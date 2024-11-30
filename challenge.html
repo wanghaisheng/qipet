@@ -1,0 +1,1128 @@
+<html><head><base href="https://example.com" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>挑战</title>
+<style>
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+.mobile-container {
+  position: relative;
+  max-width: 430px;
+  height: 100vh;
+  height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  margin: 0 auto;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.challenge-page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.page-header {
+  padding: 20px;
+  text-align: left;
+}
+
+.page-header h2 {
+  font-size: 24px;
+  color: #fff;
+}
+
+.challenge-categories {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+  margin-bottom: 15px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.category {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category.active {
+  background: var(--primary-color);
+}
+
+.category-icon {
+  font-size: 20px;
+}
+
+.challenge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 0 15px;
+}
+
+.challenge-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(138, 43, 226, 0.1));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  padding: 15px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.challenge-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.challenge-card.completed {
+  background: rgba(138, 43, 226, 0.2);
+}
+
+.challenge-difficulty {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.difficulty-easy {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+}
+
+.difficulty-medium {
+  background: rgba(255, 152, 0, 0.2);
+  color: #FF9800;
+}
+
+.difficulty-hard {
+  background: rgba(244, 67, 54, 0.2);
+  color: #F44336;
+}
+
+.challenge-type-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.challenge-type-tag {
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.challenge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.challenge-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.challenge-desc {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 15px;
+}
+
+.challenge-duration {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  margin-left: auto;
+}
+
+.vip-bonus {
+  color: #FFD700;
+  margin-left: 5px;
+}
+
+.tasks-container {
+  margin: 10px 0;
+}
+
+.task-item {
+  margin: 8px 0;
+}
+
+.task-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 4px;
+}
+
+.task-progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.task-progress-fill {
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.challenge-progress {
+  margin: 15px 0;
+}
+
+.progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50, #8BC34A);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+  text-align: right;
+}
+
+.challenge-reward {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.challenge-reward-title {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 5px;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.rare-reward {
+  animation: glow 2s infinite;
+}
+
+@keyframes glow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+.social-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.participants {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.time-limit {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.challenge-reward {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.reward-icon {
+  font-size: 20px;
+}
+
+.reward-amount {
+  font-size: 14px;
+  color: var(--primary-color);
+}
+
+.shine-effect {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-20deg);
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  from { left: -100%; }
+  to { left: 200%; }
+}
+
+.completion-animation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes complete {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+}
+
+.custom-challenge-header {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.custom-challenge-header h3 {
+  margin-bottom: 10px;
+}
+
+#custom-slots-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.upgrade-btn {
+  padding: 5px 10px;
+  background: var(--primary-color);
+  border: none;
+  border-radius: 15px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upgrade-btn:hover {
+  background: var(--secondary-color);
+}
+
+.add-challenge-btn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-challenge-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.custom-challenge-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #1a1a2e;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: white;
+}
+
+.subtask-list {
+  margin: 10px 0;
+}
+
+.subtask-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.time-settings {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+</style>
+</head>
+<body>
+<div class="mobile-container">
+  <div class="challenge-page">
+    <header class="page-header">
+      <h2>挑战</h2>
+    </header>
+
+    <div class="challenge-categories">
+      <div class="category active" data-category="daily">
+        <span class="category-icon">📅</span>
+        <span>每日挑战</span>
+      </div>
+      <div class="category" data-category="growth">
+        <span class="category-icon">📈</span>
+        <span>连续挑战</span>
+      </div>
+      <div class="category" data-category="community">
+        <span class="category-icon">🎯</span>
+        <span>特殊挑战</span>
+      </div>
+      <div class="category" data-category="custom">
+        <span class="category-icon">✏️</span>
+        <span>自定义挑战</span>
+      </div>
+      <div class="category" data-category="vip">
+        <span class="category-icon">👑</span>
+        <span>VIP挑战</span>
+      </div>
+    </div>
+
+    <div class="challenge-list current" id="daily-challenges">
+      <!-- Daily challenges will be populated here -->
+    </div>
+
+    <div class="challenge-list" id="growth-challenges" style="display: none;">
+      <!-- Growth challenges will be populated here -->
+    </div>
+    
+    <div class="challenge-list" id="community-challenges" style="display: none;">
+      <!-- Community challenges will be populated here --> 
+    </div>
+
+    <div class="challenge-list" id="custom-challenges" style="display: none;">
+      <div class="custom-challenge-header">
+        <h3>自定义挑战</h3>
+        <div id="custom-slots-info">
+          <span>可用槽位: 1/1</span>
+          <button id="upgrade-slots" class="upgrade-btn">升级解锁无限槽位</button>
+        </div>
+        <button id="add-custom-challenge" class="add-challenge-btn">
+          <span>+</span> 创建新挑战
+        </button>
+      </div>
+      <div id="custom-challenges-list"></div>
+    </div>
+
+    <div class="challenge-list" id="vip-challenges" style="display: none;">
+      <!-- VIP challenges will be populated here -->
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  initializeChallenges();
+  initializeCustomChallenges();
+  
+  // Add category switching functionality
+  const categories = document.querySelectorAll('.category');
+  categories.forEach(category => {
+    category.addEventListener('click', () => {
+      // Remove active class from all categories
+      categories.forEach(c => c.classList.remove('active'));
+      // Add active class to clicked category
+      category.classList.add('active');
+      
+      // Hide all challenge lists
+      document.querySelectorAll('.challenge-list').forEach(list => {
+        list.style.display = 'none';
+      });
+      
+      // Show the selected category's challenges
+      const categoryType = category.dataset.category;
+      const challengeList = document.getElementById(`${categoryType}-challenges`);
+      if (challengeList) {
+        challengeList.style.display = 'block';
+      }
+    });
+  });
+});
+
+let customChallenges = [];
+const isVipUser = false; // This should be set based on user's actual status
+
+function initializeCustomChallenges() {
+  const addButton = document.getElementById('add-custom-challenge');
+  
+  addButton.addEventListener('click', () => {
+    if (!isVipUser && customChallenges.length >= 1) {
+      showUpgradePrompt();
+      return;
+    }
+    showCustomChallengeModal();
+  });
+}
+
+function showUpgradePrompt() {
+  // Implementation of upgrade prompt
+  alert('升级到 VIP 以解锁无限制自定义挑战槽位！');
+}
+
+function showCustomChallengeModal() {
+  const modal = document.createElement('div');
+  modal.className = 'custom-challenge-modal';
+  modal.innerHTML = `
+    <h3>创建自定义挑战</h3>
+    <form id="custom-challenge-form">
+      <div class="form-group">
+        <label>挑战名称</label>
+        <input type="text" name="title" required>
+      </div>
+      
+      <div class="form-group">
+        <label>持续天数</label>
+        <input type="number" name="duration" min="1" required>
+      </div>
+      
+      <div class="form-group">
+        <label>子任务</label>
+        <div id="subtasks-container"></div>
+        <button type="button" id="add-subtask">添加子任务</button>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit">创建挑战</button>
+        <button type="button" id="cancel-custom">取消</button>
+      </div>
+    </form>
+  `;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  
+  document.body.appendChild(overlay);
+  document.body.appendChild(modal);
+  
+  initializeCustomChallengeForm();
+}
+
+function initializeCustomChallengeForm() {
+  const form = document.getElementById('custom-challenge-form');
+  const addSubtaskBtn = document.getElementById('add-subtask');
+  const cancelBtn = document.getElementById('cancel-custom');
+  
+  addSubtaskBtn.addEventListener('click', () => addSubtaskField());
+  cancelBtn.addEventListener('click', closeModal);
+  
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    
+    const challenge = {
+      id: 'custom-' + Date.now(),
+      title: formData.get('title'),
+      duration: parseInt(formData.get('duration')),
+      subtasks: getSubtasks(),
+      created: new Date(),
+      type: 'custom'
+    };
+    
+    addCustomChallenge(challenge);
+    closeModal();
+  });
+  
+  // Add initial subtask field
+  addSubtaskField();
+}
+
+function addSubtaskField() {
+  const container = document.getElementById('subtasks-container');
+  const subtaskDiv = document.createElement('div');
+  subtaskDiv.className = 'subtask-item';
+  subtaskDiv.innerHTML = `
+    <input type="text" placeholder="子任务名称" required>
+    <div class="time-settings">
+      <select class="repeat-type">
+        <option value="daily">每日重复</option>
+        <option value="time">时间段</option>
+      </select>
+      <input type="number" placeholder="重复次数" class="repeat-count">
+      <input type="time" class="time-start" style="display:none">
+      <input type="time" class="time-end" style="display:none">
+    </div>
+    <button type="button" class="remove-subtask">删除</button>
+  `;
+  
+  container.appendChild(subtaskDiv);
+  
+  // Add event listeners for the new subtask
+  const repeatType = subtaskDiv.querySelector('.repeat-type');
+  const repeatCount = subtaskDiv.querySelector('.repeat-count');
+  const timeStart = subtaskDiv.querySelector('.time-start');
+  const timeEnd = subtaskDiv.querySelector('.time-end');
+  
+  repeatType.addEventListener('change', (e) => {
+    if (e.target.value === 'time') {
+      repeatCount.style.display = 'none';
+      timeStart.style.display = 'block';
+      timeEnd.style.display = 'block';
+    } else {
+      repeatCount.style.display = 'block';
+      timeStart.style.display = 'none';
+      timeEnd.style.display = 'none';
+    }
+  });
+}
+
+function getSubtasks() {
+  const subtasks = [];
+  const subtaskElements = document.querySelectorAll('.subtask-item');
+  
+  subtaskElements.forEach(element => {
+    const name = element.querySelector('input[type="text"]').value;
+    const type = element.querySelector('.repeat-type').value;
+    const settings = type === 'daily' 
+      ? { repeatCount: element.querySelector('.repeat-count').value }
+      : { 
+          timeStart: element.querySelector('.time-start').value,
+          timeEnd: element.querySelector('.time-end').value
+        };
+    
+    subtasks.push({ name, type, settings });
+  });
+  
+  return subtasks;
+}
+
+function addCustomChallenge(challenge) {
+  customChallenges.push(challenge);
+  updateCustomChallengesList();
+}
+
+function updateCustomChallengesList() {
+  const container = document.getElementById('custom-challenges-list');
+  container.innerHTML = '';
+  
+  customChallenges.forEach(challenge => {
+    const card = createChallengeCard({
+      ...challenge,
+      description: `持续${challenge.duration}天的自定义挑战`,
+      tasks: challenge.subtasks.map(subtask => ({
+        name: subtask.name,
+        progress: 0,
+        total: subtask.type === 'daily' ? subtask.settings.repeatCount : 1,
+        unit: subtask.type === 'daily' ? '次' : '完成'
+      }))
+    });
+    
+    container.appendChild(card);
+  });
+}
+
+function closeModal() {
+  document.querySelector('.custom-challenge-modal').remove();
+  document.querySelector('.modal-overlay').remove();
+}
+
+function initializeChallenges() {
+  const challenges = {
+    daily: [
+      {
+        id: 'daily1',
+        title: '每日登录挑战',
+        description: '每日登录游戏一次',
+        tasks: [
+          { name: '每日登录', progress: 1, total: 1, unit: '次' }
+        ],
+        reward: { icon: '🪙', amount: '50金币' },
+        type: 'daily',
+        duration: '1天',
+        difficulty: 'easy',
+        challengeType: 'daily',
+        participants: 10
+      },
+      {
+        id: 'daily2',
+        title: '每日任务挑战',
+        description: '完成任意1个日常任务',
+        tasks: [
+          { name: '完成日常任务', progress: 0, total: 1, unit: '个' }
+        ],
+        reward: { icon: '🪙', amount: '100金币' },
+        type: 'daily',
+        duration: '1天',
+        difficulty: 'medium',
+        challengeType: 'daily',
+        participants: 5
+      },
+      {
+        id: 'daily3',
+        title: '每日分享挑战',
+        description: '分享游戏至社交平台1次',
+        tasks: [
+          { name: '分享游戏', progress: 0, total: 1, unit: '次' }
+        ],
+        reward: { icon: '🪙', amount: '30金币' },
+        type: 'daily',
+        duration: '1天',
+        difficulty: 'hard',
+        challengeType: 'daily',
+        participants: 8
+      }
+    ],
+    continuous: [
+      {
+        id: 'continuous1',
+        title: '连续7天登录挑战',
+        description: '连续登录7天',
+        tasks: [
+          { name: '连续登录', progress: 3, total: 7, unit: '天' }
+        ],
+        reward: { icon: '👕', amount: '500金币 + 熊猫服装' },
+        type: 'continuous',
+        duration: '7天',
+        difficulty: 'medium',
+        challengeType: 'weekly',
+        participants: 20
+      },
+      {
+        id: 'continuous2',
+        title: '连续14天任务挑战',
+        description: '连续14天完成任务',
+        tasks: [
+          { name: '连续完成任务', progress: 5, total: 14, unit: '天' }
+        ],
+        reward: { icon: '🎁', amount: '800金币 + 道具' },
+        type: 'continuous',
+        duration: '14天',
+        difficulty: 'medium',
+        challengeType: 'weekly',
+        participants: 15
+      },
+      {
+        id: 'continuous3',
+        title: '连续30天成长挑战',
+        description: '连续30天完成成长类任务',
+        tasks: [
+          { name: '连续完成成长任务', progress: 10, total: 30, unit: '天' }
+        ],
+        reward: { icon: '⭐', amount: '1500金币 + 进化素材' },
+        type: 'continuous',
+        duration: '30天',
+        difficulty: 'hard',
+        challengeType: 'monthly',
+        participants: 25
+      },
+      {
+        id: 'milestone1',
+        title: '熊猫照顾专家',
+        description: '连续30天每日互动熊猫并完成日常需求',
+        tasks: [
+          { name: '每日互动', progress: 0, total: 30, unit: '天' }
+        ],
+        reward: { icon: '🪙', amount: '300金币' },
+        type: 'continuous',
+        duration: '30天',
+        difficulty: 'medium',
+        challengeType: 'monthly',
+        participants: 15
+      },
+      {
+        id: 'milestone2', 
+        title: '达成健康管理目标',
+        description: '连续30天完成健康管理任务',
+        tasks: [
+          { name: '记录健康状态', progress: 0, total: 30, unit: '天' },
+          { name: '完成日常任务', progress: 0, total: 30, unit: '天' }
+        ],
+        reward: { icon: '🪙', amount: '500金币' },
+        type: 'continuous',
+        duration: '30天',
+        difficulty: 'hard',
+        challengeType: 'monthly',
+        participants: 20
+      },
+      {
+        id: 'milestone3',
+        title: '累计登录180天',
+        description: '连续登录180天',
+        tasks: [
+          { name: '每日登录', progress: 0, total: 180, unit: '天' }
+        ],
+        reward: { icon: '🪙', amount: '1500金币' },
+        type: 'continuous',
+        duration: '180天',
+        difficulty: 'hard',
+        challengeType: 'monthly',
+        participants: 10
+      }
+    ],
+    special: [
+      {
+        id: 'special1',
+        title: '限时节日挑战',
+        description: '参与限时节日活动并完成任务',
+        tasks: [
+          { name: '完成节日活动', progress: 0, total: 1, unit: '次' }
+        ],
+        reward: { icon: '🎄', amount: '200金币 + 节日装饰物' },
+        type: 'special',
+        duration: '活动期间',
+        difficulty: 'easy',
+        challengeType: 'special',
+        participants: 12
+      },
+      {
+        id: 'special2',
+        title: '好友协作挑战',
+        description: '与好友一同完成任务',
+        tasks: [
+          { name: '完成协作任务', progress: 0, total: 1, unit: '次' }
+        ],
+        reward: { icon: '🤝', amount: '100金币 + 双倍经验卡' },
+        type: 'special',
+        duration: '1天',
+        difficulty: 'medium',
+        challengeType: 'special',
+        participants: 7
+      },
+      {
+        id: 'achievement1',
+        title: '完美熊猫养成',
+        description: '将熊猫培养到最高成长阶段（完美形态）',
+        tasks: [
+          { name: '培养熊猫至完美形态', progress: 0, total: 1, unit: '次' }
+        ],
+        reward: { icon: '🪙', amount: '500金币' },
+        type: 'special',
+        duration: '不限时',
+        difficulty: 'hard',
+        challengeType: 'special',
+        participants: 25
+      },
+      {
+        id: 'achievement2',
+        title: '资源收集巨匠',
+        description: '累计收集5000竹子资源',
+        tasks: [
+          { name: '收集竹子', progress: 0, total: 5000, unit: '个' }
+        ],
+        reward: { icon: '🪙', amount: '300金币' },
+        type: 'special',
+        duration: '不限时',
+        difficulty: 'medium',
+        challengeType: 'special',
+        participants: 30
+      },
+      {
+        id: 'achievement3',
+        title: '社交名人',
+        description: '与50位不同玩家进行互动',
+        tasks: [
+          { name: '玩家互动', progress: 0, total: 50, unit: '次' }
+        ],
+        reward: { icon: '🪙', amount: '200金币' },
+        type: 'special',
+        duration: '不限时',
+        difficulty: 'medium',
+        challengeType: 'special',
+        participants: 40
+      },
+      {
+        id: 'achievement4',
+        title: '大宗收集者',
+        description: '累计收集20000竹子',
+        tasks: [
+          { name: '收集竹子', progress: 0, total: 20000, unit: '个' }
+        ],
+        reward: { icon: '🪙', amount: '1000金币' },
+        type: 'special',
+        duration: '不限时',
+        difficulty: 'hard',
+        challengeType: 'special',
+        participants: 15
+      }
+    ],
+    vip: [
+      {
+        id: 'vip1',
+        title: 'VIP精英',
+        description: '提升VIP等级至VIP3',
+        tasks: [
+          { name: '提升VIP等级', progress: 0, total: 3, unit: '级' }
+        ],
+        reward: { icon: '🪙', amount: '300金币', isRare: true },
+        type: 'vip',
+        duration: '不限时',
+        difficulty: 'medium',
+        challengeType: 'vip',
+        vipBonus: true,
+        participants: 50
+      },
+      {
+        id: 'vip2',
+        title: '月度竞技大师',
+        description: 'VIP专属月度竞技挑战',
+        tasks: [
+          { name: '参与竞技', progress: 0, total: 10, unit: '场' }
+        ],
+        reward: { icon: '🏆', amount: '特殊装备 + 荣誉点数', isRare: true },
+        type: 'vip',
+        duration: '30天',
+        difficulty: 'hard',
+        challengeType: 'vip',
+        vipBonus: true,
+        participants: 30
+      }
+    ]
+  };
+
+  // Add a new category tab for VIP challenges
+  const categoriesContainer = document.querySelector('.challenge-categories');
+  const vipCategory = document.createElement('div');
+  vipCategory.className = 'category';
+  vipCategory.dataset.category = 'vip';
+  vipCategory.innerHTML = `
+    <span class="category-icon">👑</span>
+    <span>VIP挑战</span>
+  `;
+  categoriesContainer.appendChild(vipCategory);
+
+  // Add VIP challenges container
+  const challengePage = document.querySelector('.challenge-page');
+  const vipChallengesDiv = document.createElement('div');
+  vipChallengesDiv.className = 'challenge-list';
+  vipChallengesDiv.id = 'vip-challenges';
+  vipChallengesDiv.style.display = 'none';
+  challengePage.appendChild(vipChallengesDiv);
+
+  // Populate challenges for each category including VIP
+  document.getElementById('daily-challenges').innerHTML = 
+    challenges.daily.map(challenge => createChallengeCard(challenge)).join('');
+  document.getElementById('growth-challenges').innerHTML = 
+    challenges.continuous.map(challenge => createChallengeCard(challenge)).join('');
+  document.getElementById('community-challenges').innerHTML = 
+    challenges.special.map(challenge => createChallengeCard(challenge)).join('');
+  document.getElementById('vip-challenges').innerHTML = 
+    challenges.vip.map(challenge => createChallengeCard(challenge)).join('');
+}
+
+function createChallengeCard(challenge) {
+  const totalProgress = challenge.tasks.reduce((acc, task) => acc + (task.progress / task.total), 0);
+  const averageProgress = (totalProgress / challenge.tasks.length) * 100;
+  const isCompleted = averageProgress >= 100;
+  
+  const tasksHTML = challenge.tasks.map(task => {
+    const taskProgress = (task.progress / task.total) * 100;
+    return `
+      <div class="task-item">
+        <div class="task-info">
+          <span>${task.name}</span>
+          <span>${task.progress}/${task.total}${task.unit ? ` ${task.unit}` : ''}</span>
+        </div>
+        <div class="task-progress-bar">
+          <div class="task-progress-fill" style="width: ${taskProgress}%"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const difficultyClass = `difficulty-${challenge.difficulty || 'medium'}`;
+  
+  const timeRemaining = challenge.endTime ? getTimeRemaining(challenge.endTime) : '';
+
+  const typeIndicators = {
+    competitive: '🏆 竞技',
+    cooperative: '🤝 合作',
+    special: '✨ 特殊',
+    daily: '📅 每日',
+    weekly: '📅 每周',
+    monthly: '📅 每月',
+    vip: '👑 VIP'
+  };
+  
+  const challengeTypeTag = challenge.challengeType ? 
+    `<div class="challenge-type-tag">${typeIndicators[challenge.challengeType]}</div>` : '';
+
+  return `
+    <div class="challenge-card ${isCompleted ? 'completed' : ''}" data-id="${challenge.id}">
+      <div class="challenge-difficulty ${difficultyClass}">
+        ${challenge.difficulty || 'Medium'}
+      </div>
+      
+      <div class="challenge-type-indicator">
+        ${challengeTypeTag}
+      </div>
+
+      <div class="challenge-header">
+        <div>
+          <div class="challenge-title">${challenge.title}</div>
+          <div class="challenge-desc">${challenge.description}</div>
+        </div>
+        <div class="challenge-duration">
+          ${challenge.duration}
+          ${challenge.vipBonus ? '<span class="vip-bonus">VIP加成</span>' : ''}
+        </div>
+      </div>
+      
+      <div class="tasks-container">
+        ${tasksHTML}
+      </div>
+      
+      <div class="challenge-progress">
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: ${averageProgress}%"></div>
+          ${averageProgress > 90 ? '<div class="shine-effect"></div>' : ''}
+        </div>
+        <div class="progress-text">${Math.floor(averageProgress)}%</div>
+      </div>
+      
+      <div class="challenge-reward">
+        <div class="challenge-reward-title">挑战奖励</div>
+        <div class="reward-item ${challenge.reward.isRare ? 'rare-reward' : ''}">
+          <span class="reward-icon">${challenge.reward.icon}</span>
+          <span class="reward-amount">${challenge.reward.amount}</span>
+        </div>
+      </div>
+
+      <div class="social-info">
+        <div class="participants">
+          <span>👥</span>
+          <span>${challenge.participants || 0} 人参与</span>
+        </div>
+        <div class="time-limit">
+          <span>⏳</span>
+          <span>${timeRemaining || challenge.duration}</span>
+        </div>
+      </div>
+      
+      ${isCompleted ? '<div class="completion-animation">🎉</div>' : ''}
+    </div>
+  `;
+}
+
+// Helper function to calculate time remaining
+function getTimeRemaining(endTime) {
+  const now = new Date();
+  const end = new Date(endTime);
+  const diff = end - now;
+  
+  if (diff <= 0) return '已结束';
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  
+  if (days > 0) return `${days}天${hours}小时`;
+  return `${hours}小时`;
+}
+</script>
+</body>
+</html>

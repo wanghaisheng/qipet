@@ -1,0 +1,416 @@
+<html><head><base href="task-hub.html"><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务中心</title>
+<style>
+/* 继承之前的基础样式 */
+:root {
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+  --background-gradient: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  --card-background: rgba(255, 255, 255, 0.05);
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.mobile-container {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  background: var(--background-gradient);
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+  position: relative;
+}
+
+/* 新增和修改的样式 */
+.task-hub-header {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: var(--card-background);
+  border-radius: 15px;
+}
+
+.daily-stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  scrollbar-width: none;
+}
+
+.category-tab {
+  background: var(--card-background);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.category-tab.active {
+  background: var(--primary-color);
+}
+
+.task-card {
+  background: var(--card-background);
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 15px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.task-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.task-badge {
+  background: rgba(138, 43, 226, 0.2);
+  color: var(--primary-color);
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.task-reward-preview {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.task-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.task-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.accept-btn {
+  background: var(--primary-color);
+  color: white;
+}
+
+.detail-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.task-progress {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 5px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.task-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.nav-btn {
+  flex: 1;
+  background: var(--card-background);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.nav-btn.active {
+  background: var(--primary-color);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task-card {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+</style>
+</head>
+<body>
+
+<div class="mobile-container">
+  <!-- 导航按钮 -->
+  <div class="nav-buttons">
+    <button class="nav-btn active" onclick="window.location.href='task-hub.html'">
+      领取新任务 ✨
+    </button>
+    <button class="nav-btn" onclick="window.location.href='task.html'">
+      已领取任务 📋
+    </button>
+  </div>
+
+  <!-- 任务中心头部 -->
+  <div class="task-hub-header">
+    <h1>任务中心</h1>
+    <div class="daily-stats">
+      <div class="stat-item">
+        <div class="stat-value">12</div>
+        <div class="stat-label">可领取任务</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">3</div>
+        <div class="stat-label">限时任务</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">8</div>
+        <div class="stat-label">已完成任务</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 分类标签 -->
+  <div class="category-tabs">
+    <button class="category-tab active">全部</button>
+    <button class="category-tab">日常任务</button>
+    <button class="category-tab">主线任务</button>
+    <button class="category-tab">支线任务</button>
+    <button class="category-tab">活动任务</button>
+  </div>
+
+  <!-- 任务列表 -->
+  <div class="task-list">
+    <!-- 主线任务示例 -->
+    <div class="task-card">
+      <span class="task-tag">主线</span>
+      <div class="task-header">
+        <h3 class="task-title">心肝脾肺肾记录</h3>
+        <span class="task-badge">推荐</span>
+      </div>
+      <p class="task-description">每日记录五脏健康状态，养成良好的生活习惯</p>
+      <div class="task-reward-preview">
+        <span class="reward-item">💰 50金币</span>
+        <span class="reward-item">🌟 经验值+100</span>
+      </div>
+      <div class="task-actions">
+        <button class="task-btn accept-btn">领取任务</button>
+        <button class="task-btn detail-btn">查看详情</button>
+      </div>
+    </div>
+
+    <!-- 日常任务示例 -->
+    <div class="task-card">
+      <span class="task-tag">日常</span>
+      <div class="task-header">
+        <h3 class="task-title">每日喂养熊猫</h3>
+        <span class="task-badge">简单</span>
+      </div>
+      <p class="task-description">每日喂养熊猫竹子、水、肉等基础营养</p>
+      <div class="task-reward-preview">
+        <span class="reward-item">💰 30金币</span>
+        <span class="reward-item">🎁 熊猫好感度+10</span>
+      </div>
+      <div class="task-actions">
+        <button class="task-btn accept-btn">领取任务</button>
+        <button class="task-btn detail-btn">查看详情</button>
+      </div>
+    </div>
+
+    <!-- 支线任务示例 -->
+    <div class="task-card">
+      <span class="task-tag">支线</span>
+      <div class="task-header">
+        <h3 class="task-title">竹子收集挑战</h3>
+        <span class="task-badge">限时</span>
+      </div>
+      <p class="task-description">收集1000个竹子，获得特殊奖励！</p>
+      <div class="task-reward-preview">
+        <span class="reward-item">💰 50金币</span>
+        <span class="reward-item">👑 竹子收集者称号</span>
+      </div>
+      <div class="task-progress">
+        <span>活动剩余时间: 2天3小时</span>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 30%"></div>
+        </div>
+      </div>
+      <div class="task-actions">
+        <button class="task-btn accept-btn">领取任务</button>
+        <button class="task-btn detail-btn">查看详情</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 分类标签切换
+  const categoryTabs = document.querySelectorAll('.category-tab');
+  const taskCards = document.querySelectorAll('.task-card');
+
+  categoryTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // 移除所有标签的active类
+      categoryTabs.forEach(t => t.classList.remove('active'));
+      // 添加当前标签的active类
+      tab.classList.add('active');
+      
+      // 根据选中的分类过滤任务卡片
+      const category = tab.textContent.toLowerCase();
+      taskCards.forEach(card => {
+        const cardType = card.querySelector('.task-tag').textContent.toLowerCase();
+        if (category === '全部' || cardType === category) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // 领取任务按钮点击事件
+  const acceptButtons = document.querySelectorAll('.accept-btn');
+  acceptButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const taskCard = this.closest('.task-card');
+      // 添加任务领取动画效果
+      taskCard.style.animation = 'fadeOut 0.3s ease-out forwards';
+      setTimeout(() => {
+        window.location.href = 'task.html';
+      }, 300);
+    });
+  });
+
+  // 查看详情按钮点击事件
+  const detailButtons = document.querySelectorAll('.detail-btn');
+  detailButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const taskCard = this.closest('.task-card');
+      // 这里可以添加显示任务详情的逻辑
+      alert('任务详情功能开发中...');
+    });
+  });
+});
+
+// 添加渐出动画
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+`;
+document.head.appendChild(style);
+</script>
+
+</body>
+</html>

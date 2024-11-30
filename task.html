@@ -1,0 +1,3121 @@
+<html><head><base href="https://example.com" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+
+<style>
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+#notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.user-name {
+  font-size: 16px;
+  color: white;
+}
+
+.resources-mini {
+  display: flex;
+  gap: 15px;
+}
+
+.resource-mini-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+.resource-mini-icon {
+  font-size: 16px;
+}
+
+.resource-mini-amount {
+  font-size: 14px;
+  color: white;
+}
+
+.mobile-container {
+  position: relative;
+  max-width: 430px;
+  height: 100vh;
+  height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  margin: 0 auto;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.quick-access-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.quick-access-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.quick-access-icon:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.quick-access-icon span {
+  font-size: 20px;
+}
+
+.quick-access-icon small {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.panda-display {
+  position: relative;
+  padding: 20px;
+  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  text-align: center;
+}
+
+.panda-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.panda-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: float 3s ease-in-out infinite;
+}
+
+.panda-emoji {
+  font-size: 60px;
+}
+
+.mood-indicator {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  animation: bounce 2s infinite;
+}
+
+.status-summary {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.status-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+}
+
+.interaction-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.interact-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  background: var(--primary-color);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  flex: 0 1 auto;
+  cursor: pointer;
+}
+
+.interact-btn:hover {
+  background: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+.task-section {
+  margin: 15px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.claim-all-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.task-card {
+  position: relative;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task-card.featured {
+  background: linear-gradient(45deg, rgba(138, 43, 226, 0.15), rgba(75, 0, 130, 0.15));
+  border: 1px solid rgba(138, 43, 226, 0.3);
+}
+
+.task-progress-details {
+  margin: 15px 0;
+}
+
+.progress-stages {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.progress-stages::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  z-index: 1;
+  background: #1a1a2e;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.stage.completed {
+  color: var(--primary-color);
+}
+
+.stage.active {
+  color: #fff;
+  animation: pulse 2s infinite;
+}
+
+.stage-icon {
+  font-size: 20px;
+}
+
+.stage-label {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.task-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.checklist-item.completed {
+  color: var(--primary-color);
+  text-decoration: line-through;
+}
+
+.checklist-item.active {
+  background: rgba(138, 43, 226, 0.1);
+}
+
+.check-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.task-bonuses {
+  margin: 15px 0;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.bonus-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0;
+}
+
+.bonus-icon {
+  font-size: 16px;
+}
+
+.task-tags {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.task-tag {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.task-tag.event {
+  background: rgba(255, 69, 0, 0.2);
+  color: #ff4500;
+}
+
+.task-tag.bonus {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+}
+
+/* Add new styles */
+.task-card.collaborative {
+  border: 1px solid rgba(64, 224, 208, 0.3);
+  background: linear-gradient(45deg, rgba(64, 224, 208, 0.1), rgba(0, 128, 128, 0.1));
+}
+
+.task-tag.collaborative {
+  background: rgba(64, 224, 208, 0.2);
+  color: #40E0D0;
+}
+
+.task-tag.limited {
+  background: rgba(255, 69, 0, 0.2);
+  color: #FF4500;
+}
+
+.collaboration-progress {
+  margin: 15px 0;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.team-contribution {
+  margin-top: 10px;
+}
+
+.contribution-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.player-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-name {
+  min-width: 80px;
+  font-size: 14px;
+}
+
+.progress-container {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.objective-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.objective-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.objective-item.completed {
+  background: rgba(64, 224, 208, 0.1);
+}
+
+.objective-icon {
+  font-size: 20px;
+}
+
+.objective-desc {
+  flex: 1;
+  font-size: 14px;
+}
+
+.objective-count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.task-timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 15px 0;
+  padding: 10px;
+  background: rgba(255, 69, 0, 0.1);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.achievements-section {
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+}
+
+.achievement-grid {
+  display: grid;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.achievement-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.achievement-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.achievement-name {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.achievement-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.achievement-item.unlocked {
+  border: 1px solid rgba(64, 224, 208, 0.3);
+}
+
+.achievement-item.in-progress {
+  opacity: 0.8;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: calc(10px + var(--safe-area-inset-bottom)) 0 var(--safe-area-inset-bottom);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  min-width: 60px;
+  background: none;
+  border: none;
+}
+
+.nav-item.active {
+  color: var(--primary-color);
+}
+
+.nav-item .nav-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.nav-item.active .nav-icon {
+  transform: scale(1.1);
+}
+
+.nav-item:active {
+  transform: scale(0.95);
+}
+
+.nav-item:hover {
+  color: var(--primary-color);
+  opacity: 0.8;
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+
+.floating-task-btn {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--safe-area-inset-bottom) + 80px);
+  transform: translateX(calc(-50% + (-190px + 20px))); /* Center then offset left */
+  background: var(--primary-color);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 999;
+  cursor: pointer;
+  max-width: 430px;
+}
+
+.floating-task-btn:hover {
+  background: var(--secondary-color);
+  transform: translateX(calc(-50% + (-190px + 20px))) scale(1.05);
+}
+
+.pet-advance-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 1001;
+  overflow: hidden;
+  display: none;
+  animation: slideIn 0.5s ease-out forwards;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(20px + var(--safe-area-inset-bottom));
+}
+
+@keyframes slideIn {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.advance-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.back-btn:hover {
+  transform: rotate(-10deg);
+}
+
+.advance-header h2 {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 20px;
+  color: var(--primary-color);
+}
+
+.advance-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  height: calc(100vh - 80px); /* Adjusted to fit without scrolling */
+  box-sizing: border-box;
+}
+
+.pet-portrait {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.panda-avatar.large {
+  width: 80px; /* Reduced size */
+  height: 80px; /* Reduced size */
+  margin: 0 auto;
+  animation: shake 4s infinite;
+}
+
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.panda-avatar.large .panda-emoji {
+  font-size: 40px; /* Reduced font size */
+}
+
+.level-info {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.exp-progress {
+  margin-top: 10px;
+}
+
+.exp-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.exp-fill {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.elements-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.element-slot {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.element-slot:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.element-slot.water { background: rgba(0, 150, 255, 0.2); }
+.element-slot.wood { background: rgba(76, 175, 80, 0.2); }
+.element-slot.earth { background: rgba(121, 85, 72, 0.2); }
+.element-slot.fire { background: rgba(255, 87, 34, 0.2); }
+.element-slot.metal { background: rgba(255, 215, 0, 0.2); }
+
+.element-icon {
+  font-size: 24px;
+  margin-bottom: 5px;
+  transition: transform 0.3s ease;
+}
+
+.element-slot:hover .element-icon {
+  transform: rotate(360deg);
+}
+
+.element-info {
+  text-align: center;
+  font-size: 12px;
+}
+
+.advance-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 30px; /* Reduced padding */
+  border-radius: 20px; /* Reduced border-radius */
+  font-size: 16px; /* Reduced font size */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.advance-btn:hover {
+  transform: scale(1.05);
+  background: #45a049;
+}
+
+.skill-hint {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin-top: 10px; /* Reduced margin */
+}
+
+.team-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.team-content {
+  padding: 20px;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.team-info {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.team-rank {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.team-progress {
+  margin-top: 15px;
+}
+
+.progress-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+}
+
+.member-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.member-card {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  gap: 15px;
+}
+
+.member-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.member-info {
+  flex: 1;
+}
+
+.member-name {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.member-progress {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.member-rank {
+  font-size: 18px;
+  color: var(--primary-color);
+}
+
+.team-milestones {
+  margin-top: 20px;
+}
+
+.milestone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.milestone-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  gap: 15px;
+}
+
+.milestone-item.achieved {
+  background: rgba(138, 43, 226, 0.2);
+}
+
+.milestone-icon {
+  font-size: 24px;
+}
+
+.milestone-info {
+  flex: 1;
+}
+
+.milestone-title {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.milestone-desc {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.milestone-reward {
+  font-size: 14px;
+  color: var(--primary-color);
+}
+
+.team-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+.team-actions .interact-btn {
+  flex: 1;
+}
+
+.team-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 1001;
+  overflow: hidden;
+  animation: slideIn 0.5s ease-out forwards;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(20px + var(--safe-area-inset-bottom));
+}
+
+.group-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 1001;
+  overflow-y: auto;
+  animation: slideIn 0.5s ease-out forwards;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(20px + var(--safe-area-inset-bottom));
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.search-section {
+  margin: 15px 0;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
+
+.search-bar input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: white;
+  outline: none;
+}
+
+.search-bar .search-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.filter-tags {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 5px 0;
+}
+
+.filter-tag {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 15px;
+  border-radius: 15px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filter-tag.active {
+  background: var(--primary-color);
+}
+
+.group-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px 0;
+}
+
+.group-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.group-card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.group-avatar {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.group-info {
+  flex: 1;
+}
+
+.group-type {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.group-tags {
+  display: flex;
+  gap: 4px;
+}
+
+.tag {
+  font-size: 10px;
+  color: var(--primary-color);
+  background: rgba(138, 43, 226, 0.1);
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+
+.group-description {
+  margin: 10px 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.group-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.join-btn, .details-btn {
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.join-btn {
+  background: var(--primary-color);
+  color: white;
+}
+
+.join-btn:hover {
+  background: var(--secondary-color);
+}
+
+.details-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.details-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.join-btn.joined {
+  background: var(--secondary-color);
+  opacity: 0.8;
+}
+
+.leaderboard-filters {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-option {
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.filter-option.active {
+  background: var(--primary-color);
+}
+
+.group-leaderboard {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.leaderboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.leaderboard-title {
+  font-size: 18px;
+  color: var(--primary-color);
+}
+
+.leaderboard-period {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+}
+
+.leaderboard-item:hover {
+  transform: scale(1.02);
+}
+
+.leaderboard-rank {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.rank-1 {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  color: #000;
+}
+
+.rank-2 {
+  background: linear-gradient(45deg, #C0C0C0, #A0A0A0);
+  color: #000;
+}
+
+.rank-3 {
+  background: linear-gradient(45deg, #CD7F32, #8B4513);
+  color: #fff;
+}
+
+.leaderboard-user {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leaderboard-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaderboard-points {
+  font-size: 14px;
+  color: var(--primary-color);
+}
+
+.pet-interaction-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 1001;
+  overflow-y: auto;
+  animation: slideIn 0.5s ease-out forwards;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(20px + var(--safe-area-inset-bottom));
+}
+
+.interaction-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.interaction-header h2 {
+  color: white;
+  margin: 0;
+}
+
+.camera-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.pet-display-area {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.pet-avatar.large {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+}
+
+.status-indicators {
+  margin-top: 20px;
+}
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.status-icon {
+  font-size: 20px;
+}
+
+.bar-container {
+  flex: 1;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.interaction-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.interaction-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-icon {
+  font-size: 24px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary-color);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.tasks-rewards-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.task-info {
+  flex: 1;
+}
+
+.task-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin: 5px 0;
+  overflow: hidden;
+}
+
+.camera-mode-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1002;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.camera-frame {
+  width: 80%;
+  aspect-ratio: 1;
+  border: 2px solid white;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.camera-controls {
+  display: flex;
+  gap: 20px;
+}
+
+.camera-action-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.camera-action-btn:hover {
+  background: var(--secondary-color);
+}
+
+.task-chain-progress {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.chain-week {
+  text-align: center;
+  color: var(--primary-color);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.chain-stages {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding: 10px 0;
+}
+
+.chain-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.stage-number {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: white;
+}
+
+.chain-stage.completed .stage-number {
+  background: var(--primary-color);
+}
+
+.chain-stage.active .stage-number {
+  background: rgba(138, 43, 226, 0.5);
+  animation: pulse 2s infinite;
+}
+
+.stage-connector {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  height: 2px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%);
+}
+
+.chain-stage.completed .stage-connector {
+  background: var(--primary-color);
+}
+
+.requirements-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.requirement-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.requirement-item.completed {
+  color: var(--primary-color);
+}
+
+.requirement-item.in-progress {
+  background: rgba(138, 43, 226, 0.1);
+}
+
+.task-bonus-info {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.bonus-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.bonus-rewards {
+  display: flex;
+  gap: 15px;
+}
+
+.bonus-reward-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.task-tag.weekly {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+.task-tag.chain {
+  background: rgba(233, 30, 99, 0.2);
+  color: #e91e63;
+}
+
+.daily-focus-section {
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+}
+
+.focus-cards {
+  margin-top: 15px;
+}
+
+.focus-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.focus-card.priority {
+  background: linear-gradient(45deg, rgba(255, 69, 0, 0.15), rgba(255, 140, 0, 0.15));
+  border: 1px solid rgba(255, 69, 0, 0.3);
+}
+
+.focus-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.focus-content {
+  flex: 1;
+}
+
+.focus-bonus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  color: var(--primary-color);
+}
+
+.community-tasks-section {
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+}
+
+.community-task-item {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.task-initiator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.initiator-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-stats {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.task-statistics-section {
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.stat-card {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-trend {
+  font-size: 14px;
+}
+
+.stat-trend.positive {
+  color: #4CAF50;
+}
+
+.stat-trend.negative {
+  color: #f44336;
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.stats-period-select {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 10px;
+  outline: none;
+}
+
+.stats-period-select option {
+  background: #1a1a2e;
+  color: white;
+}
+
+.task-filters-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.reset-filters-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-filters-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.filter-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-chip {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.filter-chip:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.filter-chip.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.advanced-filters {
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filter-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.search-bar {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+
+.task-search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: white;
+  outline: none;
+}
+
+.search-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.sort-select {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 15px;
+  color: white;
+  outline: none;
+  cursor: pointer;
+}
+
+.sort-select option {
+  background: #1a1a2e;
+  color: white;
+}
+
+.active-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.active-filters-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.active-filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.active-filter-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  background: var(--primary-color);
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.remove-filter {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.remove-filter:hover {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+  <div id="notification-container"></div>
+
+  <div class="mobile-container" data-current-page="home">
+    <header class="header">
+      <div class="header-content">
+        <div class="user-info">
+          <div class="user-avatar">👤</div>
+          <span class="user-name">用户名</span>
+        </div>
+        <div class="resources-mini">
+          <div class="resource-mini-item">
+            <span class="resource-mini-icon">🪙</span>
+            <span class="resource-mini-amount">1,234</span>
+          </div>
+          <div class="resource-mini-item">
+            <span class="resource-mini-icon">💎</span>
+            <span class="resource-mini-amount">56</span>
+          </div>
+          <div class="resource-mini-item">
+            <span class="resource-mini-icon">🎋</span>
+            <span class="resource-mini-amount">89</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="quick-access-grid">
+      <div class="quick-access-icon">
+        <span>🎁</span>
+        <small>礼物</small>
+      </div>
+      <div class="quick-access-icon" onclick="showGroupPage()">
+        <span>👥</span>
+        <small>群组</small>
+      </div>
+      <div class="quick-access-icon" onclick="showTeamPage()">
+        <span>👥</span>
+        <small>团队</small>
+      </div>
+      <div class="quick-access-icon">
+        <span>📊</span>
+        <small>统计</small>
+      </div>
+      <div class="quick-access-icon">
+        <span>⚙️</span>
+        <small>设置</small>
+      </div>
+      <div class="quick-access-icon">
+        <span>❓</span>
+        <small>帮助</small>
+      </div>
+    </div>
+
+    <div class="panda-display">
+      <div class="panda-container">
+        <div class="panda-avatar">
+          <span class="panda-emoji">🐼</span>
+          <div class="mood-indicator">
+            <span class="mood-emoji">😊</span>
+          </div>
+        </div>
+        <div class="status-summary">
+          <h3>欢迎回来!</h3>
+          <p class="status-text">今日活力: 100%</p>
+        </div>
+        <div class="interaction-buttons">
+          <button class="interact-btn">
+            <span class="icon">🤚</span>
+            <span>抚摸</span>
+          </button>
+          <button class="interact-btn">
+            <span class="icon">🎋</span>
+            <span>喂食</span>
+          </button>
+          <button class="interact-btn" onclick="navigateToPage('pet-advance')">
+            <span class="icon">⭐</span>
+            <span>进阶</span>
+          </button>
+          <button class="interact-btn" onclick="navigateToPage('garden')">
+            <span class="icon">🌸</span>
+            <span>后花园</span>
+          </button>
+          <button class="interact-btn" onclick="showPetInteractionPage()">
+            <span class="icon">🌿</span>
+            <span>宠物互动</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pet-progress-section">
+      <div class="progress-bar-container">
+        <div class="progress-bar" style="width: 45%;"></div>
+      </div>
+      <div class="progress-labels">
+        <span>婴儿期</span>
+        <span>成长期</span>
+        <span>成年期</span>
+      </div>
+      <div class="pet-stats">
+        <div class="pet-stat-item">
+          <div>等级: 5</div>
+        </div>
+        <div class="pet-stat-item">
+          <div>亲密度: 789</div>
+        </div>
+        <div class="pet-stat-item">
+          <div>心情: 愉快</div>
+        </div>
+        <div class="pet-stat-item">
+          <div>饥饿度: 80%</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="floating-task-btn" onclick="navigateToTaskPage()">
+      <span class="icon">✨</span>
+      <span>每日任务</span>
+    </button>
+
+    <div class="backpack-section">
+      <h3>
+        背包
+        <div class="backpack-filters">
+          <span class="active">全部</span>
+          <span>道具</span>
+          <span>奖励</span>
+        </div>
+      </h3>
+      <div class="backpack-grid">
+        <!-- Items will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <!-- Pet Advance Page Overlay -->
+    <div class="pet-advance-page">
+      <header class="advance-header">
+        <button class="back-btn" onclick="hidePetAdvancePage()">←</button>
+        <h2>熊猫小白升级</h2>
+      </header>
+
+      <div class="advance-content">
+        <div class="pet-portrait">
+          <div class="panda-avatar large">
+            <span class="panda-emoji">🐼</span>
+          </div>
+          <div class="level-info">
+            <div class="current-level">当前等级：5</div>
+            <div class="target-level">目标等级：6</div>
+            <div class="exp-progress">
+              <div class="exp-bar">
+                <div class="exp-fill" style="width: 80%;"></div>
+              </div>
+              <span class="exp-text">80%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="elements-container">
+          <div class="element-slot water" data-element="water">
+            <div class="element-icon">💧</div>
+            <div class="element-info">
+              <span>水元素</span>
+              <div class="element-progress">2/4</div>
+            </div>
+          </div>
+
+          <div class="element-slot wood" data-element="wood">
+            <div class="element-icon">🎋</div>
+            <div class="element-info">
+              <span>木元素</span>
+              <div class="element-progress">3/5</div>
+            </div>
+          </div>
+
+          <div class="element-slot earth" data-element="earth">
+            <div class="element-icon">🌱</div>
+            <div class="element-info">
+              <span>土元素</span>
+              <div class="element-progress">8/10</div>
+            </div>
+          </div>
+
+          <div class="element-slot fire" data-element="fire">
+            <div class="element-icon">🔥</div>
+            <div class="element-info">
+              <span>火元素</span>
+              <div class="element-progress">5/8</div>
+            </div>
+          </div>
+
+          <div class="element-slot metal" data-element="metal">
+            <div class="element-icon">⚪</div>
+            <div class="element-info">
+              <span>金元素</span>
+              <div class="element-progress">4/6</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="advance-btn">升级</button>
+
+        <div class="skill-hint">
+          升级后熊猫小白将获得新技能：竹林漫步
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Page -->
+    <div class="team-page" style="display: none;">
+      <header class="team-header">
+        <button class="back-btn" onclick="hideTeamPage()">←</button>
+        <h2>Dream Team</h2>
+      </header>
+
+      <div class="team-content">
+        <div class="team-info">
+          <div class="team-rank">
+            <span>全球排名：5</span>
+          </div>
+          <div class="team-progress">
+            <div class="progress-bar-container">
+              <div class="progress-bar" style="width: 75%"></div>
+            </div>
+            <span class="progress-text">75/100 任务完成</span>
+          </div>
+        </div>
+
+        <div class="team-members">
+          <h3>组内成员</h3>
+          <div class="member-grid">
+            <div class="member-card">
+              <div class="member-avatar">👤</div>
+              <div class="member-info">
+                <div class="member-name">玩家1</div>
+                <div class="member-progress">50/100 任务</div>
+              </div>
+              <div class="member-rank">#1</div>
+            </div>
+            <div class="member-card">
+              <div class="member-avatar">👤</div>
+              <div class="member-info">
+                <div class="member-name">玩家2</div>
+                <div class="member-progress">45/100 任务</div>
+              </div>
+              <div class="member-rank">#2</div>
+            </div>
+            <div class="member-card">
+              <div class="member-avatar">👤</div>
+              <div class="member-info">
+                <div class="member-name">玩家3</div>
+                <div class="member-progress">40/100 任务</div>
+              </div>
+              <div class="member-rank">#3</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="team-milestones">
+          <h3>团队里程碑</h3>
+          <div class="milestone-list">
+            <div class="milestone-item achieved">
+              <div class="milestone-icon">🏆</div>
+              <div class="milestone-info">
+                <div class="milestone-title">初级里程碑</div>
+                <div class="milestone-desc">完成50个团队任务</div>
+              </div>
+              <div class="milestone-reward">+10% 资源加成</div>
+            </div>
+            <div class="milestone-item">
+              <div class="milestone-icon">🌟</div>
+              <div class="milestone-info">
+                <div class="milestone-title">中级里程碑</div>
+                <div class="milestone-desc">完成100个团队任务</div>
+              </div>
+              <div class="milestone-reward">+20% 资源加成</div>
+            </div>
+            <div class="milestone-item">
+              <div class="milestone-icon">👑</div>
+              <div class="milestone-info">
+                <div class="milestone-title">高级里程碑</div>
+                <div class="milestone-desc">完成200个团队任务</div>
+              </div>
+              <div class="milestone-reward">+30% 资源加成</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="team-actions">
+          <button class="interact-btn">
+            <span class="icon">📢</span>
+            <span>团队公告</span>
+          </button>
+          <button class="interact-btn">
+            <span class="icon">🤝</span>
+            <span>邀请好友</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group Page -->
+    <div class="group-page" style="display: none;">
+      <header class="group-header">
+        <button class="back-btn" onclick="hideGroupPage()">←</button>
+        <h2>群组</h2>
+      </header>
+
+      <div class="group-content">
+        <!-- Milestone Notice -->
+        <div class="milestone-notice">
+          <div class="notice-card">
+            <span class="notice-icon">🎯</span>
+            <div class="notice-content">
+              <h4>里程碑收益</h4>
+              <p>群组成员率先达成里程碑时，全体成员可享受额外加成：</p>
+              <ul>
+                <li>日常任务收益 +10%</li>
+                <li>成长速度 +5%</li>
+                <li>互动奖励 +15%</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Regional Leaderboard -->
+        <div class="group-leaderboard">
+          <div class="leaderboard-header">
+            <h3 class="leaderboard-title">地区榜</h3>
+            <div class="region-filters">
+              <select class="region-select" onchange="updateRegionFilter(this.value)">
+                <option value="country">全国</option>
+                <option value="province">省份</option>
+                <option value="city">城市</option>
+              </select>
+            </div>
+            <div class="leaderboard-filters">
+              <span class="filter-option active" data-period="day">日</span>
+              <span class="filter-option" data-period="week">周</span>
+              <span class="filter-option" data-period="month">月</span>
+              <span class="filter-option" data-period="year">年</span>
+            </div>
+          </div>
+          <div class="leaderboard-list regional">
+            <!-- Regional leaderboard items will be inserted here -->
+          </div>
+        </div>
+
+        <!-- Interest-based Leaderboard -->
+        <div class="group-leaderboard">
+          <div class="leaderboard-header">
+            <h3 class="leaderboard-title">兴趣榜</h3>
+            <div class="leaderboard-filters">
+              <span class="filter-option active" data-period="day">日</span>
+              <span class="filter-option" data-period="week">周</span>
+              <span class="filter-option" data-period="month">月</span>
+              <span class="filter-option" data-period="year">年</span>
+            </div>
+          </div>
+          <div class="leaderboard-list interest">
+            <!-- Interest-based leaderboard items will be inserted here -->
+          </div>
+        </div>
+
+        <!-- Group Cards Container -->
+        <div class="group-cards">
+          <!-- Group cards will be inserted here -->
+        </div>
+      </div>
+    </div>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-page="home">
+        <span class="nav-icon">🏠</span>
+        <span>主页</span>
+      </button>
+      <button class="nav-item" data-page="challenge">
+        <span class="nav-icon">🎯</span>
+        <span>挑战</span>
+      </button>
+      <button class="nav-item" data-page="task">
+        <span class="nav-icon">✨</span>
+        <span>任务</span>
+      </button>
+      <button class="nav-item" data-page="journey">
+        <span class="nav-icon">🗺️</span>
+        <span>成长</span>
+      </button>
+      <button class="nav-item" data-page="shop">
+        <span class="nav-icon">🎁</span>
+        <span>商店</span>
+      </button>
+    </nav>
+  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize navigation menu
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const page = item.dataset.page;
+        navigateToPage(page);
+      });
+    });
+
+    // Set initial active state
+    const currentPage = document.querySelector('.mobile-container').dataset.currentPage || 'home';
+    navItems.forEach(item => {
+      item.classList.toggle('active', item.dataset.page === currentPage);
+    });
+
+    initializeHomePage();
+  });
+
+  function navigateToPage(page) {
+    // Reset all nav items active state
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.toggle('active', item.dataset.page === page);
+    });
+
+    const mobileContainer = document.querySelector('.mobile-container');
+    const header = document.querySelector('.header').cloneNode(true);
+    const bottomNav = document.querySelector('.bottom-nav').cloneNode(true);
+    const previousContent = mobileContainer.innerHTML;
+
+    // Keep track of the current page
+    mobileContainer.dataset.currentPage = page;
+
+    switch (page) {
+      case 'home':
+        // Return to home page
+        mobileContainer.innerHTML = previousContent;
+        initializeHomePage();
+        break;
+
+      case 'challenge':
+        mobileContainer.innerHTML = '';
+        mobileContainer.appendChild(header);
+        
+        const challengeContent = `
+          <div class="challenge-content">
+            <header class="page-header">
+              <h2>挑战</h2>
+            </header>
+            <div class="challenge-container">
+              <!-- Challenge content here -->
+              <p>挑战页面内容</p>
+            </div>
+          </div>
+        `;
+        
+        const challengeContainer = document.createElement('div');
+        challengeContainer.innerHTML = challengeContent;
+        mobileContainer.appendChild(challengeContainer);
+        mobileContainer.appendChild(bottomNav);
+        break;
+
+      case 'task':
+        navigateToTaskPage();
+        break;
+
+      case 'journey':
+        mobileContainer.innerHTML = '';
+        mobileContainer.appendChild(header);
+        
+        const journeyContent = `
+          <div class="journey-content">
+            <header class="page-header">
+              <h2>成长</h2>
+            </header>
+            <div class="journey-container">
+              <!-- Journey content here -->
+              <p>成长页面内容</p>
+            </div>
+          </div>
+        `;
+        
+        const journeyContainer = document.createElement('div');
+        journeyContainer.innerHTML = journeyContent;
+        mobileContainer.appendChild(journeyContainer);
+        mobileContainer.appendChild(bottomNav);
+        break;
+
+      case 'shop':
+        mobileContainer.innerHTML = '';
+        mobileContainer.appendChild(header);
+
+        const backBtn = document.createElement('button');
+        backBtn.className = 'back-btn';
+        backBtn.innerHTML = '←';
+        backBtn.onclick = () => {
+          mobileContainer.innerHTML = previousContent;
+          const navItems = document.querySelectorAll('.nav-item');
+          navItems.forEach(item => {
+            item.classList.toggle('active', item.dataset.page === 'home');
+          });
+        };
+
+        // Rest of the shop content remains the same
+        // ... (keep existing shop content)
+
+        mobileContainer.appendChild(bottomNav);
+        break;
+    }
+
+    // Update nav items active state again after content change
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.toggle('active', item.dataset.page === page);
+    });
+  }
+
+  function backFromTaskPage(previousContent) {
+    if (previousContent) {
+      const mobileContainer = document.querySelector('.mobile-container');
+      mobileContainer.innerHTML = previousContent;
+      
+      // Get the previous page from mobile container's data attribute
+      const previousPage = mobileContainer.dataset.currentPage || 'home';
+      
+      // Update nav items
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => {
+        item.classList.toggle('active', item.dataset.page === previousPage);
+      });
+    }
+  }
+
+  function initializeHomePage() {
+    // Initialize backpack grid items
+    initializeBackpack();
+    
+    // Initialize other home page elements
+    updatePetStatus();
+    updateResources();
+  }
+
+  function initializeBackpack() {
+    const backpackGrid = document.querySelector('.backpack-grid');
+    if (!backpackGrid) return;
+    
+    // Clear existing items
+    backpackGrid.innerHTML = '';
+    
+    // Add some sample items
+    const items = [
+      { icon: '🎋', count: 5, isNew: true },
+      { icon: '🍎', count: 3 },
+      { icon: '🦴', count: 2 },
+      { icon: '🎁', count: 1, isNew: true },
+      // Add empty slots
+      ...Array(4).fill({ empty: true })
+    ];
+    
+    items.forEach(item => {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = `backpack-item${item.empty ? ' empty' : ''}`;
+      
+      if (!item.empty) {
+        itemDiv.innerHTML = `
+          <span class="backpack-item-icon">${item.icon}</span>
+          <span class="backpack-item-count">x${item.count}</span>
+          ${item.isNew ? '<span class="backpack-item-new">NEW</span>' : ''}
+        `;
+        itemDiv.addEventListener('click', () => showItemDetails(item));
+      }
+      
+      backpackGrid.appendChild(itemDiv);
+    });
+  }
+
+  function updatePetStatus() {
+    // Update pet status indicators
+    const moodEmoji = document.querySelector('.mood-emoji');
+    if (moodEmoji) {
+      moodEmoji.textContent = '😊'; // Default happy mood
+    }
+    
+    // Update progress bars
+    const progressBars = document.querySelectorAll('.progress-bar');
+    progressBars.forEach(bar => {
+      if (!bar.style.width) {
+        bar.style.width = '45%'; // Default progress
+      }
+    });
+  }
+
+  function updateResources() {
+    // Update resource amounts in the header
+    const resourceAmounts = document.querySelectorAll('.resource-mini-amount');
+    const defaultValues = ['1,234', '56', '89'];
+    
+    resourceAmounts.forEach((amount, index) => {
+      if (amount.textContent === '') {
+        amount.textContent = defaultValues[index];
+      }
+    });
+  }
+
+  function showItemDetails(item) {
+    // Implement item details modal display logic
+    console.log('Showing details for item:', item);
+  }
+
+  function hidePetAdvancePage() {
+    const advancePage = document.querySelector('.pet-advance-page');
+    if (advancePage) {
+      advancePage.style.display = 'none';
+    }
+  }
+
+  function hideGroupPage() {
+    const groupPage = document.querySelector('.group-page');
+    if (groupPage) {
+      groupPage.style.display = 'none';
+    }
+  }
+
+  function hideTeamPage() {
+    const teamPage = document.querySelector('.team-page');
+    if (teamPage) {
+      teamPage.style.display = 'none';
+    }
+  }
+
+  function updateLeaderboard(period) {
+    // Implement leaderboard update logic
+    console.log('Updating leaderboard for period:', period);
+  }
+
+  function updateRegionFilter(region) {
+    // Implement region filter logic
+    console.log('Updating region filter:', region);
+  }
+
+  function showElementDetails(element) {
+    // Implement element details display logic
+    console.log('Showing details for element:', element);
+  }
+
+  function navigateToTaskPage() {
+    const mobileContainer = document.querySelector('.mobile-container');
+    const previousContent = mobileContainer.innerHTML;
+    const header = document.querySelector('.header').cloneNode(true);
+    const bottomNav = document.querySelector('.bottom-nav').cloneNode(true);
+    
+    mobileContainer.innerHTML = '';
+    mobileContainer.appendChild(header);
+    
+    const taskContainer = document.createElement('div');
+    taskContainer.innerHTML = populateTaskContent();
+    
+    mobileContainer.appendChild(taskContainer);
+    mobileContainer.appendChild(bottomNav);
+    
+    // Add event listeners for task page interactions
+    initializeTaskPageEvents();
+  }
+
+  function populateTaskContent() {
+    const taskFilters = `
+      <div class="task-filters-section">
+        <div class="filters-header">
+          <h3>筛选条件</h3>
+          <button class="reset-filters-btn">
+            <span class="icon">🔄</span>
+            <span>重置</span>
+          </button>
+        </div>
+
+        <div class="filter-groups">
+          <!-- Task Type Filter -->
+          <div class="filter-group">
+            <div class="filter-label">任务类型</div>
+            <div class="filter-chips">
+              <div class="filter-chip active" data-type="all">全部</div>
+              <div class="filter-chip" data-type="daily">日常</div>
+              <div class="filter-chip" data-type="weekly">每周</div>
+              <div class="filter-chip" data-type="chain">任务链</div>
+              <div class="filter-chip" data-type="collaborative">协作</div>
+              <div class="filter-chip" data-type="event">活动</div>
+            </div>
+          </div>
+
+          <!-- Reward Type Filter -->
+          <div class="filter-group">
+            <div class="filter-label">奖励类型</div>
+            <div class="filter-chips">
+              <div class="filter-chip" data-reward="coins">金币</div>
+              <div class="filter-chip" data-reward="gems">钻石</div>
+              <div class="filter-chip" data-reward="items">道具</div>
+              <div class="filter-chip" data-reward="exp">经验</div>
+            </div>
+          </div>
+
+          <!-- Difficulty Filter -->
+          <div class="filter-group">
+            <div class="filter-label">难度</div>
+            <div class="filter-chips">
+              <div class="filter-chip" data-difficulty="easy">简单</div>
+              <div class="filter-chip" data-difficulty="medium">中等</div>
+              <div class="filter-chip" data-difficulty="hard">困难</div>
+            </div>
+          </div>
+
+          <!-- Status Filter -->
+          <div class="filter-group">
+            <div class="filter-label">状态</div>
+            <div class="filter-chips">
+              <div class="filter-chip" data-status="available">可接取</div>
+              <div class="filter-chip" data-status="in-progress">进行中</div>
+              <div class="filter-chip" data-status="completed">已完成</div>
+            </div>
+          </div>
+
+          <!-- Time Filter -->
+          <div class="filter-group">
+            <div class="filter-label">剩余时间</div>
+            <div class="filter-chips">
+              <div class="filter-chip" data-time="urgent">紧急 (<1h)</div>
+              <div class="filter-chip" data-time="today">今日内</div>
+              <div class="filter-chip" data-time="week">本周内</div>
+            </div>
+          </div>
+
+          <!-- Advanced Filters -->
+          <div class="advanced-filters">
+            <div class="filter-row">
+              <div class="search-bar">
+                <input type="text" placeholder="搜索任务..." class="task-search-input">
+                <button class="search-btn">🔍</button>
+              </div>
+              
+              <div class="sort-options">
+                <select class="sort-select">
+                  <option value="default">默认排序</option>
+                  <option value="reward-high">奖励从高到低</option>
+                  <option value="reward-low">奖励从低到高</option>
+                  <option value="time-urgent">时间优先</option>
+                  <option value="difficulty">难度优先</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Active Filters Display -->
+            <div class="active-filters">
+              <div class="active-filters-label">已选择:</div>
+              <div class="active-filter-tags">
+                <!-- Dynamic filter tags will be inserted here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    return taskFilters + `
+      <!-- Previous task cards will continue here as well -->
+      <div class="task-card weekly">
+        <div class="task-header">
+          <div class="task-title-group">
+            <h4>竹林巡护员</h4>
+            <div class="task-tags">
+              <span class="task-tag weekly">每周任务</span>
+              <span class="task-tag chain">任务链</span>
+            </div>
+          </div>
+          <div class="task-rewards">
+            <div class="reward-item">
+              <span class="reward-icon">🪙</span>
+              <span class="reward-amount">+100</span>
+            </div>
+            <div class="reward-item">
+              <span class="reward-icon">🎋</span>
+              <span class="reward-amount">+25</span>
+            </div>
+          </div>
+        </div>
+        
+        <p class="task-desc">作为竹林巡护员，每周需要完成一系列保护任务来维护熊猫栖息地的生态平衡。</p>
+        
+        <div class="task-chain-progress">
+          <div class="chain-week">第3周 / 共4周</div>
+          <div class="chain-stages">
+            <div class="chain-stage completed">
+              <div class="stage-number">1</div>
+              <div class="stage-connector"></div>
+            </div>
+            <div class="chain-stage completed">
+              <div class="stage-number">2</div>
+              <div class="stage-connector"></div>
+            </div>
+            <div class="chain-stage active">
+              <div class="stage-number">3</div>
+              <div class="stage-connector"></div>
+            </div>
+            <div class="chain-stage">
+              <div class="stage-number">4</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="task-requirements">
+          <h5>本周任务要求：</h5>
+          <ul class="requirements-list">
+            <li class="requirement-item completed">
+              <span class="check-icon">✓</span>
+              <span>清理竹林垃圾 (10/10)</span>
+            </li>
+            <li class="requirement-item in-progress">
+              <span class="check-icon">○</span>
+              <span>记录野生动物活动 (3/5)</span>
+            </li>
+            <li class="requirement-item">
+              <span class="check-icon">○</span>
+              <span>维护步道标识 (0/3)</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="task-bonus-info">
+          <div class="bonus-header">
+            <span class="bonus-icon">🎁</span>
+            <span>任务链完成奖励</span>
+          </div>
+          <div class="bonus-rewards">
+            <div class="bonus-reward-item">
+              <span class="reward-icon">👕</span>
+              <span class="reward-desc">限定巡护员制服</span>
+            </div>
+            <div class="bonus-reward-item">
+              <span class="reward-icon">📜</span>
+              <span class="reward-desc">巡护员认证证书</span>
+            </div>
+          </div>
+        </div>
+        
+        <button class="task-action-btn">
+          <span class="btn-icon">▶️</span>
+          <span>继续任务</span>
+        </button>
+      </div>
+
+      <!-- Add new collaborative task section -->
+      <div class="task-card collaborative">
+        <div class="task-header">
+          <div class="task-title-group">
+            <h4>竹林生态调查</h4>
+            <div class="task-tags">
+              <span class="task-tag collaborative">协作任务</span>
+              <span class="task-tag limited">限时活动</span>
+            </div>
+          </div>
+          <div class="task-rewards">
+            <div class="reward-item">
+              <span class="reward-icon">🏆</span>
+              <span class="reward-amount">团队积分 +50</span>
+            </div>
+          </div>
+        </div>
+  
+        <p class="task-desc">与其他巡护员一起完成竹林生态系统调查，记录珍稀物种分布。</p>
+  
+        <div class="collaboration-progress">
+          <div class="team-contribution">
+            <h5>团队贡献</h5>
+            <div class="contribution-bars">
+              <div class="player-bar">
+                <span class="player-name">你的贡献</span>
+                <div class="progress-container">
+                  <div class="progress-fill" style="width: 35%"></div>
+                  <span class="progress-text">35%</span>
+                </div>
+              </div>
+              <div class="player-bar">
+                <span class="player-name">小明</span>
+                <div class="progress-container">
+                  <div class="progress-fill" style="width: 28%"></div>
+                  <span class="progress-text">28%</span>
+                </div>
+              </div>
+              <div class="player-bar">
+                <span class="player-name">阿华</span>
+                <div class="progress-container">
+                  <div class="progress-fill" style="width: 22%"></div>
+                  <span class="progress-text">22%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="task-objectives">
+          <h5>调查目标：</h5>
+          <div class="objective-grid">
+            <div class="objective-item completed">
+              <span class="objective-icon">📸</span>
+              <span class="objective-desc">拍摄珍稀植物</span>
+              <span class="objective-count">5/5</span>
+            </div>
+            <div class="objective-item in-progress">
+              <span class="objective-icon">🦅</span>
+              <span class="objective-desc">记录鸟类活动</span>
+              <span class="objective-count">3/6</span>
+            </div>
+            <div class="objective-item">
+              <span class="objective-icon">🐾</span>
+              <span class="objective-desc">收集动物足迹</span>
+              <span class="objective-count">0/3</span>
+            </div>
+          </div>
+        </div>
+  
+        <div class="task-timer">
+          <span class="timer-icon">⏳</span>
+          <span class="timer-text">剩余时间: 2天 8小时</span>
+        </div>
+  
+        <button class="task-action-btn collaborative">
+          <span class="btn-icon">👥</span>
+          <span>参与调查</span>
+        </button>
+      </div>
+
+      <!-- Add achievement showcase section -->
+      <div class="achievements-section">
+        <div class="section-header">
+          <h3>成就展示</h3>
+          <button class="view-all-btn">查看全部</button>
+        </div>
+        <div class="achievement-grid">
+          <div class="achievement-item unlocked">
+            <div class="achievement-icon">🌟</div>
+            <div class="achievement-info">
+              <span class="achievement-name">初级巡护员</span>
+              <span class="achievement-desc">完成10次巡护任务</span>
+            </div>
+            <div class="achievement-progress">
+              <div class="progress-bar" style="width: 100%"></div>
+            </div>
+          </div>
+          <div class="achievement-item in-progress">
+            <div class="achievement-icon">🎯</div>
+            <div class="achievement-info">
+              <span class="achievement-name">生态卫士</span>
+              <span class="achievement-desc">完成50次环保任务</span>
+            </div>
+            <div class="achievement-progress">
+              <div class="progress-bar" style="width: 60%"></div>
+              <span class="progress-text">30/50</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Daily Focus Section -->
+      <div class="daily-focus-section">
+        <div class="section-header">
+          <h3>今日重点</h3>
+          <div class="focus-date">2024.01.20</div>
+        </div>
+        <div class="focus-cards">
+          <div class="focus-card priority">
+            <div class="focus-icon">🔥</div>
+            <div class="focus-content">
+              <h4>生态保护日</h4>
+              <p>完成3个环保任务可获得双倍奖励</p>
+              <div class="focus-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 33%"></div>
+                </div>
+                <span class="progress-text">1/3</span>
+              </div>
+            </div>
+            <div class="focus-bonus">
+              <span class="bonus-icon">✨</span>
+              <span class="bonus-text">2X</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Community Tasks Section -->
+      <div class="community-tasks-section">
+        <div class="section-header">
+          <h3>社区任务</h3>
+          <button class="refresh-btn">
+            <span class="refresh-icon">🔄</span>
+            <span>刷新</span>
+          </button>
+        </div>
+        <div class="community-task-list">
+          <div class="community-task-item">
+            <div class="task-initiator">
+              <div class="initiator-avatar">👤</div>
+              <div class="initiator-info">
+                <span class="initiator-name">竹林守护者</span>
+                <span class="task-time">10分钟前</span>
+              </div>
+            </div>
+            <div class="community-task-content">
+              <h4>清理竹林垃圾活动</h4>
+              <p>一起来保护熊猫的家园吧！</p>
+              <div class="task-stats">
+                <div class="stat-item">
+                  <span class="stat-icon">👥</span>
+                  <span class="stat-value">12/20人</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-icon">⏳</span>
+                  <span class="stat-value">剩余2小时</span>
+                </div>
+              </div>
+            </div>
+            <button class="join-task-btn">
+              <span class="btn-icon">➕</span>
+              <span>参与</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Task Statistics Section -->
+      <div class="task-statistics-section">
+        <div class="section-header">
+          <h3>任务统计</h3>
+          <select class="stats-period-select">
+            <option value="week">本周</option>
+            <option value="month">本月</option>
+            <option value="year">本年</option>
+          </select>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+              <span class="stat-value">28</span>
+              <span class="stat-label">已完成任务</span>
+            </div>
+            <div class="stat-trend positive">
+              <span class="trend-icon">↑</span>
+              <span class="trend-value">12%</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-info">
+              <span class="stat-value">89%</span>
+              <span class="stat-label">完成率</span>
+            </div>
+            <div class="stat-trend positive">
+              <span class="trend-icon">↑</span>
+              <span class="trend-value">5%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function initializeTaskPageEvents() {
+    // Task category tabs
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        // Implement tab content switching logic here
+      });
+    });
+    
+    // Claim reward buttons
+    const claimBtns = document.querySelectorAll('.claim-reward-btn:not(.claimed)');
+    claimBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.add('claimed');
+        btn.textContent = '已领取';
+        // Implement reward claiming logic here
+      });
+    });
+    
+    // Claim all rewards button
+    const claimAllBtn = document.querySelector('.claim-all-btn');
+    if (claimAllBtn) {
+      claimAllBtn.addEventListener('click', () => {
+        const unclaimedRewards = document.querySelectorAll('.claim-reward-btn:not(.claimed)');
+        unclaimedRewards.forEach(btn => {
+          btn.click();
+        });
+      });
+    }
+
+    // Call to initialize filters
+    initializeFilters();
+  }
+
+  function initializeFilters() {
+    // Filter chips click handling
+    const filterChips = document.querySelectorAll('.filter-chip');
+    filterChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        // Handle "all" type differently
+        if (chip.dataset.type === 'all') {
+          const typeChips = document.querySelectorAll('.filter-chip[data-type]');
+          typeChips.forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+        } else {
+          // Remove "all" selection if exists
+          const allChip = document.querySelector('.filter-chip[data-type="all"]');
+          if (allChip) allChip.classList.remove('active');
+          
+          // Toggle current chip
+          chip.classList.toggle('active');
+        }
+        
+        updateActiveFilters();
+        filterTasks();
+      });
+    });
+
+    // Reset filters button
+    const resetBtn = document.querySelector('.reset-filters-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        filterChips.forEach(chip => chip.classList.remove('active'));
+        const allChip = document.querySelector('.filter-chip[data-type="all"]');
+        if (allChip) allChip.classList.add('active');
+        
+        const searchInput = document.querySelector('.task-search-input');
+        if (searchInput) searchInput.value = '';
+        
+        const sortSelect = document.querySelector('.sort-select');
+        if (sortSelect) sortSelect.value = 'default';
+        
+        updateActiveFilters();
+        filterTasks();
+      });
+    }
+
+    // Search input handling
+    const searchInput = document.querySelector('.task-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', debounce(() => {
+        filterTasks();
+      }, 300));
+    }
+
+    // Sort select handling
+    const sortSelect = document.querySelector('.sort-select');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', () => {
+        filterTasks();
+      });
+    }
+  }
+
+  function updateActiveFilters() {
+    const activeFiltersContainer = document.querySelector('.active-filter-tags');
+    if (!activeFiltersContainer) return;
+
+    activeFiltersContainer.innerHTML = '';
+    
+    const activeChips = document.querySelectorAll('.filter-chip.active');
+    activeChips.forEach(chip => {
+      if (chip.dataset.type === 'all') return;
+      
+      const tag = document.createElement('div');
+      tag.className = 'active-filter-tag';
+      tag.innerHTML = `
+        <span>${chip.textContent}</span>
+        <span class="remove-filter">×</span>
+      `;
+      
+      tag.querySelector('.remove-filter').addEventListener('click', () => {
+        chip.classList.remove('active');
+        updateActiveFilters();
+        filterTasks();
+      });
+      
+      activeFiltersContainer.appendChild(tag);
+    });
+  }
+
+  function filterTasks() {
+    // Implement actual task filtering logic here
+    console.log('Filtering tasks...');
+  }
+
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  // Add this call to initializeTaskPageEvents()
+  initializeFilters();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,375 @@
+<html><head><base href="custom-challenge.html">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自定义挑战</title>
+<style>
+/* 继承之前的基础样式 */
+:root {
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+  --background-gradient: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  --card-background: rgba(255, 255, 255, 0.05);
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.mobile-container {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  background: var(--background-gradient);
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+  position: relative;
+}
+
+/* 自定义挑战页面特定样式 */
+.challenge-header {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+}
+
+.challenge-steps {
+  margin-bottom: 20px;
+}
+
+.step {
+  background: var(--card-background);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-left: 3px solid var(--primary-color);
+}
+
+.step-number {
+  font-size: 12px;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.step-title {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.template-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.template-card.selected {
+  border: 2px solid var(--primary-color);
+  background: rgba(138, 43, 226, 0.2);
+}
+
+.template-card:hover {
+  transform: translateY(-2px);
+}
+
+.input-group {
+  margin: 15px 0;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  margin-bottom: 10px;
+}
+
+.subtask-list {
+  margin: 15px 0;
+}
+
+.subtask-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.reward-section {
+  margin: 15px 0;
+}
+
+.reward-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.nav-btn {
+  flex: 1;
+  background: var(--card-background);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.create-challenge-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 25px;
+  width: 100%;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.create-challenge-btn:hover {
+  background: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+.progress-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.progress-dot.active {
+  background: var(--primary-color);
+  box-shadow: 0 0 10px var(--primary-color);
+}
+</style>
+</head>
+<body>
+
+<div class="mobile-container">
+  <!-- 导航按钮 -->
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="window.location.href='task-hub.html'">
+      ← 返回任务中心
+    </button>
+  </div>
+
+  <div class="challenge-header">
+    <h2>创建自定义挑战</h2>
+    <div class="progress-indicator">
+      <div class="progress-dot active"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+    </div>
+  </div>
+
+  <div class="challenge-steps">
+    <!-- 步骤1：选择挑战类型 -->
+    <div class="step" id="step1">
+      <div class="step-number">步骤 1/4</div>
+      <h3 class="step-title">选择挑战类型</h3>
+      <div class="template-grid">
+        <div class="template-card" data-type="timed">
+          <h4>限时挑战</h4>
+          <p>30天感恩日记挑战</p>
+        </div>
+        <div class="template-card" data-type="longterm">
+          <h4>长期挑战</h4>
+          <p>14天Manifest369挑战</p>
+        </div>
+        <div class="template-card" data-type="custom">
+          <h4>自定义子任务</h4>
+          <p>自由定制任务内容</p>
+        </div>
+        <div class="template-card" data-type="repeating">
+          <h4>重复性挑战</h4>
+          <p>每日固定任务挑战</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 步骤2：定义挑战详情 -->
+    <div class="step" id="step2" style="display: none;">
+      <div class="step-number">步骤 2/4</div>
+      <h3 class="step-title">设置挑战详情</h3>
+      <div class="input-group">
+        <label>挑战名称</label>
+        <input type="text" class="input-field" placeholder="输入挑战名称">
+      </div>
+      <div class="input-group">
+        <label>持续时间</label>
+        <select class="input-field">
+          <option>7天</option>
+          <option>14天</option>
+          <option>30天</option>
+          <option>自定义</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 步骤3：设置子任务 -->
+    <div class="step" id="step3" style="display: none;">
+      <div class="step-number">步骤 3/4</div>
+      <h3 class="step-title">添加子任务</h3>
+      <div class="subtask-list">
+        <div class="subtask-item">
+          <input type="checkbox">
+          <span>每日写3条感恩事项</span>
+        </div>
+        <div class="subtask-item">
+          <input type="checkbox">
+          <span>每日冥想15分钟</span>
+        </div>
+        <div class="subtask-item">
+          <input type="checkbox">
+          <span>记录当日目标</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 步骤4：设置奖励 -->
+    <div class="step" id="step4" style="display: none;">
+      <div class="step-number">步骤 4/4</div>
+      <h3 class="step-title">设置奖励</h3>
+      <div class="reward-section">
+        <div class="reward-option">
+          <input type="checkbox">
+          <span>完成每个子任务奖励10金币</span>
+        </div>
+        <div class="reward-option">
+          <input type="checkbox">
+          <span>挑战完成奖励限定皮肤</span>
+        </div>
+        <div class="reward-option">
+          <input type="checkbox">
+          <span>额外经验值加成</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="create-challenge-btn" id="nextStepBtn">
+    下一步 →
+  </button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  let currentStep = 1;
+  const totalSteps = 4;
+  const nextStepBtn = document.getElementById('nextStepBtn');
+  
+  // 模板卡片选择
+  const templateCards = document.querySelectorAll('.template-card');
+  templateCards.forEach(card => {
+    card.addEventListener('click', () => {
+      templateCards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    });
+  });
+
+  // 步骤切换逻辑
+  function updateStep(step) {
+    // 隐藏所有步骤
+    for(let i = 1; i <= totalSteps; i++) {
+      const stepElement = document.getElementById(`step${i}`);
+      if(stepElement) {
+        stepElement.style.display = 'none';
+      }
+    }
+    
+    // 显示当前步骤
+    const currentStepElement = document.getElementById(`step${step}`);
+    if(currentStepElement) {
+      currentStepElement.style.display = 'block';
+    }
+
+    // 更新进度指示器
+    const progressDots = document.querySelectorAll('.progress-dot');
+    progressDots.forEach((dot, index) => {
+      dot.classList.toggle('active', index < step);
+    });
+
+    // 更新按钮文本
+    if(step === totalSteps) {
+      nextStepBtn.textContent = '创建挑战';
+    } else {
+      nextStepBtn.textContent = '下一步 →';
+    }
+  }
+
+  // 下一步按钮点击事件
+  nextStepBtn.addEventListener('click', () => {
+    if(currentStep < totalSteps) {
+      currentStep++;
+      updateStep(currentStep);
+    } else {
+      // 创建挑战完成，返回任务中心
+      window.location.href = 'task-hub.html';
+    }
+  });
+
+  // 初始化显示第一步
+  updateStep(1);
+});
+</script>
+
+</body>
+</html>

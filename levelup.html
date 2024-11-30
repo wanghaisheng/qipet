@@ -1,0 +1,1306 @@
+<html><head><base href="https://example.com" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+
+<style>
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+#notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.user-name {
+  font-size: 16px;
+  color: white;
+}
+
+.resources-mini {
+  display: flex;
+  gap: 15px;
+}
+
+.resource-mini-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+.resource-mini-icon {
+  font-size: 16px;
+}
+
+.resource-mini-amount {
+  font-size: 14px;
+  color: white;
+}
+
+.mobile-container {
+  position: relative;
+  max-width: 430px;
+  height: 100vh;
+  height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  margin: 0 auto;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.quick-access-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.quick-access-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.quick-access-icon:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.quick-access-icon span {
+  font-size: 20px;
+}
+
+.quick-access-icon small {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.panda-display {
+  position: relative;
+  padding: 20px;
+  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  text-align: center;
+}
+
+.panda-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.panda-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: float 3s ease-in-out infinite;
+}
+
+.panda-emoji {
+  font-size: 60px;
+}
+
+.mood-indicator {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  animation: bounce 2s infinite;
+}
+
+.status-summary {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.status-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+}
+
+.interaction-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.interact-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  background: var(--primary-color);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  flex: 0 1 auto;
+  cursor: pointer;
+}
+
+.interact-btn:hover {
+  background: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+.task-section {
+  padding: 12px;
+  margin: 15px 0;
+}
+
+.pet-progress-section {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  margin-top: 15px;
+}
+
+.progress-bar-container {
+  position: relative;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+}
+
+.pet-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.pet-stat-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+.backpack-section {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  margin: 15px 0;
+}
+
+.backpack-section h3 {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.backpack-filters span {
+  margin-left: 10px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.3s ease;
+}
+
+.backpack-filters span.active {
+  color: var(--primary-color);
+}
+
+.backpack-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.backpack-item {
+  position: relative;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-height: 80px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backpack-item:active {
+  transform: scale(0.95);
+}
+
+.backpack-item.empty {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+}
+
+.backpack-item-icon {
+  font-size: 24px;
+}
+
+.backpack-item-count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.backpack-item-new {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--primary-color);
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  animation: pulse 2s infinite;
+}
+
+.reward-notification {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(138, 43, 226, 0.9);
+  padding: 15px 25px;
+  border-radius: 20px;
+  color: white;
+  text-align: center;
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+.milestone-notice {
+  background: rgba(138, 43, 226, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.notice-card {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.notice-icon {
+  font-size: 24px;
+  padding: 10px;
+  background: rgba(138, 43, 226, 0.2);
+  border-radius: 50%;
+}
+
+.notice-content {
+  flex: 1;
+}
+
+.notice-content h4 {
+  margin-bottom: 8px;
+  color: var(--primary-color);
+}
+
+.notice-content p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+}
+
+.notice-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.notice-content li {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 4px 0;
+}
+
+.group-leaderboard {
+  margin-bottom: 20px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { transform: translate(-50%, 100%); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@keyframes float {
+  0% { transform: translatey(0px); }
+  50% { transform: translatey(-10px); }
+  100% { transform: translatey(0px); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.item-details-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  padding: 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 300px;
+  z-index: 1001;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -60%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+
+.item-details-content {
+  text-align: center;
+}
+
+.item-details-icon {
+  font-size: 40px;
+  margin: 10px 0;
+}
+
+.item-details-info {
+  margin: 15px 0;
+}
+
+.item-details-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.item-details-btn {
+  padding: 8px 16px;
+  border-radius: 15px;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.item-details-btn:hover {
+  background: var(--secondary-color);
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: calc(10px + var(--safe-area-inset-bottom)) 0 var(--safe-area-inset-bottom);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  min-width: 60px;
+  background: none;
+  border: none;
+}
+
+.nav-item.active {
+  color: var(--primary-color);
+}
+
+.nav-item .nav-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.nav-item.active .nav-icon {
+  transform: scale(1.1);
+}
+
+.nav-item:active {
+  transform: scale(0.95);
+}
+
+.nav-item:hover {
+  color: var(--primary-color);
+  opacity: 0.8;
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+
+.floating-task-btn {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--safe-area-inset-bottom) + 80px);
+  transform: translateX(calc(-50% + (-190px + 20px))); /* Center then offset left */
+  background: var(--primary-color);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 999;
+  cursor: pointer;
+  max-width: 430px;
+}
+
+.floating-task-btn:hover {
+  background: var(--secondary-color);
+  transform: translateX(calc(-50% + (-190px + 20px))) scale(1.05);
+}
+
+.pet-advance-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 1001;
+  overflow: hidden;
+  display: none;
+  animation: slideIn 0.5s ease-out forwards;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(20px + var(--safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.advance-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.back-btn:hover {
+  transform: rotate(-10deg);
+}
+
+.advance-header h2 {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 20px;
+  color: var(--primary-color);
+}
+
+.advance-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  height: calc(100vh - 80px); /* Adjusted to fit without scrolling */
+  box-sizing: border-box;
+}
+
+.pet-portrait {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.panda-avatar.large {
+  width: 80px; /* Reduced size */
+  height: 80px; /* Reduced size */
+  margin: 0 auto;
+  animation: shake 4s infinite;
+}
+
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.panda-avatar.large .panda-emoji {
+  font-size: 40px; /* Reduced font size */
+}
+
+.level-info {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.exp-progress {
+  margin-top: 10px;
+}
+
+.exp-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.exp-fill {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.elements-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.element-slot {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.element-slot:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.element-slot.water { background: rgba(0, 150, 255, 0.2); }
+.element-slot.wood { background: rgba(76, 175, 80, 0.2); }
+.element-slot.earth { background: rgba(121, 85, 72, 0.2); }
+.element-slot.fire { background: rgba(255, 87, 34, 0.2); }
+.element-slot.metal { background: rgba(255, 215, 0, 0.2); }
+
+.element-icon {
+  font-size: 24px;
+  margin-bottom: 5px;
+  transition: transform 0.3s ease;
+}
+
+.element-slot:hover .element-icon {
+  transform: rotate(360deg);
+}
+
+.element-info {
+  text-align: center;
+  font-size: 12px;
+}
+
+.advance-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 30px; /* Reduced padding */
+  border-radius: 20px; /* Reduced border-radius */
+  font-size: 16px; /* Reduced font size */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.advance-btn:hover {
+  transform: scale(1.05);
+  background: #45a049;
+}
+
+.skill-hint {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin-top: 10px; /* Reduced margin */
+}
+</style>
+</head>
+<body>
+  <div class="mobile-container">
+    <header class="advance-header">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <h2>熊猫小白升级</h2>
+    </header>
+
+    <div class="advance-content">
+      <div class="pet-portrait">
+        <div class="panda-avatar large">
+          <span class="panda-emoji">🐼</span>
+        </div>
+        <div class="level-info">
+          <div class="current-level">当前等级：5</div>
+          <div class="target-level">目标等级：6</div>
+          <div class="exp-progress">
+            <div class="exp-bar">
+              <div class="exp-fill" style="width: 80%;"></div>
+            </div>
+            <span class="exp-text">80%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="elements-container">
+        <div class="element-slot water" data-element="water">
+          <div class="element-icon">💧</div>
+          <div class="element-info">
+            <span>水元素</span>
+            <div class="element-progress">2/4</div>
+          </div>
+        </div>
+
+        <div class="element-slot wood" data-element="wood">
+          <div class="element-icon">🎋</div>
+          <div class="element-info">
+            <span>木元素</span>
+            <div class="element-progress">3/5</div>
+          </div>
+        </div>
+
+        <div class="element-slot earth" data-element="earth">
+          <div class="element-icon">🌱</div>
+          <div class="element-info">
+            <span>土元素</span>
+            <div class="element-progress">8/10</div>
+          </div>
+        </div>
+
+        <div class="element-slot fire" data-element="fire">
+          <div class="element-icon">🔥</div>
+          <div class="element-info">
+            <span>火元素</span>
+            <div class="element-progress">5/8</div>
+          </div>
+        </div>
+
+        <div class="element-slot metal" data-element="metal">
+          <div class="element-icon">⚪</div>
+          <div class="element-info">
+            <span>金元素</span>
+            <div class="element-progress">4/6</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="advance-btn">升级</button>
+
+      <div class="skill-hint">
+        升级后熊猫小白将获得新技能：竹林漫步
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function goBack() {
+    window.history.back();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const elementSlots = document.querySelectorAll('.element-slot');
+    elementSlots.forEach(slot => {
+      slot.addEventListener('click', () => {
+        const element = slot.dataset.element;
+        showElementDetails(element);
+      });
+    });
+  });
+
+  function showElementDetails(element) {
+    console.log(`Showing details for ${element} element`);
+  }
+  </script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeHomePage();
+
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      item.classList.toggle('active', item.dataset.page === 'home');
+    });
+
+    const backBtn = document.querySelector('.pet-advance-page .back-btn');
+    if (backBtn) {
+      backBtn.addEventListener('click', hidePetAdvancePage);
+    }
+    
+    const elementSlots = document.querySelectorAll('.element-slot');
+    elementSlots.forEach(slot => {
+      slot.addEventListener('click', () => {
+        const element = slot.dataset.element;
+        showElementDetails(element);
+      });
+    });
+
+    // Initialize group page related elements
+    const groupPage = document.querySelector('.group-page');
+    if (groupPage) {
+      const filterOptions = groupPage.querySelectorAll('.filter-option');
+      filterOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          const period = this.dataset.period;
+          const filterGroup = this.closest('.leaderboard-filters');
+          filterGroup.querySelectorAll('.filter-option').forEach(opt => {
+            opt.classList.remove('active');
+          });
+          this.classList.add('active');
+          updateLeaderboard(period);
+        });
+      });
+    }
+  });
+
+  function hideTeamPage() {
+    const teamPage = document.querySelector('.team-page');
+    if (teamPage) {
+      teamPage.style.display = 'none';
+    }
+    
+    // Show home content again
+    const homeContent = document.querySelectorAll('.mobile-container > *:not(.team-page, .group-page, .bottom-nav)');
+    homeContent.forEach(element => {
+      element.style.display = '';
+    });
+  }
+
+  function initializeHomePage() {
+    // Add check for quick access buttons
+    const quickAccessBtns = document.querySelectorAll('.quick-access-icon');
+    if (quickAccessBtns.length > 0) {
+      quickAccessBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const page = btn.querySelector('small').textContent;
+          if (page === '后花园') {
+            navigateToPage('pet-interaction');
+          } else {
+            navigateToPage(page.toLowerCase());
+          }
+        });
+      });
+    }
+
+    // Add check for interact buttons  
+    const interactBtns = document.querySelectorAll('.interact-btn');
+    if (interactBtns.length > 0) {
+      interactBtns.forEach(btn => {
+        btn.addEventListener('click', handlePandaInteraction);
+      });
+    }
+
+    // Add check before initializing backpack
+    const backpackGrid = document.querySelector('.backpack-grid');
+    if (backpackGrid) {
+      initializeBackpack();
+    }
+
+    // Add check before initializing pet progress
+    const progressBar = document.querySelector('.progress-bar');
+    if (progressBar) {
+      initializePetProgress();
+    }
+  }
+
+  function initializeBackpack() {
+    const backpackGrid = document.querySelector('.backpack-grid');
+    // Add safety check
+    if (!backpackGrid) return;
+    
+    const backpackItems = [
+      { id: 1, icon: '🎋', name: '竹子', count: 50, type: 'resource', isNew: false },
+      { id: 2, icon: '🍎', name: '苹果', count: 20, type: 'food', isNew: false },
+      { id: 3, icon: '🥕', name: '胡萝卜', count: 30, type: 'food', isNew: true },
+      { id: 4, icon: '🪙', name: '金币', count: 1000, type: 'currency', isNew: false },
+      { id: 5, icon: '💎', name: '钻石', count: 5, type: 'currency', isNew: false },
+      { id: 6, icon: '🎁', name: '任务奖励', count: 1, type: 'reward', isNew: true, 
+        description: '完成每日任务奖励：50金币、竹子x5' },
+      { id: 7, icon: '🏆', name: '成就奖励', count: 1, type: 'achievement', isNew: true,
+        description: '解锁"任务达人"奖励：熊猫衣服、金币x100' }
+    ];
+
+    backpackGrid.innerHTML = '';
+
+    backpackItems.forEach(item => {
+      const itemElement = document.createElement('div');
+      itemElement.className = 'backpack-item';
+      itemElement.innerHTML = `
+        ${item.isNew ? '<span class="backpack-item-new">NEW</span>' : ''}
+        <span class="backpack-item-icon">${item.icon}</span>
+        <span class="backpack-item-count">${item.count}</span>
+      `;
+      
+      itemElement.addEventListener('click', () => showItemDetails(item));
+      backpackGrid.appendChild(itemElement);
+    });
+
+    const totalSlots = 12;
+    const emptySlots = totalSlots - backpackItems.length;
+    for (let i = 0; i < emptySlots; i++) {
+      const emptySlot = document.createElement('div');
+      emptySlot.className = 'backpack-item empty';
+      backpackGrid.appendChild(emptySlot);
+    }
+  }
+
+  function showItemDetails(item) {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop';
+    document.body.appendChild(backdrop);
+
+    const modal = document.createElement('div');
+    modal.className = 'item-details-modal';
+    modal.innerHTML = `
+      <div class="item-details-content">
+        <span class="item-details-icon">${item.icon}</span>
+        <h3>${item.name}</h3>
+        <div class="item-details-info">
+          ${item.description ? `<p>${item.description}</p>` : `<p>数量: ${item.count}</p>`}
+        </div>
+        <div class="item-details-actions">
+          ${item.type === 'reward' || item.type === 'achievement' ? 
+            `<button class="item-details-btn" onclick="claimReward('${item.id}')">领取</button>` :
+            `<button class="item-details-btn" onclick="useItem('${item.id}')">使用</button>`
+          }
+          <button class="item-details-btn" onclick="closeItemDetails()">关闭</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    backdrop.addEventListener('click', () => {
+      document.body.removeChild(backdrop);
+      document.body.removeChild(modal);
+    });
+  }
+
+  function claimReward(itemId) {
+    showNotification('奖励已领取！');
+    closeItemDetails();
+    initializeBackpack();
+  }
+
+  function useItem(itemId) {
+    showNotification('物品使用成功！');
+    closeItemDetails();
+  }
+
+  function closeItemDetails() {
+    const backdrop = document.querySelector('.modal-backdrop');
+    const modal = document.querySelector('.item-details-modal');
+    if (backdrop) document.body.removeChild(backdrop);
+    if (modal) document.body.removeChild(modal);
+  }
+
+  function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'reward-notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      if (notification.parentNode) {
+        document.body.removeChild(notification);
+      }
+    }, 2000);
+  }
+
+  function initializePetProgress() {
+    function updateProgress(value) {
+      const progressBar = document.querySelector('.progress-bar');
+      progressBar.style.width = `${value}%`;
+    }
+    
+    updateProgress(45);
+  }
+
+  function showInteractionAnimation(type) {
+    const panda = document.querySelector('.panda-emoji');
+    panda.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+      panda.style.transform = 'scale(1)';
+    }, 200);
+
+    const moodEmoji = document.querySelector('.mood-emoji');
+    const happyEmojis = ['😊', '🥰', '😍'];
+    moodEmoji.textContent = happyEmojis[Math.floor(Math.random() * happyEmojis.length)];
+  }
+
+  function navigateToPage(page) {
+    if (page === 'pet-advance') {
+      window.location.href = 'levelup.html';
+      return;
+    }
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      item.classList.toggle('active', item.dataset.page === page);
+    });
+
+    if (page === 'task') {
+      console.log('Navigating to task page');
+    } else if (page === 'garden') {
+      console.log('Navigating to garden page');
+    } else if (page === 'pet-interaction') {
+      console.log('Navigating to pet interaction page');
+    } else if (page === 'home') {
+      console.log('Navigating to home page');
+    } else if (page === 'challenge') {
+      console.log('Navigating to challenge page');
+    } else if (page === 'journey') {
+      console.log('Navigating to journey page');
+    } else if (page === 'shop') {
+      console.log('Navigating to shop page');
+    }
+  }
+
+  function showPetAdvancePage() {
+    const advancePage = document.querySelector('.pet-advance-page');
+    advancePage.style.display = 'block';
+  }
+
+  function hidePetAdvancePage() {
+    const advancePage = document.querySelector('.pet-advance-page');
+    advancePage.style.display = 'none';
+  }
+
+  function showPetInteractionPage() {
+    // Hide home content
+    const homeContent = document.querySelectorAll('.mobile-container > *:not(.pet-interaction-page, .bottom-nav)');
+    homeContent.forEach(element => {
+      element.style.display = 'none';
+    });
+    
+    // Show pet interaction page
+    const petInteractionPage = createPetInteractionPage();
+    document.querySelector('.mobile-container').appendChild(petInteractionPage);
+  }
+
+  function hidePetInteractionPage() {
+    // Show home content
+    const homeContent = document.querySelectorAll('.mobile-container > *:not(.pet-interaction-page, .bottom-nav)');
+    homeContent.forEach(element => {
+      element.style.display = '';
+    });
+    
+    // Remove pet interaction page
+    const petInteractionPage = document.querySelector('.pet-interaction-page');
+    if (petInteractionPage) {
+      petInteractionPage.remove();
+    }
+  }
+
+  function createPetInteractionPage() {
+    const page = document.createElement('div');
+    page.className = 'pet-interaction-page';
+    
+    // Update the camera overlay HTML in the page content to include cancel button with handler
+    const cameraOverlayHtml = `
+      <div class="camera-mode-overlay" style="display: none;">
+        <div class="camera-frame"></div>
+        <div class="camera-controls">
+          <button class="camera-action-btn cancel" onclick="toggleCameraMode()">返回</button>
+          <button class="camera-action-btn capture">拍照</button>
+          <button class="camera-action-btn share">分享</button>
+        </div>
+      </div>
+    `;
+
+    // Update the page HTML to include back button with handler
+    page.innerHTML = `
+      <header class="interaction-header">
+        <button class="back-btn" onclick="hidePetInteractionPage()">←</button>
+        <h2>宠物互动</h2>
+        <button class="camera-btn">📸</button>
+      </header>
+
+      <div class="pet-interaction-content">
+        <div class="pet-display-area">
+          <div class="pet-avatar large">
+            <span class="pet-emoji">🐼</span>
+            <div class="status-indicators">
+              <div class="status-bar health">
+                <span class="status-icon">❤️</span>
+                <div class="bar-container">
+                  <div class="bar-fill" style="width: 80%"></div>
+                </div>
+              </div>
+              <div class="status-bar hunger">
+                <span class="status-icon">🍴</span>
+                <div class="bar-container">
+                  <div class="bar-fill" style="width: 60%"></div>
+                </div>
+              </div>
+              <div class="status-bar mood">
+                <span class="status-icon">😊</span>
+                <div class="bar-container">
+                  <div class="bar-fill" style="width: 90%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="interaction-buttons-grid">
+          <button class="interaction-btn feed">
+            <span class="btn-icon">🍽️</span>
+            <span class="btn-text">喂食</span>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+          </button>
+          <button class="interaction-btn play">
+            <span class="btn-icon">🎮</span>
+            <span class="btn-text">玩耍</span>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+          </button>
+          <button class="interaction-btn train">
+            <span class="btn-icon">📚</span>
+            <span class="btn-text">训练</span>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+          </button>
+          <button class="interaction-btn inventory">
+            <span class="btn-icon">🎒</span>
+            <span class="btn-text">背包</span>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+          </button>
+        </div>
+
+        <div class="tasks-rewards-section">
+          <div class="section-header">
+            <h3>当前任务</h3>
+            <span class="reward-indicator">🏆 3</span>
+          </div>
+          <div class="task-list">
+            <div class="task-item">
+              <div class="task-info">
+                <span class="task-name">连续喂养</span>
+                <div class="task-progress-bar">
+                  <div class="progress-fill" style="width: 60%"></div>
+                </div>
+                <span class="task-progress-text">3/5</span>
+              </div>
+              <div class="task-reward">🪙 x50</div>
+            </div>
+            <div class="task-item">
+              <div class="task-info">
+                <span class="task-name">玩耍时间</span>
+                <div class="task-progress-bar">
+                  <div class="progress-fill" style="width: 30%"></div>
+                </div>
+                <span class="task-progress-text">3/10</span>
+              </div>
+              <div class="task-reward">💎 x1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      ${cameraOverlayHtml}
+    `;
+    
+    // Add event listeners
+    const interactionButtons = page.querySelectorAll('.interaction-btn');
+    interactionButtons.forEach(btn => {
+      btn.addEventListener('click', handleInteraction);
+    });
+    
+    const cameraBtn = page.querySelector('.camera-btn');
+    cameraBtn.addEventListener('click', toggleCameraMode);
+    
+    return page;
+  }
+
+  function handleInteraction(event) {
+    const button = event.currentTarget;
+    const progressFill = button.querySelector('.progress-fill');
+    
+    // Simulate progress animation
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 10;
+      progressFill.style.width = `${progress}%`;
+      
+      if (progress >= 100) {
+        clearInterval(interval);
+        progressFill.style.width = '0%';
+        showInteractionReward(button.classList[1]);
+      }
+    }, 100);
+  }
+
+  function showInteractionReward(type) {
+    const rewards = {
+      feed: '🪙 +10',
+      play: '💎 +1',
+      train: '📚 经验 +50',
+      inventory: '🎒 道具 +1'
+    };
+    
+    showNotification(`互动成功! 获得 ${rewards[type]}`);
+  }
+
+  function toggleCameraMode() {
+    const overlay = document.querySelector('.camera-mode-overlay');
+    if (overlay.style.display === 'none') {
+      overlay.style.display = 'flex';
+    } else {
+      overlay.style.display = 'none';
+    }
+  }
+  </script>
+
+</body>
+</html>

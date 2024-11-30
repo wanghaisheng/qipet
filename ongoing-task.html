@@ -1,0 +1,473 @@
+<html><head><base href="task.html"><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的任务</title>
+<style>
+:root {
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+  --background-gradient: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  --card-background: rgba(255, 255, 255, 0.05);
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.mobile-container {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  background: var(--background-gradient);
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+  position: relative;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.nav-btn {
+  flex: 1;
+  background: var(--card-background);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.nav-btn.active {
+  background: var(--primary-color);
+}
+
+.task-status-header {
+  text-align: center;
+  padding: 15px;
+  background: var(--card-background);
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+
+.task-status-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+}
+
+.status-item {
+  text-align: center;
+}
+
+.status-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.status-label {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.task-list {
+  margin-top: 20px;
+}
+
+.task-card {
+  background: var(--card-background);
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 15px;
+  position: relative;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.task-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.task-type {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  background: rgba(138, 43, 226, 0.2);
+  color: var(--primary-color);
+}
+
+.task-progress {
+  margin: 10px 0;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.task-rewards {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.task-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.task-btn {
+  flex: 1;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.claim-btn {
+  background: var(--primary-color);
+  color: white;
+}
+
+.claim-btn:disabled {
+  background: #666;
+  cursor: not-allowed;
+}
+
+.go-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.completed-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #4CAF50;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task-filter {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filter-btn {
+  background: var(--card-background);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 15px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn.active {
+  background: var(--primary-color);
+}
+
+.batch-claim {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin: 10px 0;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.batch-claim:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(138, 43, 226, 0.2);
+}
+
+.task-timer {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 5px;
+}
+
+.task-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 5px 0;
+}
+
+</style>
+</head>
+<body>
+
+<div class="mobile-container">
+  <!-- 导航按钮 -->
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="window.location.href='task-hub.html'">
+      领取新任务 ✨
+    </button>
+    <button class="nav-btn active" onclick="window.location.href='task.html'">
+      已领取任务 📋
+    </button>
+  </div>
+
+  <!-- 任务状态头部 -->
+  <div class="task-status-header">
+    <h2>我的任务</h2>
+    <div class="task-status-stats">
+      <div class="status-item">
+        <div class="status-value">8</div>
+        <div class="status-label">进行中</div>
+      </div>
+      <div class="status-item">
+        <div class="status-value">3</div>
+        <div class="status-label">待领取</div>
+      </div>
+      <div class="status-item">
+        <div class="status-value">5</div>
+        <div class="status-label">已完成</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 任务筛选器 -->
+  <div class="task-filter">
+    <button class="filter-btn active">全部</button>
+    <button class="filter-btn">进行中</button>
+    <button class="filter-btn">可领取</button>
+    <button class="filter-btn">已完成</button>
+  </div>
+
+  <!-- 批量领取按钮 -->
+  <button class="batch-claim">
+    <span>一键领取全部奖励</span>
+    <span>🎁 × 3</span>
+  </button>
+
+  <!-- 任务列表 -->
+  <div class="task-list">
+    <!-- 进行中的任务 -->
+    <div class="task-card">
+      <div class="task-header">
+        <h3 class="task-title">心肝脾肺肾记录</h3>
+        <span class="task-type">主线</span>
+      </div>
+      <p class="task-description">记录五脏健康状态，完成3/5次记录</p>
+      <div class="task-progress">
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 60%"></div>
+        </div>
+      </div>
+      <div class="task-rewards">
+        <span class="reward-item">💰 50金币</span>
+        <span class="reward-item">🌟 经验值+100</span>
+      </div>
+      <div class="task-actions">
+        <button class="task-btn go-btn">去完成</button>
+      </div>
+      <div class="task-timer">剩余时间：23小时59分</div>
+    </div>
+
+    <!-- 可领取的任务 -->
+    <div class="task-card">
+      <div class="task-header">
+        <h3 class="task-title">每日喂养熊猫</h3>
+        <span class="task-type">日常</span>
+      </div>
+      <p class="task-description">完成熊猫日常喂养任务</p>
+      <div class="task-progress">
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 100%"></div>
+        </div>
+      </div>
+      <div class="task-rewards">
+        <span class="reward-item">💰 30金币</span>
+        <span class="reward-item">🎁 熊猫好感度+10</span>
+      </div>
+      <div class="task-actions">
+        <button class="task-btn claim-btn">领取奖励</button>
+      </div>
+      <span class="completed-label">已完成</span>
+    </div>
+
+    <!-- 已完成的任务 -->
+    <div class="task-card">
+      <div class="task-header">
+        <h3 class="task-title">竹子收集挑战</h3>
+        <span class="task-type">支线</span>
+      </div>
+      <p class="task-description">收集1000个竹子</p>
+      <div class="task-progress">
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 100%"></div>
+        </div>
+      </div>
+      <div class="task-rewards">
+        <span class="reward-item">💰 50金币</span>
+        <span class="reward-item">👑 竹子收集者称号</span>
+      </div>
+      <div class="task-actions">
+        <button class="task-btn claim-btn" disabled>已领取</button>
+      </div>
+      <span class="completed-label">已完成</span>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 筛选按钮点击事件
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      filterTasks(button.textContent.toLowerCase());
+    });
+  });
+
+  // 任务筛选逻辑
+  function filterTasks(filter) {
+    const tasks = document.querySelectorAll('.task-card');
+    tasks.forEach(task => {
+      const isCompleted = task.querySelector('.completed-label') !== null;
+      const hasClaimButton = task.querySelector('.claim-btn:not([disabled])') !== null;
+      
+      switch(filter) {
+        case '全部':
+          task.style.display = 'block';
+          break;
+        case '进行中':
+          task.style.display = !isCompleted ? 'block' : 'none';
+          break;
+        case '可领取':
+          task.style.display = hasClaimButton ? 'block' : 'none';
+          break;
+        case '已完成':
+          task.style.display = isCompleted ? 'block' : 'none';
+          break;
+      }
+    });
+  }
+
+  // 领取奖励按钮点击事件
+  const claimButtons = document.querySelectorAll('.claim-btn:not([disabled])');
+  claimButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const taskCard = this.closest('.task-card');
+      // 添加领取动画
+      button.innerHTML = '领取成功 ✨';
+      button.disabled = true;
+      taskCard.style.animation = 'claimSuccess 0.5s ease';
+      
+      // 更新任务状态
+      setTimeout(() => {
+        const completedLabel = document.createElement('span');
+        completedLabel.className = 'completed-label';
+        completedLabel.textContent = '已完成';
+        taskCard.appendChild(completedLabel);
+      }, 500);
+    });
+  });
+
+  // 一键领取按钮点击事件
+  const batchClaimButton = document.querySelector('.batch-claim');
+  batchClaimButton.addEventListener('click', function() {
+    const claimableButtons = document.querySelectorAll('.claim-btn:not([disabled])');
+    claimableButtons.forEach(button => {
+      button.click();
+    });
+    
+    // 更新一键领取按钮状态
+    this.innerHTML = '已全部领取 ✨';
+    this.disabled = true;
+    setTimeout(() => {
+      this.style.display = 'none';
+    }, 2000);
+  });
+
+  // 添加领取成功动画
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes claimSuccess {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+  `;
+  document.head.appendChild(style);
+});
+</script>
+
+</body>
+</html>

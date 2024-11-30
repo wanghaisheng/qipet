@@ -1,0 +1,545 @@
+<html><head><base href="https://example.com" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop</title>
+
+<style>
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+.mobile-container {
+  position: relative;
+  max-width: 430px;
+  height: 100vh;
+  height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  margin: 0 auto;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.user-name {
+  font-size: 16px;
+  color: white;
+}
+
+.resources-mini {
+  display: flex;
+  gap: 15px;
+}
+
+.resource-mini-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+.resource-mini-icon {
+  font-size: 16px;
+}
+
+.resource-mini-amount {
+  font-size: 14px;
+  color: white;
+}
+
+.shop-content {
+  padding: 0 15px;
+  padding-bottom: calc(65px + var(--safe-area-inset-bottom));
+}
+
+.shop-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.back-btn:hover {
+  transform: scale(1.1);
+}
+
+.currency-display {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.currency-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+
+.currency-amount {
+  font-weight: bold;
+}
+
+.recharge-btn {
+  background: var(--primary-color);
+  border: none;
+  padding: 4px 8px;
+  border-radius: 10px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.shop-categories {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+.category-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.category-btn.active {
+  background: var(--primary-color);
+}
+
+.offer-grid,
+.vip-grid,
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.offer-card,
+.vip-card,
+.item-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.item-image {
+  font-size: 40px;
+  margin: 10px 0;
+}
+
+.price {
+  margin: 10px 0;
+}
+
+.original {
+  text-decoration: line-through;
+  color: rgba(255, 255, 255, 0.5);
+  margin-right: 5px;
+}
+
+.discounted {
+  color: #ff4757;
+}
+
+.buy-btn {
+  background: var(--primary-color);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: calc(10px + var(--safe-area-inset-bottom)) 0 var(--safe-area-inset-bottom);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  min-width: 60px;
+  background: none;
+  border: none;
+}
+
+.nav-item.active {
+  color: var(--primary-color);
+}
+
+.nav-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+</style>
+</head>
+<body>
+  <div class="mobile-container">
+    <header class="header">
+      <div class="header-content">
+        <div class="user-info">
+          <div class="user-avatar">👤</div>
+          <span class="user-name">用户名</span>
+        </div>
+        <div class="resources-mini">
+          <div class="resource-mini-item">
+            <span class="resource-mini-icon">🪙</span>
+            <span class="resource-mini-amount">1,234</span>
+          </div>
+          <div class="resource-mini-item">
+            <span class="resource-mini-icon">💎</span>
+            <span class="resource-mini-amount">56</span>
+          </div>
+          <div class="resource-mini-item">
+            <span class="resource-mini-icon">🎋</span>
+            <span class="resource-mini-amount">89</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="shop-content">
+      <header class="shop-header">
+        <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+        <h2>商店</h2>
+      </header>
+
+      <div class="currency-display">
+        <div class="currency-item">
+          <span class="currency-icon">🪙</span>
+          <span class="currency-amount">1,234</span>
+          <button class="recharge-btn">充值</button>
+        </div>
+        <div class="currency-item">
+          <span class="currency-icon">💎</span>
+          <span class="currency-amount">56</span>
+          <button class="recharge-btn">充值</button>
+        </div>
+        <div class="currency-item">
+          <span class="currency-icon">🎋</span>
+          <span class="currency-amount">89</span>
+          <button class="recharge-btn">获取</button>
+        </div>
+      </div>
+
+      <div class="shop-categories">
+        <button class="category-btn active" data-category="gold">金币商城</button>
+        <button class="category-btn" data-category="diamond">钻石商城</button>
+        <button class="category-btn" data-category="vip">VIP专区</button>
+        <button class="category-btn" data-category="limited">限时商品</button>
+        <button class="category-btn" data-category="gift">礼包</button>
+      </div>
+
+      <div class="limited-time-offers">
+        <h3>限时优惠 <span style="color: #ff4757">🔥热销中</span></h3>
+        <div class="offer-grid">
+          <div class="offer-card">
+            <div class="countdown">剩余: 1小时</div>
+            <span class="discount-tag">-20%</span>
+            <div class="item-image">🎁</div>
+            <h4>超值成长礼包</h4>
+            <div class="price">
+              <span class="original">100金币</span>
+              <span class="discounted">80金币</span>
+            </div>
+            <div class="item-contents">
+              <small>包含: 竹子x10, 体力药水x5, 随机装饰x1</small>
+            </div>
+            <div class="purchase-limit">今日限购1次</div>
+            <button class="buy-btn">购买</button>
+          </div>
+          <div class="offer-card">
+            <div class="countdown">剩余: 2小时</div>
+            <span class="discount-tag">-25%</span>
+            <div class="item-image">💝</div>
+            <h4>每日特惠礼包</h4>
+            <div class="price">
+              <span class="original">200钻石</span>
+              <span class="discounted">150钻石</span>
+            </div>
+            <div class="item-contents">
+              <small>包含: 高级道具x3, 随机装饰x2, 限定称号x1</small>
+            </div>
+            <div class="purchase-limit">每周限购3次</div>
+            <button class="buy-btn">购买</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="daily-specials">
+        <h3>每日特惠</h3>
+        <div class="items-grid">
+          <div class="item-card">
+            <span class="refresh-timer">23:45:12后刷新</span>
+            <div class="item-image">🎋</div>
+            <h4>豪华竹子礼盒</h4>
+            <div class="item-desc">高品质竹子礼盒，内含稀有竹子</div>
+            <div class="price">
+              <span class="original">500金币</span>
+              <span class="discounted">400金币</span>
+            </div>
+            <div class="stock-info">今日剩余: 5个</div>
+            <button class="buy-btn">限时抢购</button>
+          </div>
+          <div class="item-card">
+            <span class="refresh-timer">23:45:12后刷新</span>
+            <div class="item-image">🌟</div>
+            <h4>幸运星礼盒</h4>
+            <div class="item-desc">开启可随机获得珍稀道具</div>
+            <div class="price">
+              <span class="original">1000金币</span>
+              <span class="discounted">800金币</span>
+            </div>
+            <div class="stock-info">今日剩余: 3个</div>
+            <button class="buy-btn">限时抢购</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="vip-section">
+        <h3>VIP专区 <span style="color: gold">👑尊享特权</span></h3>
+        <div class="vip-grid">
+          <div class="vip-card">
+            <div class="vip-tag">VIP专属</div>
+            <div class="item-image">👑</div>
+            <h4>皇冠装饰套装</h4>
+            <div class="price">500钻石</div>
+            <div class="vip-bonus">
+              <small>VIP额外获得: 专属头像框、聊天气泡</small>
+            </div>
+            <div class="vip-discount">VIP价: 400钻石</div>
+            <button class="buy-btn">购买</button>
+          </div>
+          <div class="vip-card">
+            <div class="vip-tag">VIP专属</div>
+            <div class="item-image">🌟</div>
+            <h4>闪耀特效礼包</h4>
+            <div class="price">300钻石</div>
+            <div class="vip-bonus">
+              <small>VIP额外获得: 专属徽章、粒子特效</small>
+            </div>
+            <div class="vip-discount">VIP价: 240钻石</div>
+            <button class="buy-btn">购买</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="regular-items">
+        <h3>日常商品</h3>
+        <div class="items-grid">
+          <div class="item-card">
+            <div class="item-image">🎋</div>
+            <h4>新鲜竹子</h4>
+            <div class="item-desc">恢复宠物10点健康值</div>
+            <div class="item-effects">
+              <span>效果: 健康值+10</span>
+              <span>持续时间: 即时</span>
+            </div>
+            <div class="stock-info">库存: 999+</div>
+            <div class="price">20金币/个</div>
+            <div class="quantity-selector">
+              <button class="quantity-btn">-</button>
+              <input type="number" value="1" min="1" max="99">
+              <button class="quantity-btn">+</button>
+            </div>
+            <button class="buy-btn">购买</button>
+          </div>
+          <div class="item-card">
+            <div class="item-image">🍯</div>
+            <h4>能量蜂蜜</h4>
+            <div class="item-desc">快速恢复宠物体力</div>
+            <div class="item-effects">
+              <span>效果: 体力+20</span>
+              <span>持续时间: 即时</span>
+            </div>
+            <div class="stock-info">库存: 50</div>
+            <div class="price">30金币/个</div>
+            <div class="quantity-selector">
+              <button class="quantity-btn">-</button>
+              <input type="number" value="1" min="1" max="99">
+              <button class="quantity-btn">+</button>
+            </div>
+            <button class="buy-btn">购买</button>
+          </div>
+          <div class="item-card">
+            <div class="item-image">🎨</div>
+            <h4>进阶涂料</h4>
+            <div class="item-desc">提升宠物进阶几率</div>
+            <div class="item-effects">
+              <span>效果: 进阶概率+5%</span>
+              <span>持续时间: 24小时</span>
+            </div>
+            <div class="stock-info">库存: 25</div>
+            <div class="price">50钻石/个</div>
+            <div class="quantity-selector">
+              <button class="quantity-btn">-</button>
+              <input type="number" value="1" min="1" max="99">
+              <button class="quantity-btn">+</button>
+            </div>
+            <button class="buy-btn">购买</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ad-rewards">
+        <h3>福利中心</h3>
+        <div class="reward-card">
+          <div class="reward-info">
+            <span class="reward-icon">🎁</span>
+            <span>每日观看广告领金币</span>
+            <span class="bonus-tag">今日双倍</span>
+          </div>
+          <div class="watch-progress">
+            <div class="progress-text">今日剩余: 5/10次</div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 50%"></div>
+            </div>
+          </div>
+          <div class="reward-amount">可获得: 40金币</div>
+          <button class="watch-ad-btn">观看广告</button>
+        </div>
+        <div class="reward-card">
+          <div class="reward-info">
+            <span class="reward-icon">💎</span>
+            <span>看广告领钻石</span>
+            <span class="bonus-tag">VIP额外+1</span>
+          </div>
+          <div class="watch-progress">
+            <div class="progress-text">今日剩余: 3/5次</div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 40%"></div>
+            </div>
+          </div>
+          <div class="reward-amount">可获得: 2钻石</div>
+          <button class="watch-ad-btn">观看广告</button>
+        </div>
+      </div>
+
+    </div>
+
+    <nav class="bottom-nav">
+      <button class="nav-item" data-page="home" onclick="navigateToPage('home')">
+        <span class="nav-icon">🏠</span>
+        <span>主页</span>
+      </button>
+      <button class="nav-item" data-page="challenge" onclick="navigateToPage('challenge')">
+        <span class="nav-icon">🎯</span>
+        <span>挑战</span>
+      </button>
+      <button class="nav-item" data-page="task" onclick="navigateToTaskPage()">
+        <span class="nav-icon">✨</span>
+        <span>任务</span>
+      </button>
+      <button class="nav-item" data-page="journey" onclick="navigateToPage('journey')">
+        <span class="nav-icon">🗺️</span>
+        <span>成长</span>
+      </button>
+      <button class="nav-item active" data-page="shop" onclick="navigateToPage('shop')">
+        <span class="nav-icon">🎁</span>
+        <span>商店</span>
+      </button>
+    </nav>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const backBtn = document.querySelector('.back-btn');
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          window.location.href = 'index.html';
+        });
+      }
+
+      // Other initialization code...
+    });
+  </script>
+
+</body>
+</html>

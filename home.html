@@ -1,0 +1,884 @@
+<html><head><base href="." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+
+<style>
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+#notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.user-name {
+  font-size: 16px;
+  color: white;
+}
+
+.resources-mini {
+  display: flex;
+  gap: 15px;
+}
+
+.resource-mini-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+.resource-mini-icon {
+  font-size: 16px;
+}
+
+.resource-mini-amount {
+  font-size: 14px;
+  color: white;
+}
+
+.mobile-container {
+  position: relative; /* Ensure this is set for absolute positioning context */
+  max-width: 430px;
+  height: 100vh;
+  height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  margin: 0 auto;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+}
+
+.panda-display {
+  position: relative;
+  padding: 20px;
+  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  text-align: center;
+}
+
+.panda-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.panda-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panda-emoji {
+  font-size: 60px;
+}
+
+.mood-indicator {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+.status-summary {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.status-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+}
+
+.interaction-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.interact-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  background: var(--primary-color);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  flex: 0 1 auto;
+}
+
+.interact-btn:hover {
+  background: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+.task-section {
+  padding: 12px;
+  margin: 15px 0;
+}
+
+.pet-progress-section {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  margin-top: 15px;
+}
+
+.progress-bar-container {
+  position: relative;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+}
+
+.pet-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.pet-stat-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+.backpack-section {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  margin: 15px 0;
+}
+
+.backpack-section h3 {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.backpack-filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 5px 0;
+  margin-top: 10px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.backpack-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-tab {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-tab.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.filter-tab:hover {
+  background: rgba(138, 43, 226, 0.4);
+}
+
+.backpack-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.backpack-item {
+  position: relative;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-height: 80px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backpack-item:active {
+  transform: scale(0.95);
+}
+
+.backpack-item.empty {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+}
+
+.backpack-item-icon {
+  font-size: 24px;
+}
+
+.backpack-item-count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.backpack-item-new {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--primary-color);
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  animation: pulse 2s infinite;
+}
+
+.reward-notification {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(138, 43, 226, 0.9);
+  padding: 15px 25px;
+  border-radius: 20px;
+  color: white;
+  text-align: center;
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { transform: translate(-50%, 100%); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.item-details-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  padding: 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 300px;
+  z-index: 1001;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+
+.item-details-content {
+  text-align: center;
+}
+
+.item-details-icon {
+  font-size: 40px;
+  margin: 10px 0;
+}
+
+.item-details-info {
+  margin: 15px 0;
+}
+
+.item-details-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.item-details-btn {
+  padding: 8px 16px;
+  border-radius: 15px;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.item-details-btn:hover {
+  background: var(--secondary-color);
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: calc(10px + var(--safe-area-inset-bottom)) 0 var(--safe-area-inset-bottom);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  min-width: 60px;
+  background: none;
+  border: none;
+}
+
+.nav-item.active {
+  color: var(--primary-color);
+}
+
+.nav-item .nav-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+  position: relative;
+}
+
+.nav-item.active .nav-icon {
+  transform: scale(1.1);
+}
+
+.nav-item:active {
+  transform: scale(0.95);
+}
+
+.nav-item:hover {
+  color: var(--primary-color);
+  opacity: 0.8;
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+
+.floating-task-btn {
+  position: absolute;
+  left: 20px;
+  max-width: 50%;
+  background: var(--primary-color);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+</style>
+</head>
+<body>
+<div id="notification-container"></div>
+<div class="mobile-container">
+  <header class="header">
+    <div class="header-content">
+      <div class="user-info">
+        <div class="user-avatar">👤</div>
+        <span class="user-name">用户名</span>
+      </div>
+      <div class="resources-mini">
+        <div class="resource-mini-item">
+          <span class="resource-mini-icon">🪙</span>
+          <span class="resource-mini-amount">1,234</span>
+        </div>
+        <div class="resource-mini-item">
+          <span class="resource-mini-icon">💎</span>
+          <span class="resource-mini-amount">56</span>
+        </div>
+        <div class="resource-mini-item">
+          <span class="resource-mini-icon">🎋</span>
+          <span class="resource-mini-amount">89</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="panda-display">
+    <div class="panda-container">
+      <div class="panda-avatar">
+        <span class="panda-emoji">🐼</span>
+        <div class="mood-indicator">
+          <span class="mood-emoji">😊</span>
+        </div>
+      </div>
+      <div class="status-summary">
+        <h3>欢迎回来!</h3>
+        <p class="status-text">今日活力: 100%</p>
+      </div>
+      <div class="interaction-buttons">
+        <button class="interact-btn">
+          <span class="icon">🤚</span>
+          <span>抚摸</span>
+        </button>
+        <button class="interact-btn">
+          <span class="icon">🎋</span>
+          <span>喂食</span>
+        </button>
+        <button class="interact-btn" onclick="navigateToPage('pet-advance')">
+          <span class="icon">⭐</span>
+          <span>进阶</span>
+        </button>
+        <button class="interact-btn" onclick="navigateToPage('garden')">
+          <span class="icon">🌸</span>
+          <span>后花园</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pet-progress-section">
+    <div class="progress-bar-container">
+      <div class="progress-bar" style="width: 45%;"></div>
+    </div>
+    <div class="progress-labels">
+      <span>婴儿期</span>
+      <span>成长期</span>
+      <span>成年期</span>
+    </div>
+    <div class="pet-stats">
+      <div class="pet-stat-item">
+        <div>等级: 5</div>
+      </div>
+      <div class="pet-stat-item">
+        <div>亲密度: 789</div>
+      </div>
+      <div class="pet-stat-item">
+        <div>心情: 愉快</div>
+      </div>
+      <div class="pet-stat-item">
+        <div>饥饿度: 80%</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="floating-task-btn" onclick="navigateToPage('task')">
+    <span class="icon">✨</span>
+    <span>每日任务</span>
+  </button>
+
+  <div class="backpack-section">
+    <h3>
+      背包
+      <div class="backpack-filters">
+        <button class="filter-tab active" data-filter="all">全部</button>
+        <button class="filter-tab" data-filter="item">道具</button>
+        <button class="filter-tab" data-filter="skin">皮肤</button>
+        <button class="filter-tab" data-filter="decoration">装扮</button>
+        <button class="filter-tab" data-filter="badge">徽章</button>
+        <button class="filter-tab" data-filter="reward">奖励</button>
+      </div>
+    </h3>
+    <div class="backpack-grid">
+      <!-- Items will be dynamically inserted here -->
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="home">
+      <span class="nav-icon">🏠</span>
+      <span>主页</span>
+    </button>
+    <button class="nav-item" data-page="challenge">
+      <span class="nav-icon">🎯</span>
+      <span>挑战</span>
+    </button>
+    <button class="nav-item" data-page="task">
+      <span class="nav-icon">✨</span>
+      <span>任务</span>
+    </button>
+    <button class="nav-item" data-page="journey">
+      <span class="nav-icon">🗺️</span>
+      <span>成长</span>
+    </button>
+    <button class="nav-item" data-page="shop">
+      <span class="nav-icon">🎁</span>
+      <span>商店</span>
+    </button>
+  </nav>
+</div>
+
+<script>
+// Add new JavaScript for home page functionality
+document.addEventListener('DOMContentLoaded', function() {
+  initializeHomePage();
+  updateFloatingButtonPosition(); // Call to update position on load
+  window.addEventListener('resize', updateFloatingButtonPosition); // Update position on resize
+  
+  // Handle scroll events
+  const container = document.querySelector('.mobile-container');
+  container.addEventListener('scroll', function() {
+    // Update position on scroll if needed
+    updateFloatingButtonPosition();
+  });
+
+  // Update active nav state to home
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(item => {
+    item.classList.toggle('active', item.dataset.page === 'home');
+  });
+});
+
+function initializeHomePage() {
+  // Initialize quick access buttons
+  const quickAccessBtns = document.querySelectorAll('.quick-access-btn');
+  quickAccessBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const page = btn.dataset.page;
+      navigateToPage(page);
+    });
+  });
+
+  // Initialize panda interaction
+  const interactBtns = document.querySelectorAll('.interact-btn');
+  interactBtns.forEach(btn => {
+    btn.addEventListener('click', handlePandaInteraction);
+  });
+
+  // Initialize backpack grid
+  initializeBackpack();
+
+  // Add pet progression handling
+  initializePetProgress();
+}
+
+function initializeBackpack() {
+  const backpackGrid = document.querySelector('.backpack-grid');
+  const backpackItems = [
+    { id: 1, icon: '🎋', name: '竹子', count: 50, type: 'item', isNew: false },
+    { id: 2, icon: '🍎', name: '苹果', count: 20, type: 'item', isNew: false },
+    { id: 3, icon: '👕', name: '熊猫演出服', count: 1, type: 'skin', isNew: true },
+    { id: 4, icon: '🎭', name: '新年装扮', count: 1, type: 'decoration', isNew: false },
+    { id: 5, icon: '🏆', name: '任务达人', count: 1, type: 'badge', isNew: true },
+    { id: 6, icon: '👑', name: '皇冠装饰', count: 1, type: 'decoration', isNew: false },
+    { id: 7, icon: '🎁', name: '任务奖励', count: 1, type: 'reward', isNew: true },
+    { id: 8, icon: '🌟', name: '精英徽章', count: 1, type: 'badge', isNew: false }
+  ];
+
+  // Initialize filter functionality
+  const filterTabs = document.querySelectorAll('.filter-tab');
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Update active state
+      filterTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      // Filter items
+      const filterType = tab.dataset.filter;
+      displayFilteredItems(filterType, backpackItems);
+    });
+  });
+
+  // Function to display filtered items
+  function displayFilteredItems(filterType, items) {
+    backpackGrid.innerHTML = '';
+    
+    const filteredItems = filterType === 'all' 
+      ? items 
+      : items.filter(item => item.type === filterType);
+
+    // Display filtered items
+    filteredItems.forEach(item => {
+      const itemElement = document.createElement('div');
+      itemElement.className = 'backpack-item';
+      itemElement.innerHTML = `
+        ${item.isNew ? '<span class="backpack-item-new">NEW</span>' : ''}
+        <span class="backpack-item-icon">${item.icon}</span>
+        <span class="backpack-item-count">${item.count}</span>
+      `;
+      
+      itemElement.addEventListener('click', () => showItemDetails(item));
+      backpackGrid.appendChild(itemElement);
+    });
+
+    // Add empty slots to fill the grid
+    const totalSlots = 12;
+    const emptySlots = totalSlots - filteredItems.length;
+    for (let i = 0; i < emptySlots; i++) {
+      const emptySlot = document.createElement('div');
+      emptySlot.className = 'backpack-item empty';
+      backpackGrid.appendChild(emptySlot);
+    }
+  }
+
+  // Initial display of all items
+  displayFilteredItems('all', backpackItems);
+}
+
+// Update showItemDetails function to handle different item types
+function showItemDetails(item) {
+  const typeLabels = {
+    item: '道具',
+    skin: '皮肤',
+    decoration: '装扮',
+    badge: '徽章',
+    reward: '奖励'
+  };
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  document.body.appendChild(backdrop);
+
+  const modal = document.createElement('div');
+  modal.className = 'item-details-modal';
+  modal.innerHTML = `
+    <div class="item-details-content">
+      <span class="item-details-icon">${item.icon}</span>
+      <h3>${item.name}</h3>
+      <div class="item-details-info">
+        <p>类型: ${typeLabels[item.type]}</p>
+        ${item.description ? `<p>${item.description}</p>` : ''}
+        ${item.count > 1 ? `<p>数量: ${item.count}</p>` : ''}
+      </div>
+      <div class="item-details-actions">
+        ${item.type === 'reward' ? 
+          `<button class="item-details-btn" onclick="claimReward('${item.id}')">领取</button>` :
+          `<button class="item-details-btn" onclick="useItem('${item.id}')">使用</button>`
+        }
+        <button class="item-details-btn" onclick="closeItemDetails()">关闭</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  backdrop.addEventListener('click', closeItemDetails);
+}
+
+function claimReward(itemId) {
+  showNotification('奖励已领取！');
+  closeItemDetails();
+  // Update backpack after claiming
+  initializeBackpack();
+}
+
+function useItem(itemId) {
+  showNotification('物品使用成功！');
+  closeItemDetails();
+}
+
+function closeItemDetails() {
+  const backdrop = document.querySelector('.modal-backdrop');
+  const modal = document.querySelector('.item-details-modal');
+  if (backdrop) document.body.removeChild(backdrop);
+  if (modal) document.body.removeChild(modal);
+}
+
+function showNotification(message) {
+  const notification = document.createElement('div');
+  notification.className = 'reward-notification';
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    document.body.removeChild(notification);
+  }, 2000);
+}
+
+function initializePetProgress() {
+  // Example progress update function
+  function updateProgress(value) {
+    const progressBar = document.querySelector('.progress-bar');
+    progressBar.style.width = `${value}%`;
+  }
+  
+  // Set initial progress (example value)
+  updateProgress(45);
+}
+
+function handlePandaInteraction(event) {
+  const actionType = event.currentTarget.querySelector('span:last-child').textContent;
+  // Handle different interaction types
+  switch(actionType) {
+    case '抚摸':
+      showInteractionAnimation('pet');
+      break;
+    case '喂食':
+      showInteractionAnimation('feed');
+      break;
+  }
+}
+
+function showInteractionAnimation(type) {
+  const panda = document.querySelector('.panda-emoji');
+  panda.style.transform = 'scale(1.1)';
+  setTimeout(() => {
+    panda.style.transform = 'scale(1)';
+  }, 200);
+
+  // Show mood change
+  const moodEmoji = document.querySelector('.mood-emoji');
+  const happyEmojis = ['😊', '🥰', '😍'];
+  moodEmoji.textContent = happyEmojis[Math.floor(Math.random() * happyEmojis.length)];
+}
+
+function navigateToPage(page) {
+  console.log(`Navigating to ${page}`);
+  // Update active state of nav items
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(item => {
+    item.classList.toggle('active', item.dataset.page === page);
+  });
+
+  // Handle specific page navigation
+  if (page === 'task') {
+    console.log('Navigating to task page');
+  } else if (page === 'pet-advance') {
+    console.log('Navigating to pet advancement page');
+  } else if (page === 'garden') {
+    console.log('Navigating to garden page');
+    // Implementation for garden page navigation
+  }
+}
+
+function updateFloatingButtonPosition() {
+  const button = document.querySelector('.floating-task-btn');
+  const backpackSection = document.querySelector('.backpack-section');
+  const bottomNav = document.querySelector('.bottom-nav');
+  const bottomNavTop = bottomNav.getBoundingClientRect().top;
+  const backpackTop = backpackSection.getBoundingClientRect().top;
+  
+  // Position the button relative to the bottom nav
+  const offset = bottomNavTop - backpackTop - button.offsetHeight - 20; // 20px gap
+  
+  button.style.transform = `translateY(${offset}px)`;
+}
+
+// Add scroll event listener
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.querySelector('.mobile-container');
+  container.addEventListener('scroll', updateFloatingButtonPosition);
+  updateFloatingButtonPosition(); // Initial position
+  window.addEventListener('resize', updateFloatingButtonPosition);
+});
+</script>
+
+</body></html>

@@ -1,0 +1,409 @@
+<html><head><base href="petAdvance.html"><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pet Advance</title>
+
+<style>
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+.mobile-container {
+  position: relative;
+  max-width: 430px;
+  height: 100vh;
+  height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  margin: 0 auto;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  position: relative;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.page-title {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 18px;
+  margin-left: -24px; /* Offset back button width */
+}
+
+.advance-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 15px 0;
+}
+
+.section-title {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: var(--primary-color);
+}
+
+.pet-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.stat-value {
+  font-size: 16px;
+  color: white;
+}
+
+.progress-bar-container {
+  background: rgba(255, 255, 255, 0.1);
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--primary-color);
+  width: 75%;
+  transition: width 0.3s ease;
+}
+
+.level-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.skill-item {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.skill-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.skill-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.skill-name {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.skill-level {
+  font-size: 10px;
+  color: var(--primary-color);
+  margin-top: 4px;
+}
+
+.achievement-list {
+  margin-top: 15px;
+}
+
+.achievement-item {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.achievement-icon {
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.achievement-info {
+  flex: 1;
+}
+
+.achievement-name {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.achievement-description {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.achievement-progress {
+  font-size: 12px;
+  color: var(--primary-color);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #1a1a2e;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 300px;
+  z-index: 1001;
+  display: none;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: none;
+}
+
+.modal-title {
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.modal-content {
+  margin-bottom: 20px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.modal-button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-button.confirm {
+  background: var(--primary-color);
+  color: white;
+}
+
+.modal-button.cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+</style>
+</head>
+<body>
+
+<div class="mobile-container">
+  <header class="header">
+    <button class="back-button" onclick="window.location.href='/'">←</button>
+    <h1 class="page-title">宠物进阶</h1>
+  </header>
+
+  <div class="advance-section">
+    <h2 class="section-title">成长进度</h2>
+    <div class="pet-stats">
+      <div class="stat-item">
+        <span class="stat-label">当前等级</span>
+        <span class="stat-value">Lv.5</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">成长值</span>
+        <span class="stat-value">2350/3000</span>
+      </div>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar"></div>
+    </div>
+    <div class="level-info">
+      <span>Lv.5</span>
+      <span>Lv.6</span>
+    </div>
+  </div>
+
+  <div class="advance-section">
+    <h2 class="section-title">技能培养</h2>
+    <div class="skill-grid">
+      <div class="skill-item" onclick="showSkillModal('agility')">
+        <div class="skill-icon">🏃</div>
+        <div class="skill-name">敏捷</div>
+        <div class="skill-level">Lv.3</div>
+      </div>
+      <div class="skill-item" onclick="showSkillModal('strength')">
+        <div class="skill-icon">💪</div>
+        <div class="skill-name">力量</div>
+        <div class="skill-level">Lv.2</div>
+      </div>
+      <div class="skill-item" onclick="showSkillModal('intelligence')">
+        <div class="skill-icon">🧠</div>
+        <div class="skill-name">智力</div>
+        <div class="skill-level">Lv.4</div>
+      </div>
+      <div class="skill-item" onclick="showSkillModal('charm')">
+        <div class="skill-icon">✨</div>
+        <div class="skill-name">魅力</div>
+        <div class="skill-level">Lv.3</div>
+      </div>
+      <div class="skill-item" onclick="showSkillModal('endurance')">
+        <div class="skill-icon">❤️</div>
+        <div class="skill-name">耐力</div>
+        <div class="skill-level">Lv.2</div>
+      </div>
+      <div class="skill-item" onclick="showSkillModal('luck')">
+        <div class="skill-icon">🍀</div>
+        <div class="skill-name">幸运</div>
+        <div class="skill-level">Lv.1</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="advance-section">
+    <h2 class="section-title">成就系统</h2>
+    <div class="achievement-list">
+      <div class="achievement-item">
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-info">
+          <div class="achievement-name">训练达人</div>
+          <div class="achievement-description">累计训练时间达到100小时</div>
+          <div class="achievement-progress">进度: 75/100</div>
+        </div>
+      </div>
+      <div class="achievement-item">
+        <div class="achievement-icon">⭐</div>
+        <div class="achievement-info">
+          <div class="achievement-name">技能大师</div>
+          <div class="achievement-description">将一项技能提升至最高等级</div>
+          <div class="achievement-progress">进度: 4/5</div>
+        </div>
+      </div>
+      <div class="achievement-item">
+        <div class="achievement-icon">🎯</div>
+        <div class="achievement-info">
+          <div class="achievement-name">完美养育</div>
+          <div class="achievement-description">保持宠物心情值满值持续7天</div>
+          <div class="achievement-progress">进度: 3/7</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Skill Modal -->
+<div class="modal-backdrop"></div>
+<div class="modal">
+  <h3 class="modal-title">技能提升</h3>
+  <div class="modal-content">
+    <p>是否消耗100点成长值提升该技能等级？</p>
+  </div>
+  <div class="modal-buttons">
+    <button class="modal-button cancel" onclick="hideModal()">取消</button>
+    <button class="modal-button confirm" onclick="upgradeSkill()">确认</button>
+  </div>
+</div>
+
+<script>
+let currentSkill = null;
+
+function showSkillModal(skill) {
+  currentSkill = skill;
+  document.querySelector('.modal-backdrop').style.display = 'block';
+  document.querySelector('.modal').style.display = 'block';
+}
+
+function hideModal() {
+  document.querySelector('.modal-backdrop').style.display = 'none';
+  document.querySelector('.modal').style.display = 'none';
+  currentSkill = null;
+}
+
+function upgradeSkill() {
+  if (currentSkill) {
+    // Here you would typically make an API call to upgrade the skill
+    console.log(`Upgrading skill: ${currentSkill}`);
+    
+    // Update the UI to reflect the change
+    const skillItem = document.querySelector(`.skill-item:has(.skill-name:contains("${currentSkill}"))`);
+    if (skillItem) {
+      const levelElement = skillItem.querySelector('.skill-level');
+      const currentLevel = parseInt(levelElement.textContent.replace('Lv.', ''));
+      levelElement.textContent = `Lv.${currentLevel + 1}`;
+    }
+  }
+  hideModal();
+}
+
+// Optional: Close modal when clicking backdrop
+document.querySelector('.modal-backdrop').addEventListener('click', hideModal);
+</script>
+
+</body></html>

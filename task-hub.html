@@ -1,0 +1,444 @@
+<html><head><base href="task-hub.html"><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务中心</title>
+<style>
+:root {
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+  --background-gradient: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  --card-background: rgba(255, 255, 255, 0.05);
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.mobile-container {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  background: var(--background-gradient);
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+  position: relative;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.nav-btn {
+  flex: 1;
+  background: var(--card-background);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.nav-btn.active {
+  background: var(--primary-color);
+}
+
+.task-hub-header {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: var(--card-background);
+  border-radius: 15px;
+}
+
+.user-level {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.user-progress {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.task-categories {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.category-card {
+  background: var(--card-background);
+  border-radius: 15px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.category-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.category-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.category-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.category-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.task-count {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--primary-color);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.recommended-tasks {
+  margin-top: 30px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-card {
+  background: var(--card-background);
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 15px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.task-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.task-rewards {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.task-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 10px;
+}
+
+.task-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.accept-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.accept-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.difficulty-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.difficulty-dots {
+  display: flex;
+  gap: 2px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.dot.active {
+  background: var(--primary-color);
+}
+
+.reward-tag {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@keyframes shine {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.premium-task {
+  background: linear-gradient(45deg, 
+    var(--card-background) 0%,
+    rgba(255, 215, 0, 0.3) 25%,
+    var(--card-background) 50%,
+    rgba(255, 215, 0, 0.3) 75%,
+    var(--card-background) 100%);
+  background-size: 200% 100%;
+  animation: shine 3s linear infinite;
+}
+
+</style>
+</head>
+<body>
+
+<div class="mobile-container">
+  <!-- 导航按钮 -->
+  <div class="nav-buttons">
+    <button class="nav-btn active" onclick="window.location.href='task-hub.html'">
+      领取新任务 ✨
+    </button>
+    <button class="nav-btn" onclick="window.location.href='task.html'">
+      已领取任务 📋
+    </button>
+  </div>
+
+  <!-- 任务中心头部 -->
+  <div class="task-hub-header">
+    <div class="user-level">LV.3 冒险者</div>
+    <div class="user-progress">当前经验: 2450/3000</div>
+  </div>
+
+  <!-- 任务分类 -->
+  <div class="task-categories">
+    <div class="category-card">
+      <div class="category-icon">📅</div>
+      <div class="category-title">日常任务</div>
+      <div class="category-desc">每日刷新的基础任务</div>
+      <span class="task-count">5个可接</span>
+    </div>
+
+    <div class="category-card">
+      <div class="category-icon">⚔️</div>
+      <div class="category-title">挑战任务</div>
+      <div class="category-desc">高难度高回报任务</div>
+      <span class="task-count">3个可接</span>
+    </div>
+
+    <div class="category-card">
+      <div class="category-icon">🎯</div>
+      <div class="category-title">自定义任务</div>
+      <div class="category-desc">定制你的冒险目标</div>
+      <span class="task-count">∞</span>
+    </div>
+
+    <div class="category-card">
+      <div class="category-icon">🏆</div>
+      <div class="category-title">成就系统</div>
+      <div class="category-desc">永久性的荣誉徽章</div>
+      <span class="task-count">12个</span>
+    </div>
+  </div>
+
+  <!-- 推荐任务 -->
+  <div class="recommended-tasks">
+    <h2 class="section-title">
+      <span>✨ 推荐任务</span>
+    </h2>
+
+    <!-- 普通任务卡片 -->
+    <div class="task-card">
+      <div class="task-header">
+        <h3 class="task-title">新手引导任务</h3>
+        <div class="difficulty-indicator">
+          <span>难度:</span>
+          <div class="difficulty-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      </div>
+      <p class="task-description">完成基础操作教程，熟悉游戏玩法。</p>
+      <div class="task-meta">
+        <div class="task-rewards">
+          <span class="reward-tag">💰 100金币</span>
+          <span class="reward-tag">📦 新手礼包</span>
+        </div>
+        <span>预计用时: 10分钟</span>
+      </div>
+      <button class="accept-btn">领取任务</button>
+    </div>
+
+    <!-- 高级任务卡片 -->
+    <div class="task-card premium-task">
+      <div class="task-header">
+        <h3 class="task-title">探索神秘遗迹</h3>
+        <div class="difficulty-indicator">
+          <span>难度:</span>
+          <div class="difficulty-dots">
+            <span class="dot active"></span>
+            <span class="dot active"></span>
+            <span class="dot active"></span>
+          </div>
+        </div>
+      </div>
+      <p class="task-description">深入未知的远古遗迹，发掘珍贵宝藏。</p>
+      <div class="task-meta">
+        <div class="task-rewards">
+          <span class="reward-tag">💎 50钻石</span>
+          <span class="reward-tag">🏅 稀有称号</span>
+        </div>
+        <span>限时任务: 24小时</span>
+      </div>
+      <button class="accept-btn">领取任务</button>
+    </div>
+
+    <!-- 限时活动任务 -->
+    <div class="task-card">
+      <div class="task-header">
+        <h3 class="task-title">周末双倍奖励</h3>
+        <div class="difficulty-indicator">
+          <span>难度:</span>
+          <div class="difficulty-dots">
+            <span class="dot active"></span>
+            <span class="dot active"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      </div>
+      <p class="task-description">周末期间完成任意3个任务，获得双倍奖励！</p>
+      <div class="task-meta">
+        <div class="task-rewards">
+          <span class="reward-tag">🎁 双倍奖励</span>
+          <span class="reward-tag">⭐️ 额外经验</span>
+        </div>
+        <span>剩余时间: 2天</span>
+      </div>
+      <button class="accept-btn">领取任务</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 导航按钮切换
+  const navButtons = document.querySelectorAll('.nav-btn');
+  navButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      navButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+    });
+  });
+
+  // 任务分类卡片点击效果
+  const categoryCards = document.querySelectorAll('.category-card');
+  categoryCards.forEach(card => {
+    card.addEventListener('click', () => {
+      // 添加点击波纹效果
+      const ripple = document.createElement('div');
+      ripple.classList.add('ripple');
+      card.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 1000);
+
+      // 这里可以添加跳转到对应分类的逻辑
+      console.log('Category clicked:', card.querySelector('.category-title').textContent);
+    });
+  });
+
+  // 任务领取按钮点击事件
+  const acceptButtons = document.querySelectorAll('.accept-btn');
+  acceptButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // 添加任务领取的动画效果
+      const taskCard = this.closest('.task-card');
+      taskCard.style.transform = 'scale(0.95)';
+      
+      setTimeout(() => {
+        taskCard.style.transform = 'scale(1)';
+        // 这里可以添加任务领取成功的提示
+        this.textContent = '已领取';
+        this.style.background = '#4CAF50';
+        this.disabled = true;
+        
+        // 延迟后跳转到任务页面
+        setTimeout(() => {
+          window.location.href = 'task.html';
+        }, 500);
+      }, 200);
+    });
+  });
+});
+</script>
+
+</body>
+</html>

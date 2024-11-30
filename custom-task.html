@@ -1,0 +1,535 @@
+<html><head><base href="custom-task.html">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>创建自定义任务</title>
+<style>
+:root {
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+  --background-gradient: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  --card-background: rgba(255, 255, 255, 0.05);
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.mobile-container {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  background: var(--background-gradient);
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+  position: relative;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px 0;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.header-title {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 18px;
+  margin-right: 24px;
+}
+
+.difficulty-selector {
+  margin: 20px 0;
+  background: var(--card-background);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.difficulty-title {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.difficulty-options {
+  display: flex;
+  gap: 10px;
+}
+
+.difficulty-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.difficulty-btn.active {
+  background: var(--primary-color);
+}
+
+.difficulty-btn[data-difficulty="easy"] {
+  border: 1px solid #4CAF50;
+}
+
+.difficulty-btn[data-difficulty="medium"] {
+  border: 1px solid #FFC107;
+}
+
+.difficulty-btn[data-difficulty="hard"] {
+  border: 1px solid #F44336;
+}
+
+.difficulty-btn.active[data-difficulty="easy"] {
+  background: rgba(76, 175, 80, 0.3);
+}
+
+.difficulty-btn.active[data-difficulty="medium"] {
+  background: rgba(255, 193, 7, 0.3);
+}
+
+.difficulty-btn.active[data-difficulty="hard"] {
+  background: rgba(244, 67, 54, 0.3);
+}
+
+.difficulty-icon {
+  font-size: 20px;
+}
+
+.difficulty-label {
+  font-size: 14px;
+}
+
+.difficulty-desc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+.task-type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.task-type-btn {
+  background: var(--card-background);
+  border: none;
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-type-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.task-type-icon {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.task-type-label {
+  font-size: 14px;
+  text-align: center;
+}
+
+.task-type-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+.template-section {
+  background: var(--card-background);
+  border-radius: 15px;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.template-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.template-header a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.category-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 5px 0 15px 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.category-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.category-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 15px;
+  white-space: nowrap;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.category-btn.active {
+  background: var(--primary-color);
+}
+
+.template-cards {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 5px 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.template-cards::-webkit-scrollbar {
+  display: none;
+}
+
+.template-card {
+  flex: 0 0 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.template-card:hover {
+  transform: translateY(-2px);
+}
+
+.template-title {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.template-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+
+.template-time {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 8px;
+}
+
+.help-tip {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateX(-50%) translateY(0); }
+  to { opacity: 0; transform: translateX(-50%) translateY(10px); }
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  margin-top: 5px;
+  background: rgba(138, 43, 226, 0.3);
+}
+
+.category-tag {
+  margin-right: 5px;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+}
+</style>
+</head>
+<body>
+
+<div class="mobile-container">
+  <div class="header">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <h1 class="header-title">创建自定义任务</h1>
+  </div>
+
+  <div class="difficulty-selector">
+    <h3 class="difficulty-title">选择任务难度</h3>
+    <div class="difficulty-options">
+      <button class="difficulty-btn active" data-difficulty="easy">
+        <span class="difficulty-icon">😊</span>
+        <span class="difficulty-label">简单</span>
+        <span class="difficulty-desc">轻松开始，适合新手</span>
+      </button>
+      <button class="difficulty-btn" data-difficulty="medium">
+        <span class="difficulty-icon">🤔</span>
+        <span class="difficulty-label">复杂</span>
+        <span class="difficulty-desc">有挑战，需要努力</span>
+      </button>
+      <button class="difficulty-btn" data-difficulty="hard">
+        <span class="difficulty-icon">😰</span>
+        <span class="difficulty-label">地狱</span>
+        <span class="difficulty-desc">极限挑战，非常困难</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="task-type-grid">
+    <button class="task-type-btn" onclick="window.location.href='custom-task-simple.html'">
+      <span class="task-type-icon">📝</span>
+      <span class="task-type-label">普通任务</span>
+      <span class="task-type-desc">一次性完成的单次任务</span>
+    </button>
+
+    <button class="task-type-btn" onclick="window.location.href='custom-task-repeat.html'">
+      <span class="task-type-icon">🔄</span>
+      <span class="task-type-label">重复任务</span>
+      <span class="task-type-desc">每天/每周/每月重复的任务</span>
+    </button>
+
+    <button class="task-type-btn" onclick="window.location.href='custom-task-interval.html'">
+      <span class="task-type-icon">⏱️</span>
+      <span class="task-type-label">间隔任务</span>
+      <span class="task-type-desc">每隔X小时/分钟重复</span>
+    </button>
+
+    <button class="task-type-btn" onclick="window.location.href='custom-task-specific.html'">
+      <span class="task-type-icon">📌</span>
+      <span class="task-type-label">定点任务</span>
+      <span class="task-type-desc">每当几点/周几/每月某天</span>
+    </button>
+
+    <button class="task-type-btn" onclick="window.location.href='custom-task-timed.html'">
+      <span class="task-type-icon">⏰</span>
+      <span class="task-type-label">定时任务</span>
+      <span class="task-type-desc">特定时间段完成的任务</span>
+    </button>
+
+    <button class="task-type-btn" onclick="window.location.href='custom-task-segments.html'">
+      <span class="task-type-icon">📅</span>
+      <span class="task-type-label">分时段任务</span>
+      <span class="task-type-desc">早中晚分时段完成的任务</span>
+    </button>
+
+    <button class="task-type-btn" onclick="window.location.href='custom-task-challenge.html'">
+      <span class="task-type-icon">🎯</span>
+      <span class="task-type-label">挑战任务</span>
+      <span class="task-type-desc">14天/30天等长期挑战</span>
+    </button>
+
+    <button class="task-type-btn" onclick="window.location.href='custom-task-flexible.html'">
+      <span class="task-type-icon">⭐</span>
+      <span class="task-type-label">任意时间任务</span>
+      <span class="task-type-desc">灵活时间完成特定次数</span>
+    </button>
+  </div>
+
+  <div class="template-section">
+    <div class="template-header">
+      <h3>热门任务模板</h3>
+      <a href="template-library.html">查看全部 →</a>
+    </div>
+
+    <div class="category-scroll">
+      <button class="category-btn active">全部</button>
+      <button class="category-btn">工作</button>
+      <button class="category-btn">学习</button>
+      <button class="category-btn">健康</button>
+      <button class="category-btn">运动</button>
+      <button class="category-btn">生活</button>
+      <button class="category-btn">娱乐</button>
+      <button class="category-btn">理财</button>
+      <button class="category-btn">社交</button>
+    </div>
+
+    <div class="template-cards">
+      <div class="template-card">
+        <h4 class="template-title">每2小时喝水提醒</h4>
+        <p class="template-desc">每隔2小时提醒喝一杯水</p>
+        <span class="tag">间隔任务</span>
+        <span class="category-tag">健康</span>
+        <div class="template-time">间隔: 2小时</div>
+      </div>
+
+      <div class="template-card">
+        <h4 class="template-title">工作日晨会</h4>
+        <p class="template-desc">每周一至周五早上9点晨会</p>
+        <span class="tag">定点任务</span>
+        <span class="category-tag">工作</span>
+        <div class="template-time">时间: 每工作日9:00</div>
+      </div>
+
+      <div class="template-card">
+        <h4 class="template-title">日常运动计划</h4>
+        <p class="template-desc">每天进行30分钟运动</p>
+        <span class="tag">定时任务</span>
+        <span class="category-tag">运动</span>
+        <div class="template-time">时长: 30分钟</div>
+      </div>
+
+      <div class="template-card">
+        <h4 class="template-title">学习进度检查</h4>
+        <p class="template-desc">每周日晚复习本周内容</p>
+        <span class="tag">定点任务</span>
+        <span class="category-tag">学习</span>
+        <div class="template-time">时间: 每周日</div>
+      </div>
+
+      <div class="template-card">
+        <h4 class="template-title">每月存钱计划</h4>
+        <p class="template-desc">每月1号存入固定金额</p>
+        <span class="tag">定点任务</span>
+        <span class="category-tag">理财</span>
+        <div class="template-time">时间: 每月1号</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="help-tip">
+    选择任务类型或模板开始创建 ✨
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const templateCards = document.querySelectorAll('.template-card');
+  templateCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const templateTitle = card.querySelector('.template-title').textContent;
+      window.location.href = `custom-task-template.html?template=${encodeURIComponent(templateTitle)}`;
+    });
+  });
+
+  const categoryBtns = document.querySelectorAll('.category-btn');
+  categoryBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      categoryBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      console.log(`Selected category: ${btn.textContent}`);
+    });
+  });
+
+  const helpTip = document.querySelector('.help-tip');
+  if (helpTip) {
+    setTimeout(() => {
+      helpTip.style.animation = 'fadeOut 0.3s ease forwards';
+      setTimeout(() => {
+        helpTip.remove();
+      }, 300);
+    }, 5000);
+  }
+  
+  // Add difficulty selector functionality
+  const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+  difficultyBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      difficultyBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Store selected difficulty
+      const difficulty = btn.dataset.difficulty;
+      localStorage.setItem('selectedDifficulty', difficulty);
+      
+      // Adjust task parameters based on difficulty
+      adjustTaskParameters(difficulty);
+    });
+  });
+  
+  function adjustTaskParameters(difficulty) {
+    // This function adjusts task parameters based on difficulty
+    const parameters = {
+      easy: {
+        defaultDuration: 15,
+        repeatCount: 1,
+        subTasks: 1
+      },
+      medium: {
+        defaultDuration: 30,
+        repeatCount: 3,
+        subTasks: 2
+      },
+      hard: {
+        defaultDuration: 60,
+        repeatCount: 5,
+        subTasks: 4
+      }
+    };
+    
+    console.log(`Adjusted parameters for ${difficulty} difficulty:`, parameters[difficulty]);
+    // You would use these parameters to adjust form fields, etc.
+  }
+  
+  // Initialize with default difficulty
+  const savedDifficulty = localStorage.getItem('selectedDifficulty') || 'easy';
+  const defaultDifficultyBtn = document.querySelector(`[data-difficulty="${savedDifficulty}"]`);
+  if (defaultDifficultyBtn) {
+    defaultDifficultyBtn.classList.add('active');
+    adjustTaskParameters(savedDifficulty);
+  }
+});
+</script>
+
+</body></html>

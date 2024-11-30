@@ -1,0 +1,552 @@
+<html><head><base href="https://example.com" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>群组</title>
+
+<style>
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+.mobile-container {
+  position: relative;
+  max-width: 430px;
+  height: 100vh;
+  height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  margin: 0 auto;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.back-btn:hover {
+  transform: rotate(-10deg);
+}
+
+.group-header h2 {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 20px;
+  color: var(--primary-color);
+}
+
+.milestone-notice {
+  background: rgba(138, 43, 226, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.notice-card {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.notice-icon {
+  font-size: 24px;
+  padding: 10px;
+  background: rgba(138, 43, 226, 0.2);
+  border-radius: 50%;
+}
+
+.notice-content {
+  flex: 1;
+}
+
+.notice-content h4 {
+  margin-bottom: 8px;
+  color: var(--primary-color);
+}
+
+.notice-content p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+}
+
+.notice-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.notice-content li {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 4px 0;
+}
+
+.group-leaderboard {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.leaderboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.leaderboard-title {
+  font-size: 18px;
+  color: var(--primary-color);
+}
+
+.leaderboard-filters {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-option {
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.filter-option.active {
+  background: var(--primary-color);
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+}
+
+.leaderboard-item:hover {
+  transform: scale(1.02);
+}
+
+.leaderboard-rank {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.rank-1 {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  color: #000;
+}
+
+.rank-2 {
+  background: linear-gradient(45deg, #C0C0C0, #A0A0A0);
+  color: #000;
+}
+
+.rank-3 {
+  background: linear-gradient(45deg, #CD7F32, #8B4513);
+  color: #fff;
+}
+
+.leaderboard-user {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leaderboard-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaderboard-points {
+  font-size: 14px;
+  color: var(--primary-color);
+}
+
+.group-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.group-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.group-card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.group-avatar {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.group-info {
+  flex: 1;
+}
+
+.group-type {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.group-tags {
+  display: flex;
+  gap: 4px;
+}
+
+.tag {
+  font-size: 10px;
+  color: var(--primary-color);
+  background: rgba(138, 43, 226, 0.1);
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+
+.group-description {
+  margin: 10px 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.group-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.join-btn, .details-btn {
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.join-btn {
+  background: var(--primary-color);
+  color: white;
+}
+
+.join-btn:hover {
+  background: var(--secondary-color);
+}
+
+.join-btn.joined {
+  background: var(--secondary-color);
+  opacity: 0.8;
+}
+
+.details-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.details-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.region-filters {
+  margin-right: 10px;
+}
+
+.region-select {
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.region-select option {
+  background: #1a1a2e;
+  color: white;
+}
+</style>
+</head>
+<body>
+  <div class="mobile-container">
+    <header class="group-header">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <h2>群组</h2>
+    </header>
+
+    <div class="group-content">
+      <div class="milestone-notice">
+        <div class="notice-card">
+          <span class="notice-icon">🎯</span>
+          <div class="notice-content">
+            <h4>里程碑收益</h4>
+            <p>群组成员率先达成里程碑时，全体成员可享受额外加成：</p>
+            <ul>
+              <li>日常任务收益 +10%</li>
+              <li>成长速度 +5%</li>
+              <li>互动奖励 +15%</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="group-leaderboard">
+        <div class="leaderboard-header">
+          <h3 class="leaderboard-title">地区榜</h3>
+          <div class="region-filters">
+            <select class="region-select" onchange="updateRegionFilter(this.value)">
+              <option value="country">全国</option>
+              <option value="province">省份</option>
+              <option value="city">城市</option>
+            </select>
+          </div>
+          <div class="leaderboard-filters">
+            <span class="filter-option active" data-period="day">日</span>
+            <span class="filter-option" data-period="week">周</span>
+            <span class="filter-option" data-period="month">月</span>
+            <span class="filter-option" data-period="year">年</span>
+          </div>
+        </div>
+        <div class="leaderboard-list regional">
+          <!-- Regional leaderboard items will be inserted here -->
+        </div>
+      </div>
+
+      <div class="group-leaderboard">
+        <div class="leaderboard-header">
+          <h3 class="leaderboard-title">兴趣榜</h3>
+          <div class="leaderboard-filters">
+            <span class="filter-option active" data-period="day">日</span>
+            <span class="filter-option" data-period="week">周</span>
+            <span class="filter-option" data-period="month">月</span>
+            <span class="filter-option" data-period="year">年</span>
+          </div>
+        </div>
+        <div class="leaderboard-list interest">
+          <!-- Interest-based leaderboard items will be inserted here -->
+        </div>
+      </div>
+
+      <div class="group-cards">
+        <!-- Group cards will be inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    updateGroupContent();
+    
+    const filterOptions = document.querySelectorAll('.filter-option');
+    filterOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        const period = this.dataset.period;
+        const filterGroup = this.closest('.leaderboard-filters');
+        filterGroup.querySelectorAll('.filter-option').forEach(opt => {
+          opt.classList.remove('active');
+        });
+        this.classList.add('active');
+        updateLeaderboard(period);
+      });
+    });
+  });
+
+  function updateGroupContent() {
+    updateLeaderboard();
+    updateGroupCards();
+  }
+
+  function updateLeaderboard(period) {
+    const regionalLeaderboard = document.querySelector('.leaderboard-list.regional');
+    const interestLeaderboard = document.querySelector('.leaderboard-list.interest');
+    
+    const regionalData = [
+      { rank: 1, name: '北京竹友会', avatar: '🏯', activity: '98%', points: '2,450' },
+      { rank: 2, name: '上海熊猫盟', avatar: '🌆', activity: '95%', points: '2,280' },
+      { rank: 3, name: '成都竹林会', avatar: '🎋', activity: '92%', points: '2,150' }
+    ];
+    
+    const interestData = [
+      { rank: 1, name: '摄影爱好者', avatar: '📸', activity: '96%', points: '2,350' },
+      { rank: 2, name: '竹艺工坊', avatar: '🎨', activity: '93%', points: '2,180' },
+      { rank: 3, name: '环保联盟', avatar: '🌱', activity: '90%', points: '2,050' }
+    ];
+    
+    regionalLeaderboard.innerHTML = regionalData.map(item => `
+      <div class="leaderboard-item">
+        <div class="leaderboard-rank ${item.rank <= 3 ? 'rank-' + item.rank : ''}">${item.rank}</div>
+        <div class="leaderboard-user">
+          <div class="leaderboard-avatar">${item.avatar}</div>
+          <div class="leaderboard-info">
+            <div>${item.name}</div>
+            <small>活跃度: ${item.activity}</small>
+          </div>
+        </div>
+        <div class="leaderboard-points">${item.points} 分</div>
+      </div>
+    `).join('');
+    
+    interestLeaderboard.innerHTML = interestData.map(item => `
+      <div class="leaderboard-item">
+        <div class="leaderboard-rank ${item.rank <= 3 ? 'rank-' + item.rank : ''}">${item.rank}</div>
+        <div class="leaderboard-user">
+          <div class="leaderboard-avatar">${item.avatar}</div>
+          <div class="leaderboard-info">
+            <div>${item.name}</div>
+            <small>活跃度: ${item.activity}</small>
+          </div>
+        </div>
+        <div class="leaderboard-points">${item.points} 分</div>
+      </div>
+    `).join('');
+  }
+
+  function updateGroupCards() {
+    const groups = [
+      {
+        name: '冒险家联盟',
+        avatar: '🌎',
+        type: '公开组',
+        members: '20/50',
+        description: '专注于游戏挑战的组织，一起探索更多可能！',
+        progress: 60,
+        tags: ['活跃', '竞技'],
+        joined: true
+      },
+      {
+        name: '竹林研究所',
+        avatar: '🎋',
+        type: '兴趣组',
+        members: '15/30',
+        description: '探索竹子的奥秘，分享养熊猫的心得。',
+        progress: 75,
+        tags: ['休闲', '知识'],
+        joined: false
+      },
+      {
+        name: '熊猫训练营',
+        avatar: '🐼',
+        type: '招募中',
+        members: '8/20',
+        description: '新手玩家的乐园，经验丰富的玩家带你快速成长！',
+        progress: 45,
+        tags: ['新手友好', '指导'],
+        joined: false
+      }
+    ];
+
+    const groupCards = document.querySelector('.group-cards');
+    groupCards.innerHTML = groups.map(group => `
+      <div class="group-card" data-name="${group.name}">
+        <div class="group-card-header">
+          <div class="group-avatar">${group.avatar}</div>
+          <div class="group-info">
+            <h3>${group.name}</h3>
+            <div class="group-meta">
+              <span class="group-type">${group.type}</span>
+              <span class="group-tags">
+                ${group.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+              </span>
+            </div>
+          </div>
+          <div class="group-stats">
+            <span class="member-count">${group.members}</span>
+          </div>
+        </div>
+        <div class="group-description">
+          ${group.description}
+        </div>
+        <div class="group-progress">
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: ${group.progress}%"></div>
+          </div>
+          <span class="progress-text">组任务进度: ${group.progress}%</span>
+        </div>
+        <div class="group-actions">
+          ${group.joined ? 
+            `<button class="join-btn joined" onclick="window.location.href='team.html?name=${encodeURIComponent(group.name)}'">已加入</button>` :
+            `<button class="join-btn">加入组织</button>`}
+          <button class="details-btn" onclick="window.location.href='team.html?name=${encodeURIComponent(group.name)}'">查看详情</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function updateRegionFilter(value) {
+    // Handle region filter changes here
+    console.log('Region filter changed to:', value);
+    updateLeaderboard();
+  }
+  </script>
+</body>
+</html>

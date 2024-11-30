@@ -1,0 +1,2173 @@
+<html><head><base href="." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Journey</title>
+
+<style>
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+#notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.notification {
+  background: rgba(26, 26, 46, 0.95);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mobile-container {
+  position: relative;
+  max-width: 430px;
+  height: 100vh;
+  height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  margin: 0 auto;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 15px;
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientFlow 3s linear infinite;
+}
+
+.pet-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.pet-emoji {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.level-badge {
+  position: relative;
+  font-size: 20px;
+  animation: sparkle 2s infinite;
+  cursor: pointer;
+}
+
+.map-container {
+  margin-top: 20px;
+  height: calc(70vh - 100px);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 20px;
+}
+
+.map-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, #1a1a2e 0%, #16213e 100%);
+  opacity: 0.8;
+}
+
+.map-connection {
+  position: absolute;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(138, 43, 226, 0.6), rgba(75, 0, 130, 0.6));
+  transform-origin: left center;
+  pointer-events: none;
+  z-index: 1;
+  margin-top: -1px;
+  box-shadow: 0 1px 4px rgba(138, 43, 226, 0.2);
+}
+
+.map-node {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(26, 26, 46, 0.9);
+  border: 2px solid rgba(138, 43, 226, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.node-label {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(26, 26, 46, 0.95);
+  padding: 2px 6px;
+  border-radius: 6px;
+  z-index: 3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  max-width: 120px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.node-progress {
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(26, 26, 46, 0.8);
+  padding: 1px 4px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.collaboration-badge {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  background: var(--secondary-color);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 4;
+}
+
+.collaboration-details {
+  position: absolute;
+  background: rgba(26, 26, 46, 0.98);
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  right: -130px;
+  top: 0;
+  width: 130px;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(138, 43, 226, 0.3);
+}
+
+.map-node:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 4px 12px rgba(138, 43, 226, 0.4);
+}
+
+.map-node.completed:hover {
+  box-shadow: 0 4px 12px rgba(138, 43, 226, 0.6);
+}
+
+.quick-jump {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+.quick-jump:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(138, 43, 226, 0.5);
+}
+
+.quick-jump svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+.achievements-inventory {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.inventory-header {
+  margin-bottom: 15px;
+}
+
+.inventory-filters {
+  display: flex;
+  gap: 8px;
+  margin: 12px -15px 15px -15px;
+  padding: 0 15px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.inventory-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  scroll-snap-align: start;
+}
+
+.filter-btn.active {
+  background: var(--primary-color);
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.achievement-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.achievement-header {
+  display: flex;
+  gap: 8px;
+}
+
+.achievement-icon {
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
+  background: rgba(138, 43, 226, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.achievement-header h3 {
+  font-size: 13px;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.achievement-header p {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.3;
+}
+
+.achievement-status {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.achievement-reward {
+  font-size: 12px;
+  color: var(--primary-color);
+  padding: 4px 8px;
+  background: rgba(138, 43, 226, 0.1);
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: auto;
+}
+
+.milestones-section {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.milestones-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.milestone-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.milestone-header {
+  display: flex;
+  gap: 8px;
+}
+
+.milestone-icon {
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
+  background: rgba(138, 43, 226, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.milestone-header h3 {
+  font-size: 13px;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.milestone-header p {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.3;
+}
+
+.milestone-status {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.milestone-reward {
+  font-size: 12px;
+  color: var(--primary-color);
+  padding: 4px 8px;
+  background: rgba(138, 43, 226, 0.1);
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: auto;
+}
+
+.quick-actions {
+  position: fixed;
+  bottom: calc(80px + var(--safe-area-inset-bottom));
+  right: 20px;
+  background: var(--primary-color);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: float 3s ease-in-out infinite;
+  border: none;
+  cursor: pointer;
+}
+
+.stats-container {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 10px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.location-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 15px;
+  z-index: 1000;
+  max-width: 90%;
+  width: 320px;
+  display: none;
+}
+
+.location-modal.active {
+  display: block;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.modal-title {
+  font-size: 20px;
+  color: var(--primary-color);
+}
+
+.modal-description {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-button:hover {
+  background: var(--secondary-color);
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.pet-stats {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.stat-bar {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.stat-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.daily-quests {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.quest-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.quest-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.quest-info {
+  flex: 1;
+}
+
+.quest-info h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.quest-info p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  margin: 8px 0;
+}
+
+.progress {
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.quest-reward {
+  font-size: 16px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.inventory {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.inventory-item {
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 15px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.inventory-item:hover {
+  transform: translateY(-2px);
+}
+
+.item-icon {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.item-count {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: var(--primary-color);
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+.item-name {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.profile-section {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.profile-stat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.xp-bar {
+  flex: 1;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  margin-left: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.xp-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  color: white;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.profile-badges {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.badge {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.badge:hover {
+  transform: scale(1.1);
+}
+
+.leaderboard {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.leaderboard h2 {
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.scope-filters,
+.dimension-filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scope-filters::-webkit-scrollbar,
+.dimension-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.scope-btn,
+.dimension-btn {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  scroll-snap-align: start;
+}
+
+.scope-btn.active,
+.dimension-btn.active {
+  background: var(--primary-color);
+}
+
+.leaderboard-item {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.2s ease;
+}
+
+.leaderboard-item:active {
+  transform: scale(0.98);
+}
+
+.rank {
+  min-width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.player-avatar {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.player-info {
+  flex: 1;
+}
+
+.player-info h3 {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.player-info p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.player-score {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.rank-ellipsis {
+  text-align: center;
+  padding: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+.you-rank {
+  background: rgba(138, 43, 226, 0.2);
+  border: 1px solid rgba(138, 43, 226, 0.3);
+}
+
+.dimension-filters {
+  margin-bottom: 15px;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.milestones-section {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.milestone-category {
+  margin-bottom: 20px;
+}
+
+.milestone-category h3 {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+}
+
+.milestone-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 4px 0;
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scroll-behavior: smooth;
+}
+
+.milestone-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.milestone-list {
+  display: inline-flex;
+  gap: 12px;
+  padding: 4px;
+}
+
+.milestone-item {
+  min-width: 200px;
+  max-width: 200px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  position: relative;
+  white-space: normal;
+  transition: transform 0.2s ease;
+}
+
+.milestone-item:hover {
+  transform: translateY(-2px);
+}
+
+.milestone-status {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+}
+
+.status-completed {
+  background: rgba(75, 181, 67, 0.2);
+  color: #4BB543;
+}
+
+.status-progress {
+  background: rgba(255, 170, 0, 0.2);
+  color: #FFAA00;
+}
+
+.milestone-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(138, 43, 226, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.milestone-info {
+  margin-top: 8px;
+}
+
+.milestone-info h4 {
+  font-size: 14px;
+  margin-bottom: 4px;
+  white-space: normal;
+}
+
+.milestone-info p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+  white-space: normal;
+  line-height: 1.3;
+}
+
+.scroll-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.scroll-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.scroll-dot.active {
+  background: var(--primary-color);
+}
+
+@media (max-height: 700px) {
+  .map-container {
+    height: calc(60vh - 80px);
+  }
+}
+
+.settings-section {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.settings-list {
+  margin-top: 15px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.quest-rewards {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.reward-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.quest-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #1a1a2e;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.rewards-section {
+  margin-top: 20px;
+}
+
+.rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.quest-progress {
+  margin: 15px 0;
+}
+
+.close-modal {
+  width: 100%;
+  padding: 10px;
+  background: var(--primary-color);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: calc(10px + var(--safe-area-inset-bottom)) 0 var(--safe-area-inset-bottom);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  min-width: 60px;
+  background: none;
+  border: none;
+}
+
+.nav-item.active {
+  color: var(--primary-color);
+}
+
+.nav-item .nav-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+  position: relative;
+}
+
+.nav-item.active .nav-icon {
+  transform: scale(1.1);
+}
+
+.nav-item:active {
+  transform: scale(0.95);
+}
+
+.nav-item:hover {
+  color: var(--primary-color);
+  opacity: 0.8;
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+
+.friends-section {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.friend-avatar {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.friend-info {
+  flex: 1;
+}
+
+.friend-info h3 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.friend-info p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.visit-btn {
+  padding: 8px 16px;
+  background: var(--primary-color);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.visit-btn:hover {
+  background: var(--secondary-color);
+}
+
+</style>
+</head>
+<body>
+<div id="notification-container"></div>
+<div class="mobile-container">
+  <header class="header">
+    <div class="pet-avatar">
+      <span class="pet-emoji">🐼</span>
+    </div>
+    <h1 class="title">Journey</h1>
+    <div class="level-badge">✨</div>
+  </header>
+
+  <div class="profile-section">
+    <h2>Pet Profile</h2>
+    <div class="profile-details">
+      <div class="profile-stat">
+        <span class="stat-label">Level</span>
+        <span class="stat-value">15</span>
+      </div>
+      <div class="profile-stat">
+        <span class="stat-label">Experience</span>
+        <div class="xp-bar">
+          <div class="xp-fill" style="width: 75%"></div>
+          <span class="xp-text">750/1000</span>
+        </div>
+      </div>
+      <div class="profile-badges">
+        <span class="badge" title="Explorer">🗺️</span>
+        <span class="badge" title="Collector">🎖️</span>
+        <span class="badge" title="Friend">💫</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="map-container">
+    <div class="map-background"></div>
+    <div class="stats-container">
+      <div class="stat-item">
+        <span>🪙</span>
+        <span id="coins">100</span>
+      </div>
+      <div class="stat-item">
+        <span>💎</span>
+        <span id="gems">5</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pet-stats">
+    <h2>Pet Status</h2>
+    <div class="stat-group">
+      <div class="stat-label">
+        <span>Energy</span>
+        <span id="energy-value">80%</span>
+      </div>
+      <div class="stat-bar">
+        <div class="stat-fill" style="width: 80%"></div>
+      </div>
+    </div>
+    <div class="stat-group">
+      <div class="stat-label">
+        <span>Happiness</span>
+        <span id="happiness-value">90%</span>
+      </div>
+      <div class="stat-bar">
+        <div class="stat-fill" style="width: 90%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="achievements-inventory">
+    <div class="inventory-header">
+      <h2>成就背包</h2>
+      <div class="inventory-filters">
+        <button class="filter-btn active" data-filter="all">
+          <span>🎯</span>
+          <span>全部</span>
+        </button>
+        <button class="filter-btn" data-filter="completed">
+          <span>✅</span>
+          <span>已完成</span>
+        </button>
+        <button class="filter-btn" data-filter="progress">
+          <span>🔄</span>
+          <span>进行中</span>
+        </button>
+        <button class="filter-btn" data-filter="locked">
+          <span>🔒</span>
+          <span>未解锁</span>
+        </button>
+        <button class="filter-btn" data-filter="growth">
+          <span>🌱</span>
+          <span>成长</span>
+        </button>
+        <button class="filter-btn" data-filter="tasks">
+          <span>📝</span>
+          <span>任务</span>
+        </button>
+        <button class="filter-btn" data-filter="social">
+          <span>👥</span>
+          <span>社交</span>
+        </button>
+      </div>
+    </div>
+    <div class="achievements-grid"></div>
+  </div>
+
+  <div class="milestones-section">
+    <div class="inventory-header">
+      <h2>里程碑</h2>
+      <div class="inventory-filters">
+        <button class="filter-btn active" data-filter="all">
+          <span>🎯</span>
+          <span>全部</span>
+        </button>
+        <button class="filter-btn" data-filter="completed">
+          <span>✅</span>
+          <span>已完成</span>
+        </button>
+        <button class="filter-btn" data-filter="progress">
+          <span>🔄</span>
+          <span>进行中</span>
+        </button>
+        <button class="filter-btn" data-filter="growth">
+          <span>🌱</span>
+          <span>成长</span>
+        </button>
+        <button class="filter-btn" data-filter="task">
+          <span>📝</span>
+          <span>任务</span>
+        </button>
+        <button class="filter-btn" data-filter="daily">
+          <span>📅</span>
+          <span>每日</span>
+        </button>
+      </div>
+    </div>
+    <div class="milestones-grid"></div>
+  </div>
+
+  <div class="leaderboard">
+    <h2>Leaderboard</h2>
+    <div class="leaderboard-filters">
+      <div class="scope-filters">
+        <button class="scope-btn active" data-scope="global">Global</button>
+        <button class="scope-btn" data-scope="friends">Friends</button>
+      </div>
+      <div class="dimension-filters">
+        <button class="dimension-btn active" data-dimension="overall">Overall</button>
+        <button class="dimension-btn" data-dimension="level">Level</button>
+        <button class="dimension-btn" data-dimension="resources">Resources</button>
+        <button class="dimension-btn" data-dimension="progress">Progress</button>
+        <button class="dimension-btn" data-dimension="onlineTime">Online Time</button>
+        <button class="dimension-btn" data-dimension="playDays">Play Days</button>
+        <button class="dimension-btn" data-dimension="achievements">Achievements</button>
+      </div>
+    </div>
+    <div class="leaderboard-content">
+      <!-- Dynamic content will be populated here -->
+    </div>
+  </div>
+
+  <div class="daily-quests">
+    <h2>Daily Quests</h2>
+    <div class="quest-list">
+      <div class="quest-item" data-quest-id="d1">
+        <div class="quest-icon">🎯</div>
+        <div class="quest-info">
+          <h3>训练时光</h3>
+          <div class="progress-bar">
+            <div class="progress" style="width: 33.33%"></div>
+          </div>
+          <p>1/3 完成3次宠物训练</p>
+          <div class="quest-rewards">
+            <div class="reward-item">
+              <span>🪙 50</span>
+              <span>✨ 100经验</span>
+              <span>🎋 2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="quest-item" data-quest-id="d2">
+        <div class="quest-icon">🌟</div>
+        <div class="quest-info">
+          <h3>探索冒险</h3>
+          <div class="progress-bar">
+            <div class="progress" style="width: 50%"></div>
+          </div>
+          <p>1/2 探索2个新地点</p>
+          <div class="quest-rewards">
+            <div class="reward-item">
+              <span>🪙 100</span>
+              <span>✨ 150经验</span>
+              <span>🎁 1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="inventory">
+    <h2>Inventory</h2>
+    <div class="inventory-grid">
+      <div class="inventory-item">
+        <div class="item-icon">🎋</div>
+        <span class="item-count">24</span>
+        <div class="item-name">Bamboo</div>
+      </div>
+      <div class="inventory-item">
+        <div class="item-icon">🍜</div>
+        <span class="item-count">5</span>
+        <div class="item-name">Food</div>
+      </div>
+      <div class="inventory-item">
+        <div class="item-icon">🧪</div>
+        <span class="item-count">3</span>
+        <div class="item-name">Potion</div>
+      </div>
+      <div class="inventory-item">
+        <div class="item-icon">🎁</div>
+        <span class="item-count">1</span>
+        <div class="item-name">Gift</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="friends-section">
+    <h2>Friends</h2>
+    <div class="friends-list">
+      <div class="friend-item">
+        <div class="friend-avatar">🐨</div>
+        <div class="friend-info">
+          <h3>Koala Kid</h3>
+          <p>Level 12</p>
+        </div>
+        <button class="visit-btn">Visit</button>
+      </div>
+      <div class="friend-item">
+        <div class="friend-avatar">🦊</div>
+        <div class="friend-info">
+          <h3>Fox Friend</h3>
+          <p>Level 18</p>
+        </div>
+        <button class="visit-btn">Visit</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h2>Settings</h2>
+    <div class="settings-list">
+      <div class="setting-item">
+        <div class="setting-label">Sound Effects</div>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="setting-item">
+        <div class="setting-label">Notifications</div>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="setting-item">
+        <div class="setting-label">Dark Mode</div>
+        <label class="switch">
+          <input type="checkbox">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <button class="quick-actions">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+      <path d="M12 5v14M5 12h14"/>
+    </svg>
+  </button>
+
+  <nav class="bottom-nav">
+    <button class="nav-item" data-page="home">
+      <span class="nav-icon">🏠</span>
+      <span>主页</span>
+    </button>
+    <button class="nav-item" data-page="challenge">
+      <span class="nav-icon">🎯</span>
+      <span>挑战</span>
+    </button>
+    <button class="nav-item" data-page="task">
+      <span class="nav-icon">✨</span>
+      <span>任务</span>
+    </button>
+    <button class="nav-item active" data-page="journey">
+      <span class="nav-icon">🗺️</span>
+      <span>成长</span>
+    </button>
+    <button class="nav-item" data-page="shop">
+      <span class="nav-icon">🎁</span>
+      <span>商店</span>
+    </button>
+  </nav>
+</div>
+
+<div class="location-modal" id="locationModal">
+  <button class="modal-close">×</button>
+  <div class="modal-header">
+    <span class="modal-emoji"></span>
+    <h2 class="modal-title"></h2>
+  </div>
+  <p class="modal-description"></p>
+  <div class="modal-actions">
+    <button class="modal-button" onclick="exploreLocation()">Explore</button>
+    <button class="modal-button" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script>
+// Map nodes data
+const mapNodes = [
+  {
+    id: 'start',
+    x: 50,
+    y: 50,
+    label: '初始阶段',
+    emoji: '🌱',
+    completed: true
+  },
+  {
+    id: 'young',
+    x: 150,
+    y: 100,
+    label: '幼年阶段',
+    emoji: '🐼',
+    completed: true,
+    progress: '100%'
+  },
+  {
+    id: 'teen',
+    x: 250,
+    y: 150,
+    label: '少年阶段',
+    emoji: '🌟',
+    completed: false,
+    progress: '60%'
+  },
+  {
+    id: 'adult',
+    x: 350,
+    y: 100,
+    label: '成年阶段',
+    emoji: '👑',
+    completed: false,
+    progress: '0%'
+  },
+  {
+    id: 'perfect',
+    x: 450,
+    y: 150,
+    label: '完美形态',
+    emoji: '✨',
+    completed: false,
+    progress: '0%'
+  }
+];
+
+// Achievements data
+const achievements = {
+  all: [
+    {
+      id: 'a1',
+      icon: '🏆',
+      title: '宠物成长专家',
+      description: '熊猫从幼年成长为成年阶段',
+      reward: '🪙 100金币',
+      status: 'progress',
+      category: 'growth'
+    },
+    {
+      id: 'a2',
+      icon: '🎯',
+      title: '收集大师',
+      description: '累计收集1000个竹子资源',
+      reward: '🪙 150金币',
+      status: 'progress',
+      category: 'collection'
+    },
+    {
+      id: 'a3',
+      icon: '🌟',
+      title: '活跃玩家',
+      description: '每周登录并完成至少5次任务',
+      reward: '🪙 30金币',
+      status: 'completed',
+      category: 'daily'
+    },
+    {
+      id: 'a4',
+      icon: '👥',
+      title: '社交达人',
+      description: '与10位不同玩家进行互动',
+      reward: '🪙 40金币',
+      status: 'progress',
+      category: 'social'
+    },
+    {
+      id: 'a5',
+      icon: '💝',
+      title: '熊猫护理大师',
+      description: '每日与熊猫进行互动并喂养满30天',
+      reward: '🪙 150金币',
+      status: 'progress',
+      category: 'growth'
+    },
+    {
+      id: 'a6',
+      icon: '🎯',
+      title: '目标设定大师',
+      description: '完成50个自定义目标',
+      reward: '🪙 100金币',
+      status: 'progress',
+      category: 'tasks'
+    },
+    {
+      id: 'a7',
+      icon: '⭐',
+      title: '任务成就专家',
+      description: '完成100个任务',
+      reward: '🪙 200金币',
+      status: 'progress',
+      category: 'tasks'
+    },
+    {
+      id: 'a8',
+      icon: '🌈',
+      title: '支线任务完成王',
+      description: '完成100个支线任务',
+      reward: '🪙 200金币',
+      status: 'locked',
+      category: 'tasks'
+    }
+  ]
+};
+
+// Milestones data
+const milestones = {
+  all: [
+    {
+      id: 'm1',
+      icon: '🎯',
+      title: '首次登录',
+      description: '玩家首次登录游戏',
+      reward: '🪙 20金币',
+      status: 'completed',
+      category: 'growth'
+    },
+    {
+      id: 'm2',
+      icon: '✨',
+      title: '完成第一个任务',
+      description: '完成第一个主线或支线任务',
+      reward: '🪙 50金币',
+      status: 'completed',
+      category: 'task'
+    },
+    {
+      id: 'm3',
+      icon: '🐼',
+      title: '解锁熊猫幼年阶段',
+      description: '熊猫成长到幼年阶段',
+      reward: '🪙 100金币',
+      status: 'completed',
+      category: 'growth'
+    },
+    {
+      id: 'm4',
+      icon: '📅',
+      title: '累计登录10天',
+      description: '累计登录10天',
+      reward: '🪙 100金币',
+      progress: 70,
+      status: 'progress',
+      category: 'daily'
+    },
+    {
+      id: 'm5',
+      icon: '🌟',
+      title: '熊猫成长为少年阶段',
+      description: '熊猫成长为少年阶段',
+      reward: '🪙 150金币',
+      progress: 45,
+      status: 'progress',
+      category: 'growth'
+    },
+    {
+      id: 'm6',
+      icon: '🎯',
+      title: '首次完成支线任务',
+      description: '完成首个支线任务',
+      reward: '🪙 50金币',
+      status: 'progress',
+      category: 'task'
+    },
+    {
+      id: 'm7',
+      icon: '👑',
+      title: '解锁熊猫成年阶段',
+      description: '熊猫成长为成年阶段',
+      reward: '🪙 200金币',
+      status: 'locked',
+      category: 'growth'
+    },
+    {
+      id: 'm8',
+      icon: '✨',
+      title: '连续签到7天',
+      description: '连续签到7天',
+      reward: '🪙 50金币',
+      progress: 85,
+      status: 'progress',
+      category: 'daily'
+    }
+  ]
+};
+
+// Initialize growth map function
+function initializeGrowthMap() {
+  const mapContainer = document.querySelector('.map-container');
+  
+  // Create map nodes
+  mapNodes.forEach(node => {
+    const nodeElement = document.createElement('div');
+    nodeElement.className = `map-node ${node.completed ? 'completed' : ''}`;
+    nodeElement.style.left = `${node.x}px`;
+    nodeElement.style.top = `${node.y}px`;
+    nodeElement.innerHTML = `
+      <span>${node.emoji}</span>
+      <div class="node-label">${node.label}</div>
+      ${node.progress ? `<div class="node-progress">${node.progress}</div>` : ''}
+    `;
+    
+    nodeElement.addEventListener('click', () => {
+      showLocationModal(node);
+    });
+    
+    mapContainer.appendChild(nodeElement);
+  });
+
+  // Create connections between nodes
+  const mapConnections = [
+    { from: 'start', to: 'young' },
+    { from: 'young', to: 'teen' },
+    { from: 'teen', to: 'adult' },
+    { from: 'adult', to: 'perfect' }
+  ];
+
+  mapConnections.forEach(connection => {
+    const fromNode = mapNodes.find(node => node.id === connection.from);
+    const toNode = mapNodes.find(node => node.id === connection.to);
+    
+    if (fromNode && toNode) {
+      const dx = toNode.x - fromNode.x;
+      const dy = toNode.y - fromNode.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      
+      const connectionElement = document.createElement('div');
+      connectionElement.className = 'map-connection';
+      connectionElement.style.width = `${distance}px`;
+      connectionElement.style.left = `${fromNode.x}px`;
+      connectionElement.style.top = `${fromNode.y}px`;
+      connectionElement.style.transform = `rotate(${angle}deg)`;
+      
+      mapContainer.appendChild(connectionElement);
+    }
+  });
+}
+
+// Initialize achievements inventory
+function initializeAchievementsInventory() {
+  const container = document.querySelector('.achievements-grid');
+  const filters = document.querySelectorAll('.achievements-inventory .filter-btn');
+  
+  // Create achievement cards
+  function createAchievementCards(filterValue = 'all') {
+    container.innerHTML = '';
+    
+    const achievementsToShow = achievements.all.filter(achievement => {
+      return filterValue === 'all' || 
+             filterValue === achievement.status || 
+             filterValue === achievement.category;
+    });
+    
+    // Calculate empty slots needed to maintain 2 items per row
+    const totalSlots = Math.ceil(achievementsToShow.length / 2) * 2;
+    const emptySlots = totalSlots - achievementsToShow.length;
+    
+    // Create achievement cards
+    achievementsToShow.forEach(achievement => {
+      const card = document.createElement('div');
+      card.className = 'achievement-card';
+      card.dataset.category = achievement.category;
+      card.dataset.status = achievement.status;
+      
+      card.innerHTML = `
+        <div class="achievement-header">
+          <div class="achievement-icon">${achievement.icon}</div>
+          <div>
+            <h3>${achievement.title}</h3>
+            <p>${achievement.description}</p>
+          </div>
+        </div>
+        <div class="achievement-status ${
+          achievement.status === 'completed' ? 'status-completed' : 
+          achievement.status === 'progress' ? 'status-progress' : 
+          'status-locked'
+        }">
+          ${
+            achievement.status === 'completed' ? '已完成' : 
+            achievement.status === 'progress' ? '进行中' : 
+            '未解锁'
+          }
+        </div>
+        <div class="achievement-reward">
+          ${achievement.reward}
+        </div>
+      `;
+      
+      container.appendChild(card);
+    });
+    
+    // Add empty slots to maintain grid layout
+    for (let i = 0; i < emptySlots; i++) {
+      const emptySlot = document.createElement('div');
+      emptySlot.className = 'achievement-card empty';
+      emptySlot.style.visibility = 'hidden';
+      container.appendChild(emptySlot);
+    }
+    
+    // Add empty state if no achievements
+    if (achievementsToShow.length === 0) {
+      const emptyState = document.createElement('div');
+      emptyState.className = 'empty-state';
+      emptyState.textContent = '暂无相关成就';
+      container.appendChild(emptyState);
+    }
+  }
+  
+  // Add filter functionality
+  filters.forEach(filter => {
+    filter.addEventListener('click', () => {
+      filters.forEach(f => f.classList.remove('active'));
+      filter.classList.add('active');
+      
+      const filterValue = filter.dataset.filter;
+      createAchievementCards(filterValue);
+    });
+  });
+  
+  // Initial load
+  createAchievementCards('all');
+}
+
+// Initialize milestones inventory
+function initializeMilestonesInventory() {
+  const container = document.querySelector('.milestones-grid');
+  const filters = document.querySelectorAll('.milestones-section .filter-btn');
+  
+  // Create milestone cards
+  function createMilestoneCards(filterValue = 'all') {
+    container.innerHTML = '';
+    
+    milestones.all.forEach(milestone => {
+      if (filterValue === 'all' || 
+          filterValue === milestone.status || 
+          filterValue === milestone.category) {
+        
+        const card = document.createElement('div');
+        card.className = 'milestone-card';
+        card.dataset.category = milestone.category;
+        card.dataset.status = milestone.status;
+        
+        card.innerHTML = `
+          <div class="milestone-header">
+            <div class="milestone-icon">${milestone.icon}</div>
+            <div>
+              <h3>${milestone.title}</h3>
+              <p>${milestone.description}</p>
+            </div>
+          </div>
+          ${milestone.progress ? `
+            <div class="progress-bar">
+              <div class="progress" style="width: ${milestone.progress}%"></div>
+            </div>
+          ` : ''}
+          <div class="milestone-status ${milestone.status === 'completed' ? 'status-completed' : 
+                                      milestone.status === 'progress' ? 'status-progress' : 
+                                      'status-locked'}">
+            ${milestone.status === 'completed' ? '已完成' : 
+              milestone.status === 'progress' ? `${milestone.progress}%` : 
+              '未解锁'}
+          </div>
+          <div class="milestone-reward">
+            ${milestone.reward}
+          </div>
+        `;
+        
+        container.appendChild(card);
+      }
+    });
+    
+    // Check if there are any visible cards
+    if (container.children.length === 0) {
+      const emptyState = document.createElement('div');
+      emptyState.className = 'empty-state';
+      emptyState.textContent = '暂无相关里程碑';
+      container.appendChild(emptyState);
+    }
+  }
+  
+  // Add filter functionality
+  filters.forEach(filter => {
+    filter.addEventListener('click', () => {
+      filters.forEach(f => f.classList.remove('active'));
+      filter.classList.add('active');
+      
+      const filterValue = filter.dataset.filter;
+      createMilestoneCards(filterValue);
+    });
+  });
+  
+  // Initial load
+  createMilestoneCards('all');
+}
+
+// Initialize leaderboard
+function initializeLeaderboard() {
+  const leaderboardContent = document.querySelector('.leaderboard-content');
+  const scopeBtns = document.querySelectorAll('.scope-btn');
+  const dimensionBtns = document.querySelectorAll('.dimension-btn');
+  
+  // Mock data for different dimensions
+  const leaderboardData = {
+    global: {
+      overall: [
+        { rank: 1, name: 'MasterPanda', avatar: '🦊', level: 25, score: 5280, detail: '2500 XP' },
+        { rank: 2, name: 'KoalaKing', avatar: '🐨', level: 23, score: 4950, detail: '2300 XP' },
+      ],
+      level: [
+        { rank: 1, name: 'DragonMaster', avatar: '🐲', level: 30, score: 3000, detail: 'Level 30' },
+        { rank: 2, name: 'TigerPro', avatar: '🐯', level: 28, score: 2800, detail: 'Level 28' },
+      ],
+      resources: [
+        { rank: 1, name: 'ResourceKing', avatar: '👑', level: 20, score: 10000, detail: '10000 Resources' },
+        { rank: 2, name: 'Collector', avatar: '🎯', level: 18, score: 9500, detail: '9500 Resources' },
+      ],
+    },
+    friends: {
+      // Similar structure for friends data
+    }
+  };
+
+  function renderLeaderboard(scope, dimension) {
+    const data = leaderboardData[scope][dimension] || [];
+    const yourRank = 24; // Mock your rank
+    
+    let html = '';
+    
+    // Show top 3
+    data.slice(0, 3).forEach(player => {
+      html += `
+        <div class="leaderboard-item ${player.rank === 1 ? 'top-rank' : ''}">
+          <div class="rank">${player.rank}</div>
+          <div class="player-avatar">${player.avatar}</div>
+          <div class="player-info">
+            <h3>${player.name}</h3>
+            <p>${player.detail}</p>
+          </div>
+          <div class="player-score">${player.score.toLocaleString()}</div>
+        </div>
+      `;
+    });
+
+    // If your rank is not in top 3, show ellipsis and your rank
+    if (yourRank > 3) {
+      html += `<div class="rank-ellipsis">• • •</div>`;
+      html += `
+        <div class="leaderboard-item you-rank">
+          <div class="rank">${yourRank}</div>
+          <div class="player-avatar">🐼</div>
+          <div class="player-info">
+            <h3>You</h3>
+            <p>Level 15 • 1500 XP</p>
+          </div>
+          <div class="player-score">3,200</div>
+        </div>
+      `;
+    }
+
+    leaderboardContent.innerHTML = html;
+  }
+
+  // Event listeners for scope buttons
+  scopeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      scopeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const activeDimension = document.querySelector('.dimension-btn.active').dataset.dimension;
+      renderLeaderboard(btn.dataset.scope, activeDimension);
+    });
+  });
+
+  // Event listeners for dimension buttons
+  dimensionBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      dimensionBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const activeScope = document.querySelector('.scope-btn.active').dataset.scope;
+      renderLeaderboard(activeScope, btn.dataset.dimension);
+    });
+  });
+
+  // Initial render
+  renderLeaderboard('global', 'overall');
+}
+
+// Update the DOMContentLoaded event handler
+document.addEventListener('DOMContentLoaded', () => {
+  initializeGrowthMap();
+  initializeAchievementsInventory();
+  initializeMilestonesInventory();
+  initializeLeaderboard();
+});
+
+// Navigation handling
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const page = item.dataset.page;
+    if (page === 'journey') {
+      window.location.href = 'journey.html';
+    }
+    // Handle other page navigation...
+  });
+});
+
+// Other existing JavaScript code...
+
+</script>
+
+</body></html>

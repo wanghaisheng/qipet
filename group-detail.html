@@ -1,0 +1,1317 @@
+<html><head><base href="https://example.com" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>冒险家联盟</title>
+
+<style>
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --primary-color: #8A2BE2;
+  --secondary-color: #4B0082;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+#notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.user-name {
+  font-size: 16px;
+  color: white;
+}
+
+.resources-mini {
+  display: flex;
+  gap: 15px;
+}
+
+.resource-mini-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+.resource-mini-icon {
+  font-size: 16px;
+}
+
+.resource-mini-amount {
+  font-size: 14px;
+  color: white;
+}
+
+.mobile-container {
+  position: relative;
+  max-width: 430px;
+  height: 100vh;
+  height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  margin: 0 auto;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(65px + var(--safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.quick-access-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.quick-access-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.quick-access-icon:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.quick-access-icon span {
+  font-size: 20px;
+}
+
+.quick-access-icon small {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.panda-display {
+  position: relative;
+  padding: 20px;
+  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  text-align: center;
+}
+
+.panda-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.panda-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: float 3s ease-in-out infinite;
+}
+
+.panda-emoji {
+  font-size: 60px;
+}
+
+.mood-indicator {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  animation: bounce 2s infinite;
+}
+
+.status-summary {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.status-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+}
+
+.interaction-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.interact-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  background: var(--primary-color);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  flex: 0 1 auto;
+  cursor: pointer;
+}
+
+.interact-btn:hover {
+  background: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+.task-section {
+  padding: 12px;
+  margin: 15px 0;
+}
+
+.pet-progress-section {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  margin-top: 15px;
+}
+
+.progress-bar-container {
+  position: relative;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+}
+
+.pet-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.pet-stat-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+.backpack-section {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  margin: 15px 0;
+}
+
+.backpack-section h3 {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.backpack-filters span {
+  margin-left: 10px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.3s ease;
+}
+
+.backpack-filters span.active {
+  color: var(--primary-color);
+}
+
+.backpack-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.backpack-item {
+  position: relative;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-height: 80px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backpack-item:active {
+  transform: scale(0.95);
+}
+
+.backpack-item.empty {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+}
+
+.backpack-item-icon {
+  font-size: 24px;
+}
+
+.backpack-item-count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.backpack-item-new {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--primary-color);
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  animation: pulse 2s infinite;
+}
+
+.reward-notification {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(138, 43, 226, 0.9);
+  padding: 15px 25px;
+  border-radius: 20px;
+  color: white;
+  text-align: center;
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+.milestone-notice {
+  background: rgba(138, 43, 226, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.notice-card {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.notice-icon {
+  font-size: 24px;
+  padding: 10px;
+  background: rgba(138, 43, 226, 0.2);
+  border-radius: 50%;
+}
+
+.notice-content {
+  flex: 1;
+}
+
+.notice-content h4 {
+  margin-bottom: 8px;
+  color: var(--primary-color);
+}
+
+.notice-content p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+}
+
+.notice-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.notice-content li {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 4px 0;
+}
+
+.group-leaderboard {
+  margin-bottom: 20px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { transform: translate(-50%, 100%); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@keyframes float {
+  0% { transform: translatey(0px); }
+  50% { transform: translatey(-10px); }
+  100% { transform: translatey(0px); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.item-details-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  padding: 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 300px;
+  z-index: 1001;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -60%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+
+.item-details-content {
+  text-align: center;
+}
+
+.item-details-icon {
+  font-size: 40px;
+  margin: 10px 0;
+}
+
+.item-details-info {
+  margin: 15px 0;
+}
+
+.item-details-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.item-details-btn {
+  padding: 8px 16px;
+  border-radius: 15px;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.item-details-btn:hover {
+  background: var(--secondary-color);
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: calc(10px + var(--safe-area-inset-bottom)) 0 var(--safe-area-inset-bottom);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  min-width: 60px;
+  background: none;
+  border: none;
+}
+
+.nav-item.active {
+  color: var(--primary-color);
+}
+
+.nav-item .nav-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.nav-item.active .nav-icon {
+  transform: scale(1.1);
+}
+
+.nav-item:active {
+  transform: scale(0.95);
+}
+
+.nav-item:hover {
+  color: var(--primary-color);
+  opacity: 0.8;
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+
+.floating-task-btn {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--safe-area-inset-bottom) + 80px);
+  transform: translateX(calc(-50% + (-190px + 20px))); /* Center then offset left */
+  background: var(--primary-color);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 999;
+  cursor: pointer;
+  max-width: 430px;
+}
+
+.floating-task-btn:hover {
+  background: var(--secondary-color);
+  transform: translateX(calc(-50% + (-190px + 20px))) scale(1.05);
+}
+
+.pet-advance-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 1001;
+  overflow: hidden;
+  display: none;
+  animation: slideIn 0.5s ease-out forwards;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(20px + var(--safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.advance-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.back-btn:hover {
+  transform: rotate(-10deg);
+}
+
+.advance-header h2 {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 20px;
+  color: var(--primary-color);
+}
+
+.advance-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  height: calc(100vh - 80px); /* Adjusted to fit without scrolling */
+  box-sizing: border-box;
+}
+
+.pet-portrait {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.panda-avatar.large {
+  width: 80px; /* Reduced size */
+  height: 80px; /* Reduced size */
+  margin: 0 auto;
+  animation: shake 4s infinite;
+}
+
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.panda-avatar.large .panda-emoji {
+  font-size: 40px; /* Reduced font size */
+}
+
+.level-info {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.exp-progress {
+  margin-top: 10px;
+}
+
+.exp-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.exp-fill {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.elements-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.element-slot {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.element-slot:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.element-slot.water { background: rgba(0, 150, 255, 0.2); }
+.element-slot.wood { background: rgba(76, 175, 80, 0.2); }
+.element-slot.earth { background: rgba(121, 85, 72, 0.2); }
+.element-slot.fire { background: rgba(255, 87, 34, 0.2); }
+.element-slot.metal { background: rgba(255, 215, 0, 0.2); }
+
+.element-icon {
+  font-size: 24px;
+  margin-bottom: 5px;
+  transition: transform 0.3s ease;
+}
+
+.element-slot:hover .element-icon {
+  transform: rotate(360deg);
+}
+
+.element-info {
+  text-align: center;
+  font-size: 12px;
+}
+
+.advance-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 30px; /* Reduced padding */
+  border-radius: 20px; /* Reduced border-radius */
+  font-size: 16px; /* Reduced font size */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.advance-btn:hover {
+  transform: scale(1.05);
+  background: #45a049;
+}
+
+.skill-hint {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin-top: 10px; /* Reduced margin */
+}
+
+.team-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.team-content {
+  padding: 20px;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.team-info {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.team-rank {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.team-progress {
+  margin-top: 15px;
+}
+
+.progress-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+}
+
+.member-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.member-card {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  gap: 15px;
+}
+
+.member-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.member-info {
+  flex: 1;
+}
+
+.member-name {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.member-progress {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.member-rank {
+  font-size: 18px;
+  color: var(--primary-color);
+}
+
+.team-milestones {
+  margin-top: 20px;
+}
+
+.milestone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.milestone-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  gap: 15px;
+}
+
+.milestone-item.achieved {
+  background: rgba(138, 43, 226, 0.2);
+}
+
+.milestone-icon {
+  font-size: 24px;
+}
+
+.milestone-info {
+  flex: 1;
+}
+
+.milestone-title {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.milestone-desc {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.milestone-reward {
+  font-size: 14px;
+  color: var(--primary-color);
+}
+
+.team-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+.team-actions .interact-btn {
+  flex: 1;
+}
+
+.team-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 1001;
+  overflow: hidden;
+  animation: slideIn 0.5s ease-out forwards;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(20px + var(--safe-area-inset-bottom));
+}
+
+.group-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 1001;
+  overflow-y: auto;
+  animation: slideIn 0.5s ease-out forwards;
+  padding: calc(10px + var(--safe-area-inset-top)) 15px calc(20px + var(--safe-area-inset-bottom));
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.search-section {
+  margin: 15px 0;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
+
+.search-bar input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: white;
+  outline: none;
+}
+
+.search-bar .search-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.filter-tags {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 5px 0;
+}
+
+.filter-tag {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 15px;
+  border-radius: 15px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filter-tag.active {
+  background: var(--primary-color);
+}
+
+.group-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px 0;
+}
+
+.group-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.group-card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.group-avatar {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.group-info {
+  flex: 1;
+}
+
+.group-type {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.group-tags {
+  display: flex;
+  gap: 4px;
+}
+
+.tag {
+  font-size: 10px;
+  color: var(--primary-color);
+  background: rgba(138, 43, 226, 0.1);
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+
+.group-description {
+  margin: 10px 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.group-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.join-btn, .details-btn {
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.join-btn {
+  background: var(--primary-color);
+  color: white;
+}
+
+.join-btn:hover {
+  background: var(--secondary-color);
+}
+
+.details-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.details-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.join-btn.joined {
+  background: var(--secondary-color);
+  opacity: 0.8;
+}
+
+.leaderboard-filters {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-option {
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.filter-option.active {
+  background: var(--primary-color);
+}
+
+.group-leaderboard {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.leaderboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.leaderboard-title {
+  font-size: 18px;
+  color: var(--primary-color);
+}
+
+.leaderboard-period {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+}
+
+.leaderboard-item:hover {
+  transform: scale(1.02);
+}
+
+.leaderboard-rank {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.rank-1 {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  color: #000;
+}
+
+.rank-2 {
+  background: linear-gradient(45deg, #C0C0C0, #A0A0A0);
+  color: #000;
+}
+
+.rank-3 {
+  background: linear-gradient(45deg, #CD7F32, #8B4513);
+  color: #fff;
+}
+
+.leaderboard-user {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leaderboard-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaderboard-points {
+  font-size: 14px;
+  color: var(--primary-color);
+}
+</style>
+</head>
+<body>
+  <div id="notification-container"></div>
+
+  <header class="team-header">
+    <button class="back-btn" onclick="window.history.back()">←</button>
+    <h2>冒险家联盟</h2>
+  </header>
+
+  <div class="team-content">
+    <div class="team-info">
+      <div class="team-rank">
+        <span>全球排名：5</span>
+      </div>
+      <div class="team-progress">
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: 75%"></div>
+        </div>
+        <span class="progress-text">75/100 任务完成</span>
+      </div>
+    </div>
+
+    <div class="team-members">
+      <h3>组内成员</h3>
+      <div class="member-grid">
+        <div class="member-card">
+          <div class="member-avatar">👤</div>
+          <div class="member-info">
+            <div class="member-name">玩家1</div>
+            <div class="member-progress">50/100 任务</div>
+          </div>
+          <div class="member-rank">#1</div>
+        </div>
+        <div class="member-card">
+          <div class="member-avatar">👤</div>
+          <div class="member-info">
+            <div class="member-name">玩家2</div>
+            <div class="member-progress">45/100 任务</div>
+          </div>
+          <div class="member-rank">#2</div>
+        </div>
+        <div class="member-card">
+          <div class="member-avatar">👤</div>
+          <div class="member-info">
+            <div class="member-name">玩家3</div>
+            <div class="member-progress">40/100 任务</div>
+          </div>
+          <div class="member-rank">#3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-milestones">
+      <h3>团队里程碑</h3>
+      <div class="milestone-list">
+        <div class="milestone-item achieved">
+          <div class="milestone-icon">🏆</div>
+          <div class="milestone-info">
+            <div class="milestone-title">初级里程碑</div>
+            <div class="milestone-desc">完成50个团队任务</div>
+          </div>
+          <div class="milestone-reward">+10% 资源加成</div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-icon">🌟</div>
+          <div class="milestone-info">
+            <div class="milestone-title">中级里程碑</div>
+            <div class="milestone-desc">完成100个团队任务</div>
+          </div>
+          <div class="milestone-reward">+20% 资源加成</div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-icon">👑</div>
+          <div class="milestone-info">
+            <div class="milestone-title">高级里程碑</div>
+            <div class="milestone-desc">完成200个团队任务</div>
+          </div>
+          <div class="milestone-reward">+30% 资源加成</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-actions">
+      <button class="interact-btn">
+        <span class="icon">📢</span>
+        <span>团队公告</span>
+      </button>
+      <button class="interact-btn">
+        <span class="icon">🤝</span>
+        <span>邀请好友</span>
+      </button>
+    </div>
+  </div>
+
+<script>
+function navigateToTeam(groupName) {
+  if(groupName === '冒险家联盟') {
+    window.location.href = 'adventure-group.html';
+  } else {
+    const groupPage = document.querySelector('.group-page');
+    if (groupPage) {
+      groupPage.style.display = 'none';
+    }
+
+    const homeContent = document.querySelectorAll('.mobile-container > *:not(.team-page, .group-page, .bottom-nav)');
+    homeContent.forEach(element => {
+      element.style.display = 'none';
+    });
+
+    const teamPage = document.querySelector('.team-page');
+    if (teamPage) {
+      teamPage.style.display = 'block';
+      const teamHeader = document.querySelector('.team-header h2');
+      if (teamHeader) {
+        teamHeader.textContent = groupName;
+      }
+    }
+  }
+}
+</script>
+
+</body>
+</html>
