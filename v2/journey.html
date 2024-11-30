@@ -1,0 +1,887 @@
+<html><head><base href="/">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+    --bamboo: #4CAF50;
+    --sky: #87CEEB;
+    --sage: #98FB98;
+    --coral: #FF7F50;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f5f5;
+}
+
+.mobile-container {
+    max-width: 428px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    position: relative;
+    overflow-x: hidden;
+}
+
+.header {
+    background: linear-gradient(135deg, var(--bamboo), var(--sky));
+    background-size: 200% 200%;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    animation: gradientFlow 5s infinite;
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.title {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.subtitle {
+    margin-top: 8px;
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+.progress-bar {
+    width: 80%;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+    margin: 15px auto;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #fff, #e3f2fd);
+    width: 70%;
+    transition: width 0.5s ease;
+    border-radius: 10px;
+}
+
+.stats-panel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 15px;
+    margin: 10px 20px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.stat-item {
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--sage), var(--bamboo));
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+}
+
+.stat-value {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.stat-label {
+    font-size: 0.8em;
+    opacity: 0.9;
+}
+
+.stat-desc {
+    font-size: 0.75em;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+
+.pet-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 20px auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.pet-container:hover {
+    transform: scale(1.05);
+}
+
+.panda {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+.mood-indicator {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2em;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mood-indicator.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px);
+}
+
+.pet-hint {
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 10px;
+    font-style: italic;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.growth-map {
+    padding: 20px;
+    background: white;
+    margin: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    font-size: 1.4em;
+    color: #333;
+    margin: 15px 20px 5px;
+    font-weight: bold;
+}
+
+.section-desc {
+    font-size: 0.9em;
+    color: #666;
+    margin: 0 20px 15px;
+    line-height: 1.4;
+}
+
+.map-nodes {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 20px 0;
+}
+
+.map-nodes::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 25px;
+    right: 25px;
+    height: 3px;
+    background: var(--bamboo);
+    opacity: 0.3;
+    transform: translateY(-50%);
+}
+
+.node {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--bamboo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    z-index: 1;
+}
+
+.node:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.node-tooltip {
+    position: absolute;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    font-size: 0.9em;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.node:hover .node-tooltip {
+    opacity: 1;
+}
+
+.achievements-section {
+    margin: 20px 0;
+}
+
+.achievements {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px;
+    gap: 15px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+}
+
+.achievements::-webkit-scrollbar {
+    display: none;
+}
+
+.badge {
+    min-width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.5em;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.badge-container {
+    position: relative;
+}
+
+.badge-container:hover .badge-tooltip {
+    opacity: 1;
+}
+
+.badge-tooltip {
+    position: absolute;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    font-size: 0.9em;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+}
+
+.action-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    background: var(--bamboo);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.button:active {
+    transform: scale(0.95);
+}
+
+.button-desc {
+    font-size: 0.8em;
+    color: #666;
+    text-align: center;
+}
+
+@media (max-width: 428px) {
+    .mobile-container {
+        box-shadow: none;
+    }
+    
+    .title {
+        font-size: 1.8em; /* Reduced from 2em */
+    }
+    
+    .subtitle {
+        font-size: 0.9em; /* Reduced from 1.1em */
+        line-height: 1.4;
+        padding: 0 10px;
+    }
+    
+    .stat-value {
+        font-size: 1.1em; /* Reduced from 1.2em */
+    }
+    
+    .stat-label {
+        font-size: 0.75em; /* Reduced from 0.8em */
+    }
+    
+    .stat-desc {
+        font-size: 0.7em; /* Reduced from 0.75em */
+    }
+    
+    .section-title {
+        font-size: 1.2em; /* Reduced from 1.4em */
+        margin: 12px 15px 4px;
+    }
+    
+    .section-desc {
+        font-size: 0.85em; /* Reduced from 0.9em */
+        margin: 0 15px 12px;
+    }
+    
+    .pet-hint {
+        font-size: 0.8em; /* Reduced from 0.9em */
+    }
+    
+    .node-tooltip {
+        font-size: 0.8em; /* Reduced from 0.9em */
+        padding: 6px 10px;
+    }
+    
+    .badge {
+        min-width: 65px; /* Reduced from 70px */
+        height: 65px;
+    }
+    
+    .badge-tooltip {
+        font-size: 0.8em; /* Reduced from 0.9em */
+        padding: 6px 10px;
+    }
+    
+    .button {
+        padding: 10px 20px; /* Reduced padding */
+        font-size: 0.9em;
+    }
+    
+    .button-desc {
+        font-size: 0.75em; /* Reduced from 0.8em */
+    }
+    
+    .actions {
+        padding: 15px; /* Reduced from 20px */
+        gap: 15px; /* Reduced from 20px */
+    }
+    
+    .stats-panel {
+        gap: 8px; /* Reduced from 10px */
+        padding: 12px; /* Reduced from 15px */
+        margin: 8px 15px; /* Reduced from 10px 20px */
+    }
+    
+    .stat-item {
+        padding: 10px; /* Reduced from 12px */
+    }
+
+    .achievements {
+        padding: 15px; /* Reduced from 20px */
+        gap: 12px; /* Reduced from 15px */
+    }
+
+    .growth-map {
+        padding: 15px; /* Reduced from 20px */
+        margin: 15px; /* Reduced from 20px */
+    }
+
+    .map-nodes {
+        padding: 15px 0; /* Reduced from 20px */
+    }
+
+    .node {
+        width: 45px; /* Reduced from 50px */
+        height: 45px; /* Reduced from 50px */
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 320px) {
+    .title {
+        font-size: 1.6em;
+    }
+    
+    .subtitle {
+        font-size: 0.85em;
+    }
+    
+    .stats-panel {
+        gap: 6px;
+        padding: 10px;
+    }
+    
+    .badge {
+        min-width: 60px;
+        height: 60px;
+    }
+    
+    .button {
+        padding: 8px 16px;
+        font-size: 0.85em;
+    }
+}
+</style>
+</head>
+<body>
+<div class="mobile-container">
+    <div class="header">
+        <h1 class="title">Journey</h1>
+        <div class="subtitle">Current Stage: Teenage Growth - Your panda is learning and evolving!</div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="stats-panel">
+        <div class="stat-item">
+            <div class="stat-value">Level 5</div>
+            <div class="stat-label">Experience</div>
+            <div class="stat-desc">Growing steadily!</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">87%</div>
+            <div class="stat-label">Happiness</div>
+            <div class="stat-desc">Very content</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">3/5</div>
+            <div class="stat-label">Energy</div>
+            <div class="stat-desc">Ready for action</div>
+        </div>
+    </div>
+
+    <div class="pet-container">
+        <div class="mood-indicator">😊</div>
+        <div class="pet-hint">Click to interact with your panda!</div>
+        <svg class="panda" viewBox="0 0 200 200">
+            <!-- Panda Face -->
+            <circle cx="100" cy="100" r="80" fill="white" />
+            <!-- Eyes -->
+            <ellipse cx="70" cy="80" rx="25" ry="20" fill="black" />
+            <ellipse cx="130" cy="80" rx="25" ry="20" fill="black" />
+            <circle cx="75" cy="75" r="5" fill="white" class="eye-highlight" />
+            <circle cx="135" cy="75" r="5" fill="white" class="eye-highlight" />
+            <!-- Nose -->
+            <circle cx="100" cy="110" r="10" fill="black" />
+            <!-- Mouth -->
+            <path d="M85 120 Q100 130 115 120" fill="none" stroke="black" stroke-width="3" />
+        </svg>
+    </div>
+
+    <div class="growth-map">
+        <h3 class="section-title">Growth Journey Map</h3>
+        <p class="section-desc">Track your panda's development through different life stages</p>
+        <div class="map-nodes">
+            <div class="node" data-stage="childhood">
+                🌱
+                <div class="node-tooltip">Early Growth Stage: Learning Basic Skills<br>Ages 0-5<br>Focus on fundamental development</div>
+            </div>
+            <div class="node" data-stage="teen">
+                🌿
+                <div class="node-tooltip">Teen Stage: Developing Talents<br>Ages 6-12<br>Discovering unique abilities</div>
+            </div>
+            <div class="node" data-stage="adult">
+                🌳
+                <div class="node-tooltip">Adult Stage: Mastering Abilities<br>Ages 13+<br>Becoming fully developed</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="achievements-section">
+        <h3 class="section-title">Achievement Collection</h3>
+        <p class="section-desc">Unlock special badges as you progress - scroll to see more!</p>
+        <div class="achievements">
+            <div class="badge-container">
+                <div class="badge" data-achievement="first-steps">🏆</div>
+                <div class="badge-tooltip">First Steps: Complete Tutorial<br>Learn the basics of panda care</div>
+            </div>
+            <div class="badge-container">
+                <div class="badge" data-achievement="quick-learner">⭐</div>
+                <div class="badge-tooltip">Quick Learner: Master 5 Skills<br>Your panda is growing fast!</div>
+            </div>
+            <div class="badge-container">
+                <div class="badge" data-achievement="goal-setter">🎯</div>
+                <div class="badge-tooltip">Goal Setter: Complete 10 Tasks<br>Showing great dedication</div>
+            </div>
+            <div class="badge-container">
+                <div class="badge" data-achievement="creative">🎨</div>
+                <div class="badge-tooltip">Creative Spirit: Design Something<br>Express your artistic side</div>
+            </div>
+            <div class="badge-container">
+                <div class="badge" data-achievement="scholar">📚</div>
+                <div class="badge-tooltip">Scholar: Learn Advanced Skills<br>Master of panda wisdom</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <div class="action-group">
+            <button class="button" id="dailyTask">Daily Task</button>
+            <div class="button-desc">Complete tasks to earn rewards</div>
+        </div>
+        <div class="action-group">
+            <button class="button" id="quickJump">Quick Jump</button>
+            <div class="button-desc">Boost progress instantly</div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updatePandaExpression(event) {
+    const moodIndicator = document.querySelector('.mood-indicator');
+    const panda = document.querySelector('.panda');
+    const eyes = document.querySelectorAll('.eye-highlight');
+    const mouth = document.querySelector('.panda path');
+    
+    // Toggle mood indicator
+    if (event.type === 'click') {
+        isHappy = !isHappy;
+        moodIndicator.textContent = isHappy ? '😊' : '😴';
+        moodIndicator.classList.add('show');
+        
+        // Hide mood indicator after 2 seconds
+        setTimeout(() => {
+            moodIndicator.classList.remove('show');
+        }, 2000);
+        
+        // Update mouth based on mood
+        if (isHappy) {
+            mouth.setAttribute('d', 'M85 120 Q100 135 115 120');
+        } else {
+            mouth.setAttribute('d', 'M85 120 Q100 130 115 120');
+        }
+    }
+    
+    // Eye tracking for mousemove
+    if (event.type === 'mousemove' && panda) {
+        const pandaRect = panda.getBoundingClientRect();
+        const centerX = pandaRect.left + pandaRect.width / 2;
+        const centerY = pandaRect.top + pandaRect.height / 2;
+        
+        const angleX = (event.clientX - centerX) / pandaRect.width;
+        const angleY = (event.clientY - centerY) / pandaRect.height;
+        
+        eyes.forEach(eye => {
+            const originalX = parseInt(eye.getAttribute('cx'));
+            const originalY = parseInt(eye.getAttribute('cy'));
+            
+            eye.setAttribute('cx', originalX + angleX * 5);
+            eye.setAttribute('cy', originalY + angleY * 5);
+        });
+    }
+}
+
+function updateStageDetails() {
+    const subtitle = document.querySelector('.subtitle');
+    const stageDesc = {
+        childhood: {
+            title: "Early Growth Stage",
+            desc: "Your panda is discovering the world with curiosity and wonder!"
+        },
+        teen: {
+            title: "Teenage Growth",
+            desc: "Your panda is learning and evolving!"
+        },
+        adult: {
+            title: "Mature Development",
+            desc: "Your panda has grown into a wise and skilled companion!"
+        }
+    };
+
+    let currentStage;
+    if (progress < 33) {
+        currentStage = stageDesc.childhood;
+    } else if (progress < 66) {
+        currentStage = stageDesc.teen;
+    } else {
+        currentStage = stageDesc.adult;
+    }
+
+    subtitle.innerHTML = `Current Stage: ${currentStage.title}<br><span style="font-size: 0.8em">${currentStage.desc}</span>`;
+}
+
+const panda = document.querySelector('.panda');
+const progressFill = document.querySelector('.progress-fill');
+const badges = document.querySelectorAll('.badge');
+const nodes = document.querySelectorAll('.node');
+const moodIndicator = document.querySelector('.mood-indicator');
+let isHappy = false;
+let progress = 70;
+
+function unlockAchievement() {
+    const badges = document.querySelectorAll('.badge');
+    const unlockedBadges = new Set();
+    
+    badges.forEach(badge => {
+        if (!unlockedBadges.has(badge.dataset.achievement)) {
+            const achievementType = badge.dataset.achievement;
+            let shouldUnlock = false;
+            
+            // Define unlock conditions based on achievement type
+            switch (achievementType) {
+                case 'first-steps':
+                    shouldUnlock = progress >= 20;
+                    break;
+                case 'quick-learner':
+                    shouldUnlock = progress >= 40;
+                    break;
+                case 'goal-setter':
+                    shouldUnlock = progress >= 60;
+                    break;
+                case 'creative':
+                    shouldUnlock = progress >= 80;
+                    break;
+                case 'scholar':
+                    shouldUnlock = progress >= 100;
+                    break;
+            }
+            
+            if (shouldUnlock) {
+                badge.classList.add('unlocked');
+                unlockedBadges.add(achievementType);
+                
+                // Add sparkle effect
+                badge.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
+                badge.style.transform = 'scale(1.1)';
+                
+                // Show achievement notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: white;
+                    padding: 10px 20px;
+                    border-radius: 20px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                    animation: slideDown 0.5s ease, fadeOut 0.5s ease 2.5s forwards;
+                `;
+                notification.textContent = `🎉 Achievement Unlocked: ${badge.nextElementSibling.textContent}`;
+                document.body.appendChild(notification);
+                
+                // Remove notification after animation
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                    badge.style.transform = '';
+                }, 3000);
+            }
+        }
+    });
+}
+
+function updateProgress() {
+    const oldProgress = progress;
+    progress = Math.min(100, progress + Math.random() * 5);
+    progressFill.style.width = `${progress}%`;
+    
+    if (progress !== oldProgress) {
+        updateStats();
+        updateStageDetails();
+        checkStageTransition(oldProgress);
+    }
+    
+    if (progress >= 100) {
+        unlockAchievement();
+    }
+}
+
+function checkStageTransition(oldProgress) {
+    const stageThresholds = [33, 66];
+    for (let threshold of stageThresholds) {
+        if (oldProgress < threshold && progress >= threshold) {
+            showStageTransition();
+        }
+    }
+}
+
+function showStageTransition() {
+    const transition = document.createElement('div');
+    transition.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        text-align: center;
+        z-index: 1000;
+        animation: fadeInOut 3s forwards;
+    `;
+    transition.innerHTML = `
+        <h3>🎉 Stage Evolution! 🎉</h3>
+        <p>Your panda has reached a new stage of growth!</p>
+        <div style="font-size: 2em; margin: 10px">✨</div>
+    `;
+    document.body.appendChild(transition);
+    
+    setTimeout(() => {
+        document.body.removeChild(transition);
+    }, 3000);
+}
+
+function updateStats() {
+    const levelElement = document.querySelector('.stats-panel .stat-value');
+    const happinessElement = document.querySelector('.stats-panel .stat-item:nth-child(2) .stat-value');
+    const energyElement = document.querySelector('.stats-panel .stat-item:nth-child(3) .stat-value');
+    
+    if (levelElement && happinessElement && energyElement) {
+        const level = Math.floor(progress / 20) + 1;
+        const happiness = Math.min(100, Math.floor(progress + Math.random() * 10));
+        const energy = Math.min(5, Math.floor(progress / 20));
+        
+        levelElement.textContent = `Level ${level}`;
+        happinessElement.textContent = `${happiness}%`;
+        energyElement.textContent = `${energy}/5`;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const panda = document.querySelector('.panda');
+    const progressFill = document.querySelector('.progress-fill');
+    const nodes = document.querySelectorAll('.node');
+    const moodIndicator = document.querySelector('.mood-indicator');
+    let isHappy = false;
+    let progress = 70;
+
+    updateStageDetails(); // Initial stage update
+    
+    if (panda) {
+        panda.addEventListener('click', updatePandaExpression);
+        document.addEventListener('mousemove', updatePandaExpression);
+    }
+    
+    if (nodes) {
+        nodes.forEach(node => {
+            node.addEventListener('click', () => {
+                const rewards = ['🎁', '💎', '🌟', '🎨'];
+                const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
+                const originalContent = node.textContent;
+                
+                node.classList.add('unlocked');
+                node.textContent = randomReward;
+                
+                setTimeout(() => {
+                    node.textContent = originalContent;
+                    node.classList.remove('unlocked');
+                }, 1000);
+            });
+        });
+    }
+    
+    const dailyTaskBtn = document.getElementById('dailyTask');
+    const quickJumpBtn = document.getElementById('quickJump');
+    
+    if (dailyTaskBtn) {
+        dailyTaskBtn.addEventListener('click', () => {
+            const tasks = [
+                "Feed your panda bamboo",
+                "Practice meditation",
+                "Exercise routine",
+                "Learn a new skill"
+            ];
+            const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
+            
+            const taskNotification = document.createElement('div');
+            taskNotification.style.cssText = `
+                position: fixed;
+                bottom: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: white;
+                padding: 15px 25px;
+                border-radius: 25px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideUp 0.5s ease;
+            `;
+            taskNotification.textContent = `New Task: ${randomTask}`;
+            document.body.appendChild(taskNotification);
+            
+            setTimeout(() => {
+                taskNotification.remove();
+            }, 3000);
+            
+            updateProgress();
+        });
+    }
+    
+    if (quickJumpBtn) {
+        quickJumpBtn.addEventListener('click', () => {
+            progress += 10;
+            updateProgress();
+        });
+    }
+    
+    const achievementsContainer = document.querySelector('.achievements');
+    let isScrolling = false;
+    
+    if (achievementsContainer) {
+        achievementsContainer.addEventListener('wheel', (e) => {
+            if (!isScrolling) {
+                isScrolling = true;
+                requestAnimationFrame(() => {
+                    achievementsContainer.scrollLeft += e.deltaY;
+                    isScrolling = false;
+                });
+            }
+        });
+    }
+    
+    setInterval(updateProgress, 3000);
+    updateStats();
+});
+</script>
+</body></html>

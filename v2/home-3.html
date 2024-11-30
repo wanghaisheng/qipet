@@ -1,0 +1,572 @@
+<html><head><base href="/" /><style>
+:root {
+  --primary: #FFB5D8; 
+  --secondary: #B5E6FF;
+  --accent: #7DE3D9;
+  --text: #4A4A4A;
+  font-family: 'Nunito', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.app {
+  max-width: 414px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255,255,255,0.9);
+}
+
+.currency {
+  display: flex;
+  gap: 1rem;
+}
+
+.currency-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255,255,255,0.9);
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.pet-container {
+  position: relative;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.panda {
+  width: 200px;
+  height: 200px;
+}
+
+.task-list {
+  padding: 1rem;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 15px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.task-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 414px;
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem;
+  background: white;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.nav-item {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.nav-item:hover {
+  transform: translateY(-2px);
+}
+
+.progress-container {
+  width: 80%;
+  height: 10px;
+  background: var(--secondary);
+  border-radius: 10px;
+  margin: 1rem auto;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--accent);
+  width: 60%;
+  transition: width 0.3s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes shine {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+@keyframes celebration {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+.shine {
+  animation: shine 2s infinite;
+}
+
+.bounce {
+  animation: bounce 2s infinite;
+}
+
+.celebrate {
+  animation: celebration 0.5s ease;
+}
+
+.task-completed {
+  background: #E8F5E9;
+  opacity: 0.8;
+}
+
+.task-icon {
+  min-width: 24px;
+}
+
+.daily-rewards {
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.reward-day {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reward-day:hover {
+  transform: scale(1.1);
+}
+
+.reward-day.claimed {
+  background: var(--accent);
+  color: white;
+}
+
+.pet-stats {
+  padding: 1rem;
+  background: rgba(255,255,255,0.9);
+  border-radius: 15px;
+  margin: 1rem;
+}
+
+.stat-bar {
+  height: 8px;
+  background: var(--secondary);
+  border-radius: 4px;
+  margin: 0.5rem 0;
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.page {
+  display: none;
+  padding: 1rem;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.page.active {
+  display: block;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.shop-item {
+  background: white;
+  border-radius: 15px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.shop-item:hover {
+  transform: translateY(-5px);
+}
+
+.shop-item-image {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+.shop-item-price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.rewards-page {
+  text-align: center;
+}
+
+.reward-chest {
+  width: 150px;
+  height: 150px;
+  margin: 2rem auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.reward-chest:hover {
+  transform: scale(1.1);
+}
+
+.map-container {
+  position: relative;
+  height: 100%;
+  background: #E8F5E9;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.map-location {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.map-location:hover {
+  transform: scale(1.2);
+}
+
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="app">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="currency">
+      <div class="currency-item shine">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="gold">
+          <circle cx="12" cy="12" r="10"/>
+          <text x="12" y="16" text-anchor="middle" fill="white">$</text>
+        </svg>
+        <span>1,234</span>
+      </div>
+      <div class="currency-item shine">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#5D4DE3">
+          <polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/>
+          <text x="12" y="16" text-anchor="middle" fill="white">💎</text>
+        </svg>
+        <span>56</span>
+      </div>
+    </div>
+    <div class="vip-badge shine">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="gold">
+        <path d="M15,5 L20,10 L25,5 L20,20 L15,25 L10,20 L5,5 L10,10 Z"/>
+        <text x="15" y="18" text-anchor="middle" fill="white">VIP</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar"></div>
+  </div>
+
+  <!-- Pet Stats -->
+  <div class="pet-stats">
+    <h3>Pet Status</h3>
+    <div>
+      <label>Happiness</label>
+      <div class="stat-bar">
+        <div class="stat-fill" style="width: 80%"></div>
+      </div>
+    </div>
+    <div>
+      <label>Energy</label>
+      <div class="stat-bar">
+        <div class="stat-fill" style="width: 65%"></div>
+      </div>
+    </div>
+    <div>
+      <label>Health</label>
+      <div class="stat-bar">
+        <div class="stat-fill" style="width: 90%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pet Display -->
+  <div class="pet-container">
+    <svg class="panda bounce" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="80" fill="white"/>
+      <circle cx="70" cy="80" r="25" fill="black"/>
+      <circle cx="130" cy="80" r="25" fill="black"/>
+      <circle cx="75" cy="85" r="5" fill="white"/>
+      <circle cx="125" cy="85" r="5" fill="white"/>
+      <ellipse cx="100" cy="110" rx="15" ry="10" fill="black"/>
+      <path d="M85,120 Q100,130 115,120" stroke="black" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- Daily Rewards -->
+  <div class="daily-rewards">
+    <h3>Daily Rewards</h3>
+    <div class="rewards-grid">
+      <div class="reward-day claimed">1</div>
+      <div class="reward-day claimed">2</div>
+      <div class="reward-day">3</div>
+      <div class="reward-day">4</div>
+      <div class="reward-day">5</div>
+      <div class="reward-day">6</div>
+      <div class="reward-day">7</div>
+    </div>
+  </div>
+
+  <!-- Task List -->
+  <div class="task-list">
+    <div class="task-item">
+      <svg class="task-icon" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M12,2 A10,10 0 1,0 12,22 A10,10 0 1,0 12,2 Z" fill="none" stroke="#4A4A4A"/>
+        <path d="M7,12 L10,15 L17,8" stroke="#4A4A4A" fill="none"/>
+      </svg>
+      <span>Daily Check-in</span>
+    </div>
+    <div class="task-item">
+      <svg class="task-icon" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M12,2 A10,10 0 1,0 12,22 A10,10 0 1,0 12,2 Z" fill="none" stroke="#4A4A4A"/>
+        <path d="M12,6 L12,18 M6,12 L18,12" stroke="#4A4A4A"/>
+      </svg>
+      <span>Complete 3 Exercises</span>
+    </div>
+    <div class="task-item">
+      <svg class="task-icon" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M12,2 A10,10 0 1,0 12,22 A10,10 0 1,0 12,2 Z" fill="none" stroke="#4A4A4A"/>
+        <path d="M8,12 L16,12" stroke="#4A4A4A"/>
+      </svg>
+      <span>Feed Your Pet</span>
+    </div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <div class="nav-bar">
+    <svg class="nav-item" width="24" height="24" viewBox="0 0 24 24" fill="var(--accent)">
+      <path d="M3,13 L5,5 L19,5 L21,13 L12,20 Z"/>
+      <text x="12" y="15" text-anchor="middle" fill="white">🏠</text>
+    </svg>
+    <svg class="nav-item" width="24" height="24" viewBox="0 0 24 24" fill="var(--text)">
+      <circle cx="12" cy="12" r="10"/>
+      <text x="12" y="16" text-anchor="middle" fill="white">🎁</text>
+    </svg>
+    <svg class="nav-item" width="24" height="24" viewBox="0 0 24 24" fill="var(--text)">
+      <path d="M2,12 L22,12 M12,2 L12,22" stroke="white"/>
+      <text x="12" y="16" text-anchor="middle" fill="white">🗺️</text>
+    </svg>
+    <svg class="nav-item" width="24" height="24" viewBox="0 0 24 24" fill="var(--text)">
+      <rect x="4" y="4" width="16" height="16" rx="2"/>
+      <text x="12" y="16" text-anchor="middle" fill="white">🛍️</text>
+    </svg>
+  </div>
+
+  <!-- New Pages -->
+  <div id="shop-page" class="page">
+    <h2>Shop</h2>
+    <div class="shop-grid">
+      <div class="shop-item">
+        <svg class="shop-item-image" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="40" fill="#FFD700"/>
+          <text x="50" y="60" text-anchor="middle" fill="white" font-size="30">🍎</text>
+        </svg>
+        <h3>Apple Treat</h3>
+        <div class="shop-item-price">
+          <span>50</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="gold">
+            <circle cx="12" cy="12" r="10"/>
+            <text x="12" y="16" text-anchor="middle" fill="white">$</text>
+          </svg>
+        </div>
+      </div>
+      <!-- More shop items -->
+    </div>
+  </div>
+
+  <div id="rewards-page" class="page">
+    <h2>Rewards</h2>
+    <svg class="reward-chest" viewBox="0 0 100 100">
+      <rect x="20" y="40" width="60" height="40" fill="#8B4513"/>
+      <path d="M20,40 C20,20 80,20 80,40" fill="#8B4513"/>
+      <rect x="45" y="35" width="10" height="10" fill="#FFD700"/>
+    </svg>
+    <div class="rewards-grid">
+      <!-- Existing rewards grid content -->
+    </div>
+  </div>
+
+  <div id="map-page" class="page">
+    <h2>Adventure Map</h2>
+    <div class="map-container">
+      <svg class="map-location" style="left: 30%; top: 20%" viewBox="0 0 50 50">
+        <circle cx="25" cy="25" r="20" fill="#FF6B6B"/>
+        <text x="25" y="32" text-anchor="middle" fill="white">1</text>
+      </svg>
+      <svg class="map-location" style="left: 60%; top: 50%" viewBox="0 0 50 50">
+        <circle cx="25" cy="25" r="20" fill="#4ECDC4"/>
+        <text x="25" y="32" text-anchor="middle" fill="white">2</text>
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.task-item').forEach(task => {
+  task.addEventListener('click', () => {
+    if (!task.classList.contains('task-completed')) {
+      task.classList.add('task-completed', 'celebrate');
+      
+      const progressBar = document.querySelector('.progress-bar');
+      const currentWidth = parseInt(progressBar.style.width) || 60;
+      progressBar.style.width = Math.min(currentWidth + 10, 100) + '%';
+      
+      const panda = document.querySelector('.panda');
+      panda.style.animation = 'none';
+      panda.offsetHeight;
+      panda.style.animation = 'bounce 0.5s ease';
+      
+      setTimeout(() => {
+        task.classList.remove('celebrate');
+      }, 500);
+    }
+  });
+});
+
+document.querySelectorAll('.currency-item').forEach(item => {
+  item.addEventListener('click', () => {
+    item.classList.remove('shine');
+    void item.offsetWidth;
+    item.classList.add('shine');
+  });
+});
+
+document.querySelectorAll('.nav-item').forEach((navItem, index) => {
+  navItem.addEventListener('click', () => {
+    const pages = ['home-page', 'rewards-page', 'map-page', 'shop-page'];
+    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+    document.getElementById(pages[index])?.classList.add('active');
+    
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.style.fill = 'var(--text)';
+    });
+    navItem.style.fill = 'var(--accent)';
+  });
+});
+
+const vipBadge = document.querySelector('.vip-badge');
+vipBadge.addEventListener('click', () => {
+  vipBadge.classList.remove('shine');
+  void vipBadge.offsetWidth;
+  vipBadge.classList.add('shine');
+});
+
+document.querySelectorAll('.reward-day').forEach((day, index) => {
+  day.addEventListener('click', () => {
+    if (index <= 1 || day.previousElementSibling?.classList.contains('claimed')) {
+      day.classList.add('claimed', 'celebrate');
+      setTimeout(() => {
+        day.classList.remove('celebrate');
+      }, 500);
+    }
+  });
+});
+
+// Shop interactions
+document.querySelectorAll('.shop-item').forEach(item => {
+  item.addEventListener('click', () => {
+    item.classList.add('celebrate');
+    setTimeout(() => item.classList.remove('celebrate'), 500);
+  });
+});
+
+// Reward chest interaction
+const rewardChest = document.querySelector('.reward-chest');
+if (rewardChest) {
+  rewardChest.addEventListener('click', () => {
+    rewardChest.style.animation = 'celebration 0.5s ease';
+    setTimeout(() => rewardChest.style.animation = '', 500);
+  });
+});
+
+// Map location interactions
+document.querySelectorAll('.map-location').forEach(location => {
+  location.addEventListener('click', () => {
+    location.style.animation = 'bounce 0.5s ease';
+    setTimeout(() => location.style.animation = '', 500);
+  });
+});
+
+// Update pet stats periodically
+setInterval(() => {
+  document.querySelectorAll('.stat-fill').forEach(stat => {
+    const currentWidth = parseInt(stat.style.width) || 100;
+    stat.style.width = Math.max(currentWidth - 5, 20) + '%';
+  });
+}, 30000);
+
+</script>
+
+</body></html>

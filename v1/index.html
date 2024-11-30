@@ -1,0 +1,1989 @@
+<html><head><base href="https://websim.ai">
+<style>
+:root {
+  --primary-color: #6c5ce7;
+  --primary-light: #a594f9;
+  --secondary-color: #ff6b6b;
+  --secondary-light: #ff8e53;
+  --success-color: #4ecdc4;
+  --warning-color: #ffd93d;
+  --danger-color: #ff6b6b;
+  --background-color: #faf4f0;
+  --card-background: #ffffff;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --border-radius-lg: 40px;
+  --border-radius-md: 25px;
+  --border-radius-sm: 15px;
+  --shadow-default: 0 4px 15px rgba(0,0,0,0.1);
+  --shadow-large: 0 8px 25px rgba(0,0,0,0.08);
+  --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-light) 100%);
+}
+
+/* Update mobile-wrapper positioning and styling */
+.mobile-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 360px; /* Update to match example */
+  height: 640px; /* Update to match example */
+  background: #ffffff;
+  border-radius: 16px; /* Update to match example */
+  box-shadow: none; /* Remove shadow */
+  overflow: hidden;
+}
+
+/* Update body styling */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f0f0f0; /* Update to match example */
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  min-width: 100vw;
+}
+
+/* Remove or update these styles that may interfere */
+.mobile-notch {
+  display: none; /* Remove notch */
+}
+
+.mobile-time {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: 500;
+  font-size: 14px;
+  z-index: 100;
+}
+
+.mobile-status {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 14px;
+  z-index: 100;
+}
+
+.app {
+  height: 100%;
+  max-height: 100%;
+  border-radius: 0; /* Remove inner border radius */
+  overflow: hidden;
+}
+
+.content {
+  height: calc(100% - 90px); /* Adjust for bottom nav */
+  padding-top: 45px;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Nunito", sans-serif;
+  overflow: hidden;
+}
+
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color);
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+}
+
+.nav {
+  height: 60px;
+  background: var(--card-background);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.nav-item.active {
+  color: var(--primary-color);
+}
+
+.nav-icon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+}
+
+.panda {
+  width: 200px;
+  height: 200px;
+  margin: 20px auto;
+  position: relative;
+}
+
+.panda-head {
+  width: 100px;
+  height: 100px;
+  background: var(--card-background);
+  border-radius: 50%;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: transform 0.2s;
+}
+
+.panda-ear {
+  width: 40px;
+  height: 40px;
+  background: black;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.panda-ear.left {
+  left: 10px;
+  top: 0;
+}
+
+.panda-ear.right {
+  right: 10px;
+  top: 0;
+}
+
+.panda-eye {
+  width: 30px;
+  height: 30px;
+  background: black;
+  border-radius: 50%;
+  position: absolute;
+  top: 40px;
+  transition: height 0.3s;
+}
+
+.panda-eye.left {
+  left: 20px;
+}
+
+.panda-eye.right {
+  right: 20px;
+}
+
+.panda-nose {
+  width: 20px;
+  height: 15px;
+  background: black;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.streak-container {
+  text-align: center;
+  margin: 20px;
+}
+
+.streak-counter {
+  background: var(--gradient-secondary);
+  color: white;
+  padding: 15px 25px;
+  border-radius: var(--border-radius-md);
+  margin: 20px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: var(--shadow-default);
+  animation: pulse 2s infinite;
+}
+
+.daily-goal {
+  background: var(--card-background);
+  border-radius: var(--border-radius-sm);
+  padding: 10px;
+  margin-top: 10px;
+  box-shadow: var(--shadow-default);
+  color: var(--text-secondary);
+}
+
+.task-list {
+  margin: 20px;
+}
+
+.task-item {
+  background: var(--card-background);
+  margin: 15px;
+  padding: 15px;
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-default);
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  align-items: center;
+  gap: 15px;
+}
+
+.task-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-icon {
+  font-size: 24px;
+}
+
+.task-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.task-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.task-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.task-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.task-btn:hover {
+  transform: scale(1.1);
+}
+
+.task-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fab {
+  position: fixed;
+  bottom: 25%; /* Change from 10% to 25% from bottom */
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: var(--secondary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 30px;
+  box-shadow: var(--shadow-large);
+  cursor: move; /* Indicates moveability */
+  touch-action: none; /* Prevents default touch actions */
+  user-select: none; /* Prevents text selection while dragging */
+  z-index: 1000; /* Ensures it stays above other content */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(255,107,107,0.4);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+.emotion-indicator {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.emotion-indicator.visible {
+  opacity: 1;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.page-content {
+  padding: 20px;
+  display: none; /* Hide all pages by default */
+}
+
+.page-content.active {
+  display: block;
+}
+
+/* Update rewards page styles */
+.rewards-header {
+  padding: 20px;
+  background: var(--gradient-primary);
+  color: white;
+  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+  margin: -20px -20px 15px;
+  text-align: center;
+}
+
+.rewards-section {
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 15px 10px;
+  color: var(--text-primary);
+}
+
+/* Update grid layout for mobile */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Change to 2 columns for mobile */
+  gap: 10px;
+}
+
+/* Update reward cards for mobile */
+.reward-card {
+  background: var(--card-background);
+  border-radius: var(--border-radius-sm);
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.reward-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.reward-title {
+  font-size: 14px;
+  margin: 5px 0;
+  font-weight: 600;
+}
+
+.reward-description {
+  font-size: 12px;
+  margin: 5px 0;
+  color: var(--text-secondary);
+}
+
+.reward-points {
+  font-size: 12px;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.claim-btn {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  background: var(--primary-color);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+/* Update premium badge */
+.premium-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+/* Update premium info section */
+.premium-info {
+  background: linear-gradient(135deg, #6c5ce7, #a594f9);
+  color: white;
+  margin: 20px 10px;
+  padding: 20px;
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-large);
+  text-align: center;
+}
+
+.premium-info h4 {
+  font-size: 1.2em;
+  margin: 0 0 10px 0;
+  color: white;
+}
+
+.premium-info p {
+  margin: 10px 0;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+.premium-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+  text-align: left;
+}
+
+.premium-benefits li {
+  margin: 12px 0;
+  padding-left: 25px;
+  position: relative;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+}
+
+.premium-benefits li:before {
+  content: "✨";
+  position: absolute;
+  left: 0;
+  margin-right: 8px;
+}
+
+.upgrade-button {
+  background: white;
+  color: var(--primary-color);
+  border: none;
+  padding: 12px 25px;
+  border-radius: var(--border-radius-sm);
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-default);
+  width: auto;
+  margin: 15px auto 5px;
+  display: inline-block;
+}
+
+.upgrade-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Add these styles for the premium section updates */
+.premium-plans {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.plan-card {
+  background: rgba(255,255,255,0.1);
+  border-radius: var(--border-radius-sm);
+  padding: 15px;
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+}
+
+.plan-card.featured {
+  border: 2px solid #FFD700;
+}
+
+.best-value {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  background: #FFD700;
+  color: #000;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.plan-price {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.save-badge {
+  background: #4CAF50;
+  color: white;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  margin: 5px 0;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.plan-features li {
+  margin: 8px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.plan-features li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #4CAF50;
+}
+
+.premium-templates {
+  margin: 20px 0;
+}
+
+.template-grid {
+  display: grid;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.template-card {
+  background: rgba(255,255,255,0.1);
+  border-radius: var(--border-radius-sm);
+  padding: 12px;
+}
+
+.template-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.template-author {
+  color: #FFD700;
+}
+
+.template-tasks {
+  margin-top: 10px;
+}
+
+.template-task {
+  padding: 4px 0;
+  font-size: 0.9em;
+}
+</style>
+</head>
+<body>
+  <div class="mobile-wrapper">
+    <div class="mobile-notch"></div>
+    <div class="mobile-time"></div>
+    <div class="mobile-status">
+      <span>📶</span>
+      <span>🔋</span>
+    </div>
+    
+    <div class="app">
+      <div class="content">
+        <!-- Home Page -->
+        <div class="page-content active" id="home-page">
+          <div class="mood-tracker">
+            <h3>How are you feeling?</h3>
+            <div class="mood-selector">
+              <div class="mood-option active" data-mood="happy">
+                <span class="mood-emoji">😊</span>
+                <span class="mood-label">happy</span>
+              </div>
+              <div class="mood-option" data-mood="neutral">
+                <span class="mood-emoji">😐</span>
+                <span class="mood-label">neutral</span>
+              </div>
+              <div class="mood-option" data-mood="sad">
+                <span class="mood-emoji">😢</span>
+                <span class="mood-label">sad</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panda">
+            <div class="emotion-indicator">😊</div>
+            <div class="panda-head">
+              <div class="panda-ear left"></div>
+              <div class="panda-ear right"></div>
+              <div class="panda-eye left"></div>
+              <div class="panda-eye right"></div>
+              <div class="panda-nose"></div>
+            </div>
+          </div>
+
+          <div class="daily-statistics">
+            <div class="stat-card">
+              <span class="stat-icon">✨</span>
+              <span class="stat-value">0</span>
+              <span class="stat-label">Tasks Done</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">⭐</span>
+              <span class="stat-value">0</span>
+              <span class="stat-label">Points</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">📈</span>
+              <span class="stat-value">0</span>
+              <span class="stat-label">Best Streak</span>
+            </div>
+          </div>
+
+          <div class="streak-container">
+            <div class="streak-counter">
+              🔥 0 Day Streak! Keep going!
+            </div>
+            <div class="daily-goal">
+              <div class="goal-progress">
+                <div class="goal-bar">
+                  <div class="goal-fill" style="width: 0%"></div>
+                </div>
+                <span class="goal-percentage">0%</span>
+              </div>
+              <div class="goal-subtitle">Daily Progress</div>
+            </div>
+          </div>
+
+          <div class="task-categories">
+            <div class="category-section">
+              <h3 class="category-title">Health</h3>
+              <div class="task-list">
+                <div class="task-item" data-task="water" style="border-left: 4px solid #4FA4DE">
+                  <div class="task-info">
+                    <span class="task-icon">💧</span>
+                    <span class="task-name">Water</span>
+                  </div>
+                  <div class="task-progress">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 25%; background: #4FA4DE"></div>
+                    </div>
+                    <span class="progress-text">2/8 glasses</span>
+                  </div>
+                  <div class="task-controls">
+                    <button class="task-btn minus" style="background: #4FA4DE">-</button>
+                    <button class="task-btn plus" style="background: #4FA4DE">+</button>
+                  </div>
+                </div>
+                <div class="task-item" data-task="walk" style="border-left: 4px solid #92DE4F">
+                  <div class="task-info">
+                    <span class="task-icon">🚶</span>
+                    <span class="task-name">Walk</span>
+                  </div>
+                  <div class="task-progress">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 0%; background: #92DE4F"></div>
+                    </div>
+                    <span class="progress-text">0/30 min</span>
+                  </div>
+                  <div class="task-controls">
+                    <button class="task-btn minus" style="background: #92DE4F">-</button>
+                    <button class="task-btn plus" style="background: #92DE4F">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="category-section">
+              <h3 class="category-title">Mindfulness</h3>
+              <div class="task-list">
+                <div class="task-item" data-task="meditation" style="border-left: 4px solid #B44FDE">
+                  <div class="task-info">
+                    <span class="task-icon">🧘</span>
+                    <span class="task-name">Meditation</span>
+                  </div>
+                  <div class="task-progress">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 0%; background: #B44FDE"></div>
+                    </div>
+                    <span class="progress-text">0/10 min</span>
+                  </div>
+                  <div class="task-controls">
+                    <button class="task-btn minus" style="background: #B44FDE">-</button>
+                    <button class="task-btn plus" style="background: #B44FDE">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="category-section">
+              <h3 class="category-title">Personal</h3>
+              <div class="task-list">
+                <div class="task-item" data-task="reading" style="border-left: 4px solid #DE4F4F">
+                  <div class="task-info">
+                    <span class="task-icon">📚</span>
+                    <span class="task-name">Reading</span>
+                  </div>
+                  <div class="task-progress">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 0%; background: #DE4F4F"></div>
+                    </div>
+                    <span class="progress-text">0/20 pages</span>
+                  </div>
+                  <div class="task-controls">
+                    <button class="task-btn minus" style="background: #DE4F4F">-</button>
+                    <button class="task-btn plus" style="background: #DE4F4F">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fab" title="Add new task">+</div>
+        </div>
+
+        <!-- Rewards Page -->
+        <div class="page-content" id="rewards-page">
+          <div class="rewards-header">
+            <h2>Your Rewards</h2>
+            <div class="coins-display">
+              <span>🪙</span>
+              <span>0 Coins</span>
+            </div>
+          </div>
+          <div class="rewards-section daily-rewards">
+            <h3 class="section-title">Daily Rewards</h3>
+            <div class="shop-grid">
+              <!-- Free User Rewards -->
+              <div class="reward-card">
+                <div class="reward-icon">🌅</div>
+                <h3 class="reward-title">Early Bird</h3>
+                <p class="reward-description">Complete 3 tasks before noon</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>30 points</span>
+                </div>
+                <button class="claim-btn">Import Routine</button>
+              </div>
+
+              <div class="reward-card">
+                <div class="reward-icon">🎯</div>
+                <h3 class="reward-title">Task Master</h3>
+                <p class="reward-description">Complete all daily tasks</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>50 points</span>
+                </div>
+                <button class="claim-btn">Import Routine</button>
+              </div>
+
+              <div class="reward-card">
+                <div class="reward-icon">💪</div>
+                <h3 class="reward-title">Fitness Focus</h3>
+                <p class="reward-description">30 mins exercise</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>40 points</span>
+                </div>
+                <button class="claim-btn">Import Routine</button>
+              </div>
+
+              <div class="reward-card">
+                <div class="reward-icon">🧘</div>
+                <h3 class="reward-title">Mindful Morning</h3>
+                <p class="reward-description">Meditate for 10 mins</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>35 points</span>
+                </div>
+                <button class="claim-btn">Import Routine</button>
+              </div>
+
+              <!-- Premium Only Rewards -->
+              <div class="reward-card premium-locked">
+                <div class="premium-badge">👑 Premium</div>
+                <div class="reward-icon">⚡</div>
+                <h3 class="reward-title">Power Hour</h3>
+                <p class="reward-description">3 tasks within one hour</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>100 points</span>
+                </div>
+                <button class="claim-btn">Upgrade to Claim</button>
+              </div>
+
+              <div class="reward-card premium-locked">
+                <div class="premium-badge">👑 Premium</div>
+                <div class="reward-icon">🎨</div>
+                <h3 class="reward-title">Creative Flow</h3>
+                <p class="reward-description">Custom creative goals</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>120 points</span>
+                </div>
+                <button class="claim-btn">Upgrade to Claim</button>
+              </div>
+
+              <div class="reward-card premium-locked">
+                <div class="premium-badge">👑 Premium</div>
+                <div class="reward-icon">📚</div>
+                <h3 class="reward-title">Learning Path</h3>
+                <p class="reward-description">Study milestone goals</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>150 points</span>
+                </div>
+                <button class="claim-btn">Upgrade to Claim</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="premium-info">
+            <h4>Unlock Premium Rewards</h4>
+            <p>Upgrade to access exclusive premium rewards and features!</p>
+            
+            <div class="premium-plans">
+              <div class="plan-card">
+                <h5>Monthly Premium</h5>
+                <div class="plan-price">$9.99/month</div>
+                <ul class="plan-features">
+                  <li>Create custom goals & routines</li>
+                  <li>Share templates with community</li>
+                  <li>Access premium challenges</li>
+                  <li>2x points multiplier</li>
+                </ul>
+              </div>
+              
+              <div class="plan-card featured">
+                <div class="best-value">Best Value</div>
+                <h5>Yearly Premium</h5>
+                <div class="plan-price">$89.99/year</div>
+                <div class="save-badge">Save 25%</div>
+                <ul class="plan-features">
+                  <li>All monthly features</li>
+                  <li>Priority template publishing</li>
+                  <li>Advanced analytics</li>
+                  <li>Early access to new features</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="premium-templates">
+              <h5>Premium Template Gallery</h5>
+              <p>Browse and use templates from our community</p>
+              <div class="template-grid">
+                <div class="template-card">
+                  <div class="template-header">
+                    <span class="template-author">@wellness_guru</span>
+                    <span class="template-likes">❤️ 1.2k</span>
+                  </div>
+                  <h6>Perfect Morning Routine</h6>
+                  <div class="template-tasks">
+                    <div class="template-task">🧘‍♀️ Morning Meditation - 10min</div>
+                    <div class="template-task">🏃‍♂️ Quick Exercise - 15min</div>
+                    <div class="template-task">📝 Journal - 10min</div>
+                  </div>
+                </div>
+                <!-- Add more template cards as needed -->
+              </div>
+            </div>
+
+            <button class="upgrade-button">Upgrade Now</button>
+          </div>
+
+          <div class="rewards-section weekly-rewards">
+            <h3 class="section-title">Weekly Goals</h3>
+            <div class="shop-grid">
+              <!-- Free User Rewards -->
+              <div class="reward-card">
+                <div class="reward-icon">📈</div>
+                <h3 class="reward-title">Weekly Sprint</h3>
+                <p class="reward-description">Complete 20 tasks</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>100 points</span>
+                </div>
+                <button class="claim-btn">Claim Reward</button>
+              </div>
+
+              <div class="reward-card">
+                <div class="reward-icon">🎯</div>
+                <h3 class="reward-title">Goal Getter</h3>
+                <p class="reward-description">Hit all weekly targets</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>150 points</span>
+                </div>
+                <button class="claim-btn">Claim Reward</button>
+              </div>
+
+              <!-- Premium Only -->
+              <div class="reward-card premium-locked">
+                <div class="premium-badge">👑 Premium</div>
+                <div class="reward-icon">🌟</div>
+                <h3 class="reward-title">Champion</h3>
+                <p class="reward-description">Top weekly board</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>300 points</span>
+                </div>
+                <button class="claim-btn">Upgrade to Claim</button>
+              </div>
+
+              <div class="reward-card premium-locked">
+                <div class="premium-badge">👑 Premium</div>
+                <div class="reward-icon">🏆</div>
+                <h3 class="reward-title">Elite Week</h3>
+                <p class="reward-description">Premium challenges</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>400 points</span>
+                </div>
+                <button class="claim-btn">Upgrade to Claim</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="rewards-section special-rewards">
+            <h3 class="section-title">Special Achievements</h3>
+            <div class="shop-grid">
+              <!-- Free Achievements -->
+              <div class="reward-card">
+                <div class="reward-icon">🌟</div>
+                <h3 class="reward-title">Rising Star</h3>
+                <p class="reward-description">Reach level 5</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>200 points</span>
+                </div>
+                <button class="claim-btn">Claim Reward</button>
+              </div>
+
+              <div class="reward-card">
+                <div class="reward-icon">🔥</div>
+                <h3 class="reward-title">Fire Starter</h3>
+                <p class="reward-description">7-day streak</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>250 points</span>
+                </div>
+                <button class="claim-btn">Claim Reward</button>
+              </div>
+
+              <!-- Premium Only -->
+              <div class="reward-card premium-locked">
+                <div class="premium-badge">👑 Premium</div>
+                <div class="reward-icon">💫</div>
+                <h3 class="reward-title">Elite</h3>
+                <p class="reward-description">Premium master</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>500 points</span>
+                </div>
+                <button class="claim-btn">Upgrade to Claim</button>
+              </div>
+
+              <div class="reward-card premium-locked">
+                <div class="premium-badge">👑 Premium</div>
+                <div class="reward-icon">👑</div>
+                <h3 class="reward-title">Legend</h3>
+                <p class="reward-description">30-day perfection</p>
+                <div class="reward-points">
+                  <span>⭐</span><span>1000 points</span>
+                </div>
+                <button class="claim-btn">Upgrade to Claim</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="premium-info">
+            <h4>Unlock Premium Rewards</h4>
+            <p>Upgrade to access exclusive premium rewards and features!</p>
+            
+            <div class="premium-plans">
+              <div class="plan-card">
+                <h5>Monthly Premium</h5>
+                <div class="plan-price">$9.99/month</div>
+                <ul class="plan-features">
+                  <li>Create custom goals & routines</li>
+                  <li>Share templates with community</li>
+                  <li>Access premium challenges</li>
+                  <li>2x points multiplier</li>
+                </ul>
+              </div>
+              
+              <div class="plan-card featured">
+                <div class="best-value">Best Value</div>
+                <h5>Yearly Premium</h5>
+                <div class="plan-price">$89.99/year</div>
+                <div class="save-badge">Save 25%</div>
+                <ul class="plan-features">
+                  <li>All monthly features</li>
+                  <li>Priority template publishing</li>
+                  <li>Advanced analytics</li>
+                  <li>Early access to new features</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="premium-templates">
+              <h5>Premium Template Gallery</h5>
+              <p>Browse and use templates from our community</p>
+              <div class="template-grid">
+                <div class="template-card">
+                  <div class="template-header">
+                    <span class="template-author">@wellness_guru</span>
+                    <span class="template-likes">❤️ 1.2k</span>
+                  </div>
+                  <h6>Perfect Morning Routine</h6>
+                  <div class="template-tasks">
+                    <div class="template-task">🧘‍♀️ Morning Meditation - 10min</div>
+                    <div class="template-task">🏃‍♂️ Quick Exercise - 15min</div>
+                    <div class="template-task">📝 Journal - 10min</div>
+                  </div>
+                </div>
+                <!-- Add more template cards as needed -->
+              </div>
+            </div>
+
+            <button class="upgrade-button">Upgrade Now</button>
+          </div>
+
+          <div class="ad-rewards-section">
+            <h3 class="section-title">Ad Rewards</h3>
+            <p>Watch ads to unlock treasure chests and earn coins!</p>
+            
+            <div class="ad-rewards-grid">
+              <div class="chest-card">
+                <div class="treasure-chest ">
+                  <svg viewBox="0 0 24 24" width="100%" height="100%">
+                    <path fill="#ffd700" d="M5,4H19A3,3 0 0,1 22,7V11H2V7A3,3 0 0,1 5,4M4,12H20L19,21H5L4,12M7,14A1,1 0 0,0 6,15V17A1,1 0 0,0 7,18H17A1,1 0 0,0 18,17V15A1,1 0 0,0 17,14H7Z"/>
+                  </svg>
+                  <div class="chest-status">READY!</div>
+                </div>
+                <div class="chest-info">
+                  <h4>Bronze Chest</h4>
+                  <div>🪙 50 coins</div>
+                  <button class="watch-ad-btn">Watch Ad</button>
+                </div>
+              </div>
+              <div class="chest-card">
+                <div class="treasure-chest locked">
+                  <svg viewBox="0 0 24 24" width="100%" height="100%">
+                    <path fill="#a0a0a0" d="M5,4H19A3,3 0 0,1 22,7V11H2V7A3,3, 0 0,1 5,4M4,12H20L19,21H5L4,12M7,14A1,1 0 0,0 6,15V17A1,1 0 0,0 7,18H17A1,1 0 0,0 18,17V15A1,1 0 0,0 17,14H7Z"/>
+                  </svg>
+                  <div class="chest-status">COOLDOWN</div>
+                </div>
+                <div class="chest-info">
+                  <h4>Silver Chest</h4>
+                  <div>🪙 100 coins</div>
+                  <button class="watch-ad-btn disabled" disabled>Wait</button>
+                </div>
+              </div>
+              <div class="chest-card">
+                <div class="treasure-chest locked">
+                  <svg viewBox="0 0 24 24" width="100%" height="100%">
+                    <path fill="#a0a0a0" d="M5,4H19A3,3 0 0,1 22,7V11H2V7A3,3, 0 0,1 5,4M4,12H20L19,21H5L4,12M7,14A1,1 0 0,0 6,15V17A1,1 0 0,0 7,18H17A1,1 0 0,0 18,17V15A1,1 0 0,0 17,14H7Z"/>
+                  </svg>
+                  <div class="chest-status">COOLDOWN</div>
+                </div>
+                <div class="chest-info">
+                  <h4>Gold Chest</h4>
+                  <div>🪙 200 coins</div>
+                  <button class="watch-ad-btn disabled" disabled>Wait</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Journey Page -->
+        <div class="page-content" id="journey-page">
+          <div class="journey-header">
+            <h2>Your Wellness Journey</h2>
+            <p>Track your progress and achievements</p>
+            <div class="journey-stats">
+              <div class="journey-stat">
+                <div class="journey-stat-label">Total Tasks</div>
+                <div class="journey-stat-value">42</div>
+              </div>
+              <div class="journey-stat">
+                <div class="journey-stat-label">Streak</div>
+                <div class="journey-stat-value">7</div>
+              </div>
+              <div class="journey-stat">
+                <div class="journey-stat-label">Points</div>
+                <div class="journey-stat-value">350</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="milestone-section">
+            <h3>Monthly Milestones</h3>
+            <div class="milestone-card">
+              <div class="milestone-icon">🌟</div>
+              <h3>Consistent Champion</h3>
+              <p class="timestamp">September 2023</p>
+              <div class="achievement-points">+300 Points</div>
+              <p>Maintained a perfect streak for 30 days!</p>
+              <div class="milestone-details">
+                <h4>Achievements:</h4>
+                <ul>
+                  <li>✅ Daily meditation practice</li>
+                  <li>✅ Fitness goals exceeded</li>
+                  <li>✅ Healthy eating habits maintained</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="journey-timeline">
+            <div class="timeline-item">
+              <div class="milestone-badge">Level Up! 🌟</div>
+              <h3>Advanced to Level 5</h3>
+              <p class="timestamp">Today at 2:30 PM</p>
+              <div class="achievement-details">
+                <span class="achievement-points">+100 Points</span>
+                <p>You've reached a new milestone in your wellness journey!</p>
+                <div class="stats">
+                  <div class="stat">
+                    <span>🎯</span>
+                    <span>Tasks Complete: 25</span>
+                  </div>
+                  <div class="stat">
+                    <span>⭐</span>
+                    <span>Level Benefits Unlocked</span>
+                  </div>
+                </div>
+                <div class="milestone-details">
+                  <h4>New Features Unlocked:</h4>
+                  <ul>
+                    <li>Custom challenge creation</li>
+                    <li>Advanced analytics</li>
+                    <li>Premium themes</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="milestone-badge">Challenge Complete! 🏆</div>
+              <h3>30-Day Meditation Challenge</h3>
+              <p class="timestamp">Yesterday</p>
+              <div class="achievement-details">
+                <span class="achievement-points">+150 Points</span>
+                <p>Successfully completed 30 days of mindfulness meditation!</p>
+                <div class="milestone-progress">
+                  <div class="milestone-progress-bar">
+                    <div class="milestone-progress-fill" style="width: 100%"></div>
+                  </div>
+                  <span>30/30 days</span>
+                </div>
+                <div class="stats">
+                  <div class="stat">
+                    <span>🧘‍♀️</span>
+                    <span>300 minutes total</span>
+                  </div>
+                  <div class="stat">
+                    <span>📈</span>
+                    <span>Perfect streak</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="milestone-badge">Breakthrough! 🎯</div>
+              <h3>Personal Best Week</h3>
+              <p class="timestamp">3 days ago</p>
+              <div class="achievement-details">
+                <span class="achievement-points">+125 Points</span>
+                <p>Set new records in multiple categories!</p>
+                <div class="stats">
+                  <div class="stat">
+                    <span>💪</span>
+                    <span>Exercise: 5 hours</span>
+                  </div>
+                  <div class="stat">
+                    <span>🧠</span>
+                    <span>Learning: 8 hours</span>
+                  </div>
+                </div>
+                <div class="milestone-details">
+                  <h4>Categories Improved:</h4>
+                  <ul>
+                    <li>Fitness & Exercise</li>
+                    <li>Mental Wellness</li>
+                    <li>Productivity</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="journey-insights">
+            <h3>Monthly Insights</h3>
+            <div class="insight-grid">
+              <div class="insight-card">
+                <div class="insight-icon">📈</div>
+                <h4>Progress Overview</h4>
+                <ul>
+                  <li>Tasks Completed: 127</li>
+                  <li>Achievements Unlocked: 15</li>
+                  <li>Streaks Maintained: 4</li>
+                </ul>
+              </div>
+              <div class="insight-card">
+                <div class="insight-icon">🎯</div>
+                <h4>Goal Completion</h4>
+                <div class="goal-stats">
+                  <div class="goal-stat">
+                    <span>Exercise Goals</span>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 85%"></div>
+                    </div>
+                  </div>
+                  <div class="goal-stat">
+                    <span>Mindfulness Goals</span>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 92%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="upcoming-challenges">
+            <h3>Upcoming Challenges</h3>
+            <div class="challenge-grid">
+              <div class="challenge-card">
+                <div class="challenge-icon">🏃‍♂️</div>
+                <h4>October Fitness Challenge</h4>
+                <p>Starting in 3 days</p>
+                <button class="join-challenge-btn">Join Challenge</button>
+              </div>
+              <div class="challenge-card">
+                <div class="challenge-icon">🧘‍♀️</div>
+                <h4>Meditation Marathon</h4>
+                <p>Starting in 1 week</p>
+                <button class="join-challenge-btn">Join Challenge</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="collectibles-section">
+            <h3 class="section-title">Pet Collectibles</h3>
+            <p>Unlock special items for your wellness companion!</p>
+            <div class="collectibles-grid">
+              <div class="collectible-item">
+                <div class="collectible-icon">🎀</div>
+                <div class="collectible-name">Lucky Ribbon</div>
+                <div class="collectible-status">Unlocked</div>
+              </div>
+              <div class="collectible-item locked">
+                <div class="collectible-icon">👑</div>
+                <div class="collectible-name">Royal Crown</div>
+                <div class="collectible-status">Reach Level 10</div>
+              </div>
+              <div class="collectible-item locked">
+                <div class="collectible-icon">🧣</div>
+                <div class="collectible-name">Cozy Scarf</div>
+                <div class="collectible-status">30 Day Streak</div>
+              </div>
+              <div class="collectible-item locked">
+                <div class="collectible-icon">🌟</div>
+                <div class="collectible-name">Star Badge</div>
+                <div class="collectible-status">Complete 100 Tasks</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="streak-recovery-section">
+            <h3 class="section-title">Streak Recovery</h3>
+            <div class="streak-recovery">
+              <h4>Oh no! Your streak was broken</h4>
+              <p>Complete a bonus task to rebuild your bridge and recover your streak!</p>
+              
+              <div class="recovery-bridge">
+                <div class="bridge-step">🏃</div>
+                <div class="bridge-step">💪</div>
+                <div class="bridge-step">🎯</div>
+              </div>
+              
+              <div class="recovery-task">
+                <h4>Bonus Recovery Task</h4>
+                <p>Complete 3 mindfulness sessions today</p>
+                <p>Progress: 1/3</p>
+              </div>
+              
+              <button class="recovery-button">
+                Start Recovery Task
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shop Page -->
+        <div class="page-content" id="shop-page">
+          <div class="shop-header">
+            <h2>Shop</h2>
+            <div class="balance-display">
+              <span>🪙</span>
+              <span>1,250 Coins</span>
+              <span>|</span>
+              <span>⭐</span>
+              <span>350 Points</span>
+            </div>
+          </div>
+
+          <div class="limited-offer">
+            <span class="item-badge">LIMITED TIME</span>
+            <h3>Summer Bundle</h3>
+            <div class="timer-display">23:45:10</div>
+            <p>Get 3 premium themes + exclusive pet accessories</p>
+            <div class="bundle-items">
+              <div class="bundle-item">
+                <div class="item-icon">🏖️</div>
+                <div class="item-name">Beach Theme</div>
+              </div>
+              <div class="bundle-item">
+                <div class="item-icon">🌴</div>
+                <div class="item-name">Tropical Theme</div>
+              </div>
+              <div class="bundle-item">
+                <div class="item-icon">🎭</div>
+                <div class="item-name">Festival Theme</div>
+              </div>
+            </div>
+            <div class="item-price">
+              <span>🪙</span>
+              <span>500</span>
+              <span class="original-price" style="text-decoration: line-through; margin-left: 5px;">800</span>
+            </div>
+            <button class="purchase-btn">Purchase Bundle</button>
+          </div>
+
+          <!-- Repeat this structure for each category -->
+          <div class="shop-category">
+            <h3 class="shop-category-title">Themes</h3>
+            <div class="shop-grid">
+              <div class="shop-item">
+                <span class="item-badge new-badge">NEW</span>
+                <div class="item-icon">🌙</div>
+                <div class="item-name">Dark Mode</div>
+                <div class="item-price">
+                  <span>🪙</span>
+                  <span>200</span>
+                </div>
+                <button class="purchase-btn">Purchase</button>
+              </div>
+              <div class="shop-item">
+                <span class="item-badge seasonal-badge">SEASONAL</span>
+                <div class="item-icon">🍁</div>
+                <div class="item-name">Autumn Theme</div>
+                <div class="item-price">
+                  <span>🪙</span>
+                  <span>150</span>
+                </div>
+                <button class="purchase-btn">Purchase</button>
+              </div>
+              <div class="shop-item">
+                <div class="item-icon">🌈</div>
+                <div class="item-name">Rainbow Theme</div>
+                <div class="item-price">
+                  <span>🪙</span>
+                  <span>100</span>
+                </div>
+                <button class="purchase-btn owned">Owned</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="shop-category">
+            <div class="shop-category-header">
+              <h3 class="shop-category-title">Pet Accessories</h3>
+            </div>
+            <div class="shop-grid">
+              <div class="shop-item">
+                <span class="item-badge sale-badge">SALE</span>
+                <div class="item-icon">🎩</div>
+                <div class="item-name">Top Hat</div>
+                <div class="item-price">
+                  <span>🪙</span>
+                  <span>75</span>
+                  <span class="original-price" style="text-decoration: line-through; margin-left: 5px;">150</span>
+                </div>
+                <button class="purchase-btn">Purchase</button>
+              </div>
+              <div class="shop-item">
+                <div class="item-icon">🕶️</div>
+                <div class="item-name">Cool Shades</div>
+                <div class="item-price">
+                  <span>🪙</span>
+                  <span>100</span>
+                </div>
+                <button class="purchase-btn">Purchase</button>
+              </div>
+              <div class="shop-item">
+                <div class="item-icon">👔</div>
+                <div class="item-name">Fancy Tie</div>
+                <div class="item-price">
+                  <span>🪙</span>
+                  <span>80</span>
+                </div>
+                <button class="purchase-btn">Purchase</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="shop-category">
+            <div class="shop-category-header">
+              <h3 class="shop-category-title">Sound Effects</h3>
+            </div>
+            <div class="shop-grid">
+              <div class="shop-item">
+                <div class="item-icon">🎵</div>
+                <div class="item-name">Achievement Pack</div>
+                <div class="item-price">
+                  <span>🪙</span>
+                  <span>50</span>
+                </div>
+                <button class="purchase-btn">Purchase</button>
+              </div>
+              <div class="shop-item">
+                <div class="item-icon">🎶</div>
+                <div class="item-name">Nature Sounds</div>
+                <div class="item-price">
+                  <span>🪙</span>
+                  <span>75</span>
+                </div>
+                <button class="purchase-btn">Purchase</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="shop-category">
+            <div class="shop-category-header">
+              <h3 class="shop-category-title">Special Effects</h3>
+            </div>
+            <div class="shop-grid">
+              <div class="shop-item">
+                <div class="item-icon">✨</div>
+                <div class="item-name">Sparkle Effect</div>
+                <div class="item-price">
+                  <span>🪙</span>
+                  <span>120</span>
+                </div>
+                <button class="purchase-btn">Purchase</button>
+              </div>
+              <div class="shop-item">
+                <div class="item-icon">🌟</div>
+                <div class="item-name">Star Burst</div>
+                <div class="item-price">
+                  <span>🪙</span>
+                  <span>150</span>
+                </div>
+                <button class="purchase-btn">Purchase</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div class="page-content" id="settings-page">
+          <div class="settings-header">
+            <h2>Settings</h2>
+            <p>Customize your wellness journey experience</p>
+          </div>
+
+          <div class="settings-section">
+            <h3>Notifications</h3>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">Daily Reminders</span>
+                <span class="settings-description">Get reminded of your daily tasks</span>
+              </div>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">Achievement Alerts</span>
+                <span class="settings-description">Notifications when you earn rewards</span>
+              </div>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">Weekly Summary</span>
+                <span class="settings-description">Get a weekly progress report</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h3>Appearance</h3>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">Dark Mode</span>
+                <span class="settings-description">Switch to dark theme</span>
+              </div>
+              <div class="toggle-switch"></div>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">High Contrast</span>
+                <span class="settings-description">Increase text contrast</span>
+              </div>
+              <div class="toggle-switch"></div>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">Larger Text</span>
+                <span class="settings-description">Increase text size</span>
+              </div>
+              <div class="toggle-switch"></div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h3>Sound & Haptics</h3>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">Sound Effects</span>
+                <span class="settings-description">Play sounds for actions</span>
+              </div>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">Achievement Sounds</span>
+                <span class="settings-description">Special sounds for rewards</span>
+              </div>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">Vibration</span>
+                <span class="settings-description">Haptic feedback for actions</span>
+              </div>
+              <div class="toggle-switch active"></div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h3>Privacy</h3>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">Activity Sharing</span>
+                <span class="settings-description">Share progress with friends</span>
+              </div>
+              <div class="toggle-switch"></div>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">Public Profile</span>
+                <span class="settings-description">Make profile visible to others</span>
+              </div>
+              <div class="toggle-switch active"></div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h3>Data Management</h3>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <span class="settings-label">Backup Data</span>
+                <span class="settings-description">Auto-backup to cloud</span>
+              </div>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="data-actions">
+              <button class="settings-button">Export Data</button>
+              <button class="settings-button warning">Clear All Data</button>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h3>Account</h3>
+            <div class="account-info">
+              <div class="account-email">user@example.com</div>
+              <div class="account-type">Premium Member</div>
+            </div>
+            <div class="account-actions">
+              <button class="settings-button">Edit Profile</button>
+              <button class="settings-button">Change Password</button>
+              <button class="settings-button warning">Sign Out</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="#" class="nav-item active" data-page="home-page">
+          <svg class="nav-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/>
+          </svg>
+          Home
+        </a>
+        <a href="#" class="nav-item" data-page="rewards-page">
+          <svg class="nav-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z"/>
+          </svg>
+          Rewards
+        </a>
+        <a href="#" class="nav-item" data-page="journey-page">
+          <svg class="nav-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12,2L1,21H23M12,6L19.53,19H4.47"/>
+          </svg>
+          Journey  
+        </a>
+        <a href="#" class="nav-item" data-page="shop-page">
+          <svg class="nav-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12,13A5,5 0 0,1 7,8H9A3,3 0 0,0 12,11A3,3 0 0,0 15,8H17A5,5 0 0,1 12,13M12,3A3,3 0 0,1 15,6H9A3,3 0 0,1 12,3M19,6H17A5,5 0 0,0 12,1A5,5 0 0,0 7,6H5C3.89,6 3,6.89 3,8V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V8C21,6.89 20.1,6 19,6Z"/>
+          </svg>
+          Shop
+        </a>
+        <a href="#" class="nav-item" data-page="settings-page">
+          <svg class="nav-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
+          </svg>
+          Settings
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <script>
+    function updateMobileTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+      });
+      document.querySelector('.mobile-time').textContent = timeString;
+    }
+
+    // Call this when the page loads
+    updateMobileTime(); // Initial call
+    setInterval(updateMobileTime, 1000); // Update every second
+
+    const pandaHead = document.querySelector('.panda-head');
+    const emotionIndicator = document.querySelector('.emotion-indicator');
+    const eyes = document.querySelectorAll('.panda-eye');
+
+    // Task data
+    const taskData = {
+      water: { 
+        current: 2, 
+        target: 8, 
+        unit: 'glasses',
+        icon: '💧',
+        color: '#4FA4DE'
+      },
+      walk: { 
+        current: 0, 
+        target: 30, 
+        unit: 'min',
+        icon: '🚶',
+        color: '#92DE4F'
+      },
+      meditation: { 
+        current: 0, 
+        target: 10, 
+        unit: 'min',
+        icon: '🧘',
+        color: '#B44FDE'
+      },
+      reading: { 
+        current: 0, 
+        target: 20, 
+        unit: 'pages',
+        icon: '📚',
+        color: '#DE4F4F'
+      }
+    };
+
+    // Categories for tasks
+    const taskCategories = {
+      health: ['water', 'walk'],
+      mindfulness: ['meditation'],
+      personal: ['reading']
+    };
+
+    // Updated mood tracking data
+    const moodData = {
+      currentMood: 'happy',
+      moodHistory: [],
+      moodEmojis: {
+        happy: '😊',
+        neutral: '😐',
+        sad: '😢'
+      }
+    };
+
+    // Rewards data structure
+    const rewardsData = {
+      dailyRewards: [
+        {
+          id: 'early_bird',
+          icon: '🌅',
+          title: 'Early Bird',
+          description: 'Complete 3 tasks before noon',
+          progress: 3,
+          target: 5,
+          points: 50,
+          color: '#FF6B6B'
+        },
+        {
+          id: 'mindful_minutes',
+          icon: '🧘‍♀️',
+          title: 'Mindful Minutes',
+          description: 'Meditate for 10 minutes',
+          progress: 7,
+          target: 10,
+          points: 30,
+          color: '#FF6B6B'
+        }
+      ],
+      weeklyRewards: [
+        {
+          id: 'consistency',
+          icon: '💪',
+          title: 'Consistency Queen',
+          description: 'Complete daily tasks for 7 days straight',
+          progress: 4,
+          target: 7,
+          points: 100,
+          color: '#4ECDC4'
+        }
+      ],
+      specialRewards: [
+        {
+          id: 'wellness_warrior',
+          icon: '⭐',
+          title: 'Wellness Warrior',
+          description: 'Achieve perfect scores in all categories',
+          progress: 2,
+          target: 5,
+          points: 200,
+          color: '#FFD93D'
+        }
+      ],
+      premiumTemplates: {
+        canCreate: false, // Set to true for premium users
+        publishedTemplates: [
+          {
+            id: 'morning_routine',
+            author: '@wellness_guru',
+            title: 'Perfect Morning Routine',
+            description: 'Start your day right with this energizing routine',
+            likes: 1250,
+            tasks: [
+              {name: 'Morning Meditation', duration: '10min', icon: '🧘‍♀️'},
+              {name: 'Stretching', duration: '15min', icon: '🤸‍♀️'},
+              {name: 'Healthy Breakfast', duration: '20min', icon: '🥗'}
+            ]
+          },
+          {
+            id: 'focus_work',
+            author: '@productivity_pro',
+            title: 'Deep Work Focus',
+            description: 'Maximize your productivity with this focused routine',
+            likes: 892,
+            tasks: [
+              {name: 'Priority Planning', duration: '10min', icon: '📝'},
+              {name: 'Focus Block', duration: '90min', icon: '🎯'},
+              {name: 'Active Break', duration: '15min', icon: '⏰'}
+            ]
+          }
+        ]
+      }
+    };
+
+    // Initialize page navigation
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get all nav items and pages
+      const navItems = document.querySelectorAll('.nav-item');
+      const pages = document.querySelectorAll('.page-content');
+
+      // Add click handler to each nav item
+      navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+          e.preventDefault(); // Prevent default anchor behavior
+          
+          // Get target page id from data attribute
+          const targetPageId = this.getAttribute('data-page');
+          
+          // Update active states for nav items
+          navItems.forEach(nav => nav.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Update visible page
+          pages.forEach(page => {
+            page.classList.remove('active');
+            if (page.id === targetPageId) {
+              page.classList.add('active');
+            }
+          });
+
+          // Update header title based on selected page
+          const headerTitle = document.querySelector('.mobile-time');
+          switch(targetPageId) {
+            case 'home-page':
+              headerTitle.textContent = 'Home';
+              break;
+            case 'rewards-page':
+              headerTitle.textContent = 'Rewards';
+              break;
+            case 'journey-page':
+              headerTitle.textContent = 'Journey';
+              break;
+            case 'shop-page':
+              headerTitle.textContent = 'Shop';
+              break;
+            case 'settings-page':
+              headerTitle.textContent = 'Settings';
+              break;
+          }
+        });
+      });
+
+      // Initialize page based on current URL hash or default to home
+      function initializePage() {
+        const hash = window.location.hash || '#home-page';
+        const targetId = hash.slice(1);
+        const targetNav = document.querySelector(`.nav-item[data-page="${targetId}"]`);
+        if (targetNav) {
+          targetNav.click();
+        } else {
+          document.querySelector('.nav-item[data-page="home-page"]').click();
+        }
+      }
+
+      // Call initialize on load
+      initializePage();
+
+      // Handle browser back/forward
+      window.addEventListener('hashchange', initializePage);
+    });
+
+    // Add this to handle the mood selection
+    document.addEventListener('DOMContentLoaded', function() {
+      const moodOptions = document.querySelectorAll('.mood-option');
+      
+      moodOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          // Remove active class from all options
+          moodOptions.forEach(opt => opt.classList.remove('active'));
+          // Add active class to clicked option
+          this.classList.add('active');
+          
+          // Update panda emotion
+          const mood = this.getAttribute('data-mood');
+          updatePandaEmotion(mood);
+        });
+      });
+    });
+
+    // Function to update panda emotion
+    function updatePandaEmotion(mood) {
+      const emotionIndicator = document.querySelector('.emotion-indicator');
+      const pandaEyes = document.querySelectorAll('.panda-eye');
+      
+      switch(mood) {
+        case 'happy':
+          emotionIndicator.textContent = '😊';
+          pandaEyes.forEach(eye => eye.style.height = '15px');
+          break;
+        case 'neutral':
+          emotionIndicator.textContent = '😐';
+          pandaEyes.forEach(eye => eye.style.height = '20px');
+          break;
+        case 'sad':
+          emotionIndicator.textContent = '😢';
+          pandaEyes.forEach(eye => eye.style.height = '25px');
+          break;
+      }
+      
+      emotionIndicator.classList.add('visible');
+      setTimeout(() => emotionIndicator.classList.remove('visible'), 2000);
+    }
+
+    // Add this to handle task controls
+    document.addEventListener('DOMContentLoaded', function() {
+      const taskControls = document.querySelectorAll('.task-controls button');
+      
+      taskControls.forEach(button => {
+        button.addEventListener('click', function() {
+          const taskItem = this.closest('.task-item');
+          const taskId = taskItem.getAttribute('data-task');
+          const isPlus = this.classList.contains('plus');
+          
+          updateTaskProgress(taskId, isPlus);
+        });
+      });
+    });
+
+    // Function to update task progress
+    function updateTaskProgress(taskId, increment) {
+      const task = taskData[taskId];
+      if (increment && task.current < task.target) {
+        task.current++;
+      } else if (!increment && task.current > 0) {
+        task.current--;
+      }
+      
+      // Update UI
+      const taskItem = document.querySelector(`.task-item[data-task="${taskId}"]`);
+      const progressBar = taskItem.querySelector('.progress');
+      const progressText = taskItem.querySelector('.progress-text');
+      
+      const percentage = (task.current / task.target) * 100;
+      progressBar.style.width = `${percentage}%`;
+      progressText.textContent = `${task.current}/${task.target} ${task.unit}`;
+    }
+  </script>
+</body>
+</html>

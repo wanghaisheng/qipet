@@ -1,0 +1,606 @@
+<html><head><base href="." /><style>
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: #f0f2f5;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: white;
+    height: 100vh;
+    position: relative;
+    overflow-y: auto;
+}
+
+/* 宠物展示区 */
+.pet-display {
+    height: 40vh;
+    position: relative;
+    background: #e8f4fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.pet {
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+}
+
+/* 状态条区域 */
+.status-bars {
+    padding: 15px;
+    background: white;
+}
+
+.status-bar {
+    margin: 8px 0;
+}
+
+.status-bar-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-size: 14px;
+    color: #666;
+}
+
+.progress {
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+/* 互动按钮区 */
+.interaction-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background: white;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.interaction-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.interaction-btn:active {
+    transform: scale(0.95);
+}
+
+.interaction-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.interaction-btn:hover::after {
+    width: 100%;
+    height: 100%;
+}
+
+/* 奖励区域 */
+.rewards {
+    padding: 15px;
+    background: white;
+}
+
+/* 新增挑战区域 */
+.challenges {
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+.challenge-categories {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.category-tab {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background: #f0f2f5;
+    color: #333;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s;
+}
+
+.category-tab.active {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.challenge-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.challenge-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.reward {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.description {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-text {
+    font-size: 12px;
+    color: #666;
+}
+
+/* 社交分享区域 */
+.social-share {
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.share-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background: #f0f2f5;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.2s;
+}
+
+.share-btn:hover {
+    background: #e4e6eb;
+}
+
+/* 拍照模式 */
+.photo-mode {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+}
+
+.photo-frame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.photo-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.photo-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+</style></head><body>
+<div class="container">
+    <!-- 宠物展示区 -->
+    <div class="pet-display">
+        <svg class="pet" viewBox="0 0 200 200">
+            <!-- 简单的卡通狗形象 -->
+            <circle cx="100" cy="100" r="50" fill="#FFE4B5"/>
+            <circle cx="80" cy="90" r="5" fill="black"/>
+            <circle cx="120" cy="90" r="5" fill="black"/>
+            <path d="M90 110 Q100 120 110 110" fill="none" stroke="black" stroke-width="2"/>
+            <path d="M70 70 Q100 50 130 70" fill="none" stroke="#FFE4B5" stroke-width="20"/>
+            <!-- 添加动画效果的尾巴 -->
+            <path class="tail" d="M150 100 Q160 90 170 100" fill="none" stroke="#FFE4B5" stroke-width="10">
+                <animateTransform
+                    attributeName="transform"
+                    type="rotate"
+                    from="0 150 100"
+                    to="20 150 100"
+                    dur="1s"
+                    repeatCount="indefinite"
+                    additive="sum"
+                />
+            </path>
+        </svg>
+    </div>
+
+    <!-- 状态条区域 -->
+    <div class="status-bars">
+        <div class="status-bar">
+            <div class="status-bar-label">
+                <span>健康</span>
+                <span>90%</span>
+            </div>
+            <div class="progress">
+                <div class="progress-fill" style="width: 90%; background: #4CAF50;"></div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <div class="status-bar-label">
+                <span>心情</span>
+                <span>75%</span>
+            </div>
+            <div class="progress">
+                <div class="progress-fill" style="width: 75%; background: #2196F3;"></div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <div class="status-bar-label">
+                <span>饥饿</span>
+                <span>60%</span>
+            </div>
+            <div class="progress">
+                <div class="progress-fill" style="width: 60%; background: #FFC107;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 互动按钮区 -->
+    <div class="interaction-buttons">
+        <button class="interaction-btn" style="background: #4CAF50;" data-action="feed">
+            <svg viewBox="0 0 24 24" width="30" height="30">
+                <path fill="white" d="M12,3L4,9v12h16V9L12,3z M12,17c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2S13.1,17,12,17z"/>
+            </svg>
+            <span style="font-size: 12px; color: white; margin-top: 5px;">喂食</span>
+        </button>
+        <button class="interaction-btn" style="background: #2196F3;" data-action="play">
+            <svg viewBox="0 0 24 24" width="30" height="30">
+                <path fill="white" d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z"/>
+            </svg>
+            <span style="font-size: 12px; color: white; margin-top: 5px;">玩耍</span>
+        </button>
+        <button class="interaction-btn" style="background: #9C27B0;" data-action="train">
+            <svg viewBox="0 0 24 24" width="30" height="30">
+                <path fill="white" d="M19,3h-4.18C14.4,1.84,13.3,1,12,1S9.6,1.84,9.18,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z"/>
+            </svg>
+            <span style="font-size: 12px; color: white; margin-top: 5px;">训练</span>
+        </button>
+        <button class="interaction-btn" style="background: #F44336;" data-action="photo">
+            <svg viewBox="0 0 24 24" width="30" height="30">
+                <path fill="white" d="M12,12c2.21,0,4-1.79,4-4s-1.79-4-4-4s-4,1.79-4,4S9.79,12,12,12z M12,14c-2.67,0-8,1.34-8,4v2h16v-2C20,15.34,14.67,14,12,14z"/>
+            </svg>
+            <span style="font-size: 12px; color: white; margin-top: 5px;">照相</span>
+        </button>
+    </div>
+
+    <!-- 奖励区域 -->
+    <div class="rewards">
+        <h3>每日任务</h3>
+        <div class="task-progress">
+            <div class="status-bar">
+                <div class="status-bar-label">
+                    <span>喂养进度</span>
+                    <span>3/5</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-fill" style="width: 60%; background: #FF9800;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增挑战区域 -->
+    <div class="challenges">
+        <!-- Challenge Categories -->
+        <div class="challenge-categories">
+            <button class="category-tab active" data-category="daily">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="#4CAF50" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                    <path fill="#4CAF50" d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                </svg>
+                每日挑战
+            </button>
+            <button class="category-tab" data-category="growth">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="#2196F3" d="M23 8c0 1.1-.9 2-2 2-.18 0-.35-.02-.51-.07l-3.56 3.55c.05.16.07.33.07.52 0 1.1-.9 2-2 2s-2-.9-2-2c0-.19.02-.36.07-.52l-2.55-2.55c-.16.05-.33.07-.52.07s-.36-.02-.52-.07l-4.55 4.56c.05.16.07.33.07.52 0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2c.19 0 .36.02.52.07l4.56-4.55C8.02 9.36 8 9.19 8 9c0-1.1.9-2 2-2s2 .9 2 2c0 .19-.02.36-.07.52l2.55 2.55c.16-.05.33-.07.52-.07s.36.02.52.07l3.55-3.56C19.02 8.35 19 8.18 19 8c0-1.1.9-2 2-2s2 .9 2 2z"/>
+                </svg>
+                成长挑战
+            </button>
+            <button class="category-tab" data-category="community">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="#9C27B0" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                </svg>
+                合作挑战
+            </button>
+        </div>
+
+        <!-- Challenge Cards Container -->
+        <div class="challenge-cards">
+            <!-- Daily Challenge Example -->
+            <div class="challenge-card" data-category="daily">
+                <div class="card-header">
+                    <h3>每日喂养挑战</h3>
+                    <span class="reward">+100 金币</span>
+                </div>
+                <p class="description">连续喂养宠物3次</p>
+                <div class="progress-container">
+                    <div class="progress">
+                        <div class="progress-fill" style="width: 66%"></div>
+                    </div>
+                    <span class="progress-text">2/3</span>
+                </div>
+            </div>
+
+            <!-- Growth Challenge Example -->
+            <div class="challenge-card" data-category="growth">
+                <div class="card-header">
+                    <h3>训练大师</h3>
+                    <span class="reward">解锁新技能</span>
+                </div>
+                <p class="description">完成10次训练</p>
+                <div class="progress-container">
+                    <div class="progress">
+                        <div class="progress-fill" style="width: 30%"></div>
+                    </div>
+                    <span class="progress-text">3/10</span>
+                </div>
+            </div>
+
+            <!-- Community Challenge Example -->
+            <div class="challenge-card" data-category="community">
+                <div class="card-header">
+                    <h3>社区互动</h3>
+                    <span class="reward">限定装饰</span>
+                </div>
+                <p class="description">与5位好友互动</p>
+                <div class="progress-container">
+                    <div class="progress">
+                        <div class="progress-fill" style="width: 20%"></div>
+                    </div>
+                    <span class="progress-text">1/5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 社交分享区域 -->
+    <div class="social-share">
+        <h3>分享到社交平台</h3>
+        <div class="share-buttons">
+            <button class="share-btn" onclick="shareToSocial('facebook')">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="#1877F2" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3.181 12h-2.077v7.5h-2.804V12H8.692v-2.57h1.808V7.365c0-1.888 1.148-2.915 2.832-2.915.804 0 1.495.06 1.696.087v1.967h-1.165c-.913 0-1.089.435-1.089 1.072v1.854h2.188l-.285 2.57z"/>
+                </svg>
+                Facebook
+            </button>
+            <button class="share-btn" onclick="shareToSocial('instagram')">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="#E4405F" d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.897 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.897-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                </svg>
+                Instagram
+            </button>
+        </div>
+    </div>
+
+    <!-- 拍照模式 -->
+    <div class="photo-mode">
+        <div class="photo-frame"></div>
+        <div class="photo-controls">
+            <button class="photo-btn" onclick="takePhoto()">
+                <svg viewBox="0 0 24 24" width="30" height="30">
+                    <circle cx="12" cy="12" r="10" fill="white"/>
+                    <circle cx="12" cy="12" r="8" fill="#F44336"/>
+                </svg>
+            </button>
+            <button class="photo-btn" onclick="closePhotoMode()">
+                <svg viewBox="0 0 24 24" width="30" height="30">
+                    <path fill="#333" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// 宠物动画
+const pet = document.querySelector('.pet');
+let isAnimating = false;
+
+function animatePet() {
+    if (isAnimating) return;
+    isAnimating = true;
+    
+    pet.style.transition = 'transform 0.5s ease';
+    pet.style.transform = 'translateY(-20px)';
+    
+    setTimeout(() => {
+        pet.style.transform = 'translateY(0)';
+        setTimeout(() => {
+            isAnimating = false;
+        }, 500);
+    }, 500);
+}
+
+// 添加互动按钮点击事件
+document.querySelectorAll('.interaction-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        
+        if (action === 'photo') {
+            openPhotoMode();
+            return;
+        }
+        
+        animatePet();
+        
+        // 更新相应的状态条
+        const progressBars = document.querySelectorAll('.progress-fill');
+        progressBars.forEach(bar => {
+            const currentWidth = parseInt(bar.style.width);
+            const newWidth = Math.min(currentWidth + 10, 100);
+            bar.style.width = `${newWidth}%`;
+        });
+    });
+});
+
+// 拍照功能
+function openPhotoMode() {
+    document.querySelector('.photo-mode').style.display = 'block';
+}
+
+function closePhotoMode() {
+    document.querySelector('.photo-mode').style.display = 'none';
+}
+
+function takePhoto() {
+    // 模拟拍照效果
+    const photoMode = document.querySelector('.photo-mode');
+    photoMode.style.animation = 'flash 0.5s';
+    setTimeout(() => {
+        photoMode.style.animation = '';
+        closePhotoMode();
+        alert('照片已保存！');
+    }, 500);
+}
+
+// 社交分享功能
+function shareToSocial(platform) {
+    // 这里可以接入实际的社交平台分享API
+    alert(`分享到${platform}功能即将上线！`);
+}
+
+// 挑战互动
+document.addEventListener('DOMContentLoaded', () => {
+    // Challenge category switching
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    const challengeCards = document.querySelectorAll('.challenge-card');
+
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Update active tab
+            categoryTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Filter challenge cards
+            const category = tab.dataset.category;
+            challengeCards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Add click animation to challenge cards
+    challengeCards.forEach(card => {
+        card.addEventListener('click', () => {
+            card.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                card.style.transform = 'scale(1)';
+            }, 100);
+        });
+    });
+});
+
+// 添加CSS动画
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes flash {
+        0% { background: rgba(0, 0, 0, 0.8); }
+        50% { background: rgba(255, 255, 255, 0.8); }
+        100% { background: rgba(0, 0, 0, 0.8); }
+    }
+`;
+document.head.appendChild(style);
+</script>
+</body></html>

@@ -1,6 +1,129 @@
 <html><head><base href="/" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
+.mobile-container {
+  position: relative;
+  width: 375px; /* iPhone-like width */
+  height: 812px; /* iPhone-like height */
+  margin: 20px auto;
+  background: white;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 0 0 11px #1f1f1f,
+              0 0 0 13px #191919,
+              0 0 0 20px #111;
+}
+
+.mobile-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 30px;
+  background: #1f1f1f;
+  border-bottom-left-radius: 17px;
+  border-bottom-right-radius: 17px;
+  z-index: 2;
+}
+
+.mobile-container::after {
+  content: '';
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 4px;
+  background: #f2f2f2;
+  border-radius: 10px;
+}
+
+body {
+  background: #2c3e50;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-container {
+  height: 100%;
+  max-height: calc(100% - 80px); /* Account for bottom nav */
+  overflow-y: auto;
+}
+
+/* Update nav-links positioning and layout */
+.nav-links {
+  position: absolute;
+  bottom: 35px; /* Give space for home indicator */
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 0 0 40px 40px;
+  display: flex; /* Add flex display */
+  justify-content: space-around; /* Evenly space nav items */
+  align-items: center; /* Center items vertically */
+  padding: 10px 20px; /* Add padding */
+}
+
+/* Update nav-link styles for horizontal layout */
+.nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: var(--secondary);
+  font-size: 0.8rem;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  width: auto; /* Allow natural width */
+  min-width: 60px; /* Ensure minimum width */
+}
+
+/* Update hover and active states */
+.nav-link:hover {
+  background: rgba(136, 201, 161, 0.1);
+}
+
+.nav-link.active {
+  color: var(--primary);
+  background: var(--background);
+}
+
+/* Add icons for nav items using pseudo-elements */
+.nav-link[data-page="home-page"]::before {
+  content: '🏠';
+  font-size: 1.2rem;
+}
+
+.nav-link[data-page="rewards-page"]::before {
+  content: '🎁';
+  font-size: 1.2rem;
+}
+
+.nav-link[data-page="journey-page"]::before {
+  content: '📈';
+  font-size: 1.2rem;
+}
+
+.nav-link[data-page="shop-page"]::before {
+  content: '🛍️';
+  font-size: 1.2rem;
+}
+
+:root {
+  --primary: #88c9a1;
+  --secondary: #384454;
+  --accent: #ff7676;
+  --background: #f5f7fa;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -8,14 +131,6 @@
   font-family: 'Poppins', sans-serif;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
-}
-
-/* Keeping existing styles */
-:root {
-  --primary: #88c9a1;
-  --secondary: #384454;
-  --accent: #ff7676;
-  --background: #f5f7fa;
 }
 
 body {
@@ -31,84 +146,22 @@ body {
 }
 
 nav {
-  background: white;
-  padding: 0.8rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
+  display: none; /* Hide the nav completely */
 }
-
-.nav-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.nav-links {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
-  width: 100%;
-  background: white;
-  padding: 0.8rem;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-}
-
-.nav-link {
-  color: var(--secondary);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.8rem;
-  text-align: center;
-  padding: 0.5rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.nav-link::before {
-  content: '';
-  width: 24px;
-  height: 24px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.nav-link[href*="home"]::before { content: '🏠'; }
-.nav-link[href*="rewards"]::before { content: '🎁'; }
-.nav-link[href*="journey"]::before { content: '🗺️'; }
-.nav-link[href*="shop"]::before { content: '🛍️'; }
 
 .main-container {
   flex: 1;
-  padding: 1rem;
+  margin-top: 0; /* Remove the top margin that was accounting for the nav */
+  padding: 0; /* Remove top padding as well */
   overflow-y: auto;
-  margin-top: 60px; /* Account for fixed nav */
-  padding-bottom: 80px; /* Account for bottom nav */
+  padding-bottom: 90px; /* Updated to account for fixed nav */
   -webkit-overflow-scrolling: touch;
 }
 
 .habitat {
   position: relative;
   overflow: hidden;
+  margin-top: 1rem; /* Add some spacing at the top */
 }
 
 .habitat::before {
@@ -138,64 +191,44 @@ nav {
   background: white;
   border-radius: 15px;
   padding: 1rem;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.task-group-header {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 1rem;
-  padding-bottom: 0.8rem;
-  border-bottom: 1px solid var(--background);
-}
-
-.group-icon {
-  font-size: 1.2rem;
-}
-
-.group-name {
-  font-weight: 500;
+.task-group h4 {
   color: var(--secondary);
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  padding-left: 0.5rem;
 }
 
 .task-item {
-  background: var(--background);
-  margin-bottom: 0.8rem;
-  padding: 1rem;
-  border-radius: 10px;
   display: flex;
-  align-items: flex-start;
-  gap: 0.8rem;
-}
-
-.task-title-row {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.3rem;
-}
-
-.task-points {
-  font-size: 0.8rem;
-  color: var(--accent);
-  font-weight: 500;
-}
-
-.task-progress-note {
-  font-size: 0.8rem;
-  color: var(--secondary);
-  margin-top: 0.3rem;
-}
-
-/* Update existing task-item styles */
-.task-item:last-child {
-  margin-bottom: 0;
+  gap: 0.8rem;
+  padding: 1rem;
+  background: var(--background);
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+  transition: transform 0.3s ease;
+  min-height: 44px; /* Minimum touch target size */
 }
 
 .task-checkbox {
-  margin-top: 0.2rem;
+  min-width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  position: relative;
+}
+
+.task-checkbox.checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--primary);
 }
 
 .progress-container {
@@ -269,6 +302,8 @@ nav {
 .panda-stats-header {
   position: relative;
   z-index: 1;
+  margin-top: 0;
+  padding-top: 1rem;
 }
 
 .panda-exp-bar {
@@ -305,6 +340,25 @@ nav {
   gap: 0.5rem;
   font-size: 0.9rem;
   color: var(--secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+.quick-action-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.quick-action-btn:active::after {
+  transform: translate(-50%, -50%) scale(2);
 }
 
 .achievements-preview {
@@ -414,8 +468,8 @@ nav {
 .page {
   display: none;
   padding: 1rem;
-  margin-top: 60px;
-  padding-bottom: 80px;
+  margin-top: 0; /* Remove top margin that was accounting for nav */
+  padding-bottom: 80px; /* Ensure pages have proper padding */
 }
 
 .page.active {
@@ -1217,19 +1271,188 @@ nav {
   margin-bottom: 1rem;
   opacity: 0.8;
 }
+
+.manifest-progress,
+.qi-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--secondary);
+  margin-top: 0.3rem;
+}
+
+.manifest-icon,
+.qi-icon {
+  font-size: 1.2rem;
+}
+
+.manifest-count,
+.qi-time {
+  background: var(--background);
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+}
+
+.special-offers {
+  margin-top: 1.5rem;
+  background: white;
+  border-radius: 15px;
+  padding: 1.2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.ad-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.ad-card {
+  background: var(--background);
+  border-radius: 15px;
+  padding: 1rem;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.ad-card:active {
+  transform: scale(0.98);
+}
+
+.ad-badge {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  background: var(--accent);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.ad-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ad-icon {
+  font-size: 2rem;
+  min-width: 40px;
+  text-align: center;
+}
+
+.ad-info {
+  flex: 1;
+}
+
+.ad-title {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  color: var(--secondary);
+}
+
+.ad-description {
+  font-size: 0.8rem;
+  color: var(--secondary);
+  opacity: 0.8;
+}
+
+.watch-ad-btn,
+.premium-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.premium-btn {
+  background: var(--accent);
+}
+
+.ad-card.premium {
+  background: linear-gradient(135deg, #fff6e5, #ffe0e0);
+  border: 2px solid var(--accent);
+}
+
+.ad-card.premium .ad-badge {
+  background: #ff4646;
+}
+
+@media (max-width: 480px) {
+  .ad-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .watch-ad-btn,
+  .premium-btn {
+    width: 100%;
+    margin-top: 0.8rem;
+  }
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.notification.fade-out {
+  animation: fadeOut 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translate(-50%, 0); }
+  to { opacity: 0; transform: translate(-50%, -20px); }
+}
+
+.eating {
+  animation: eat 1s ease;
+}
+
+.cleaning {
+  animation: clean 1s ease;
+}
+
+@keyframes eat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes clean {
+  0% { transform: rotate(0); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+  100% { transform: rotate(0); }
+}
 </style>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-<nav>
-  <div class="nav-container">
-    <div class="logo">
-      🐼 Panda Pet
-    </div>
-  </div>
-</nav>
-
+<div class="mobile-container">
 <div class="main-container">
   <!-- Home Page -->
   <div class="page active" id="home-page">
@@ -1357,50 +1580,13 @@ nav {
       <div class="task-list">
         <h3>Today's Tasks</h3>
         
-        <!-- Mental Health Group -->
+        <!-- Updated tasks section -->
         <div class="task-group">
-          <div class="task-group-header">
-            <span class="group-icon">🧠</span>
-            <span class="group-name">Mental Health</span>
-          </div>
-          <div class="task-item" data-task-id="meditation" data-points="15" data-duration="10">
+          <h4>Daily Wellness</h4>
+          <div class="task-item">
             <div class="task-checkbox"></div>
             <div class="task-details">
-              <div class="task-title-row">
-                <span class="task-title">Meditation Session</span>
-                <span class="task-points">+15 pts</span>
-              </div>
-              <div class="mindful-progress">
-                <span class="mindful-icon">🧘‍♂️</span>
-                <span class="mindful-time">0/10 min</span>
-              </div>
-            </div>
-          </div>
-          <div class="task-item" data-task-id="gratitude" data-points="10">
-            <div class="task-checkbox"></div>
-            <div class="task-details">
-              <div class="task-title-row">
-                <span class="task-title">Gratitude Journal</span>
-                <span class="task-points">+10 pts</span>
-              </div>
-              <div class="task-progress-note">Write 3 things you're grateful for</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Self Care Group -->
-        <div class="task-group">
-          <div class="task-group-header">
-            <span class="group-icon">💆</span>
-            <span class="group-name">Self Care</span>
-          </div>
-          <div class="task-item" data-task-id="hydration" data-points="20" data-target="8">
-            <div class="task-checkbox"></div>
-            <div class="task-details">
-              <div class="task-title-row">
-                <span class="task-title">Hydration Goal</span>
-                <span class="task-points">+20 pts</span>
-              </div>
+              <span class="task-title">Drink Water</span>
               <div class="water-progress">
                 <div class="water-cups">
                   <span class="cup-icon">🥤</span>
@@ -1412,81 +1598,82 @@ nav {
               </div>
             </div>
           </div>
-          <div class="task-item" data-task-id="exercise" data-points="25" data-duration="20">
+          <div class="task-item">
             <div class="task-checkbox"></div>
             <div class="task-details">
-              <div class="task-title-row">
-                <span class="task-title">Exercise</span>
-                <span class="task-points">+25 pts</span>
-              </div>
+              <span class="task-title">Daily Exercise</span>
               <div class="exercise-progress">
                 <span class="exercise-icon">🏃‍♂️</span>
                 <span class="exercise-time">0/20 min</span>
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Social Care Group -->
-        <div class="task-group">
-          <div class="task-group-header">
-            <span class="group-icon">👥</span>
-            <span class="group-name">Social Care</span>
-          </div>
-          <div class="task-item" data-task-id="connect" data-points="15">
+          <div class="task-item">
             <div class="task-checkbox"></div>
             <div class="task-details">
-              <div class="task-title-row">
-                <span class="task-title">Connect with Friend</span>
-                <span class="task-points">+15 pts</span>
+              <span class="task-title">Mindfulness</span>
+              <div class="mindful-progress">
+                <span class="mindful-icon">🧘‍♂️</span>
+                <span class="mindful-time">0/10 min</span>
               </div>
-              <div class="task-progress-note">Have a meaningful conversation</div>
             </div>
           </div>
         </div>
 
-        <!-- Sleep Care Group -->
         <div class="task-group">
-          <div class="task-group-header">
-            <span class="group-icon">😴</span>
-            <span class="group-name">Sleep Care</span>
-          </div>
-          <div class="task-item" data-task-id="bedtime" data-points="20" data-target-time="22:30">
+          <h4>369 Manifestation Method</h4>
+          <div class="task-item" data-manifest="morning">
             <div class="task-checkbox"></div>
             <div class="task-details">
-              <div class="task-title-row">
-                <span class="task-title">Bedtime Routine</span>
-                <span class="task-points">+20 pts</span>
+              <span class="task-title">Morning Write 3x</span>
+              <div class="manifest-progress">
+                <span class="manifest-icon">✍️</span>
+                <span class="manifest-count">0/3</span>
               </div>
-              <div class="task-progress-note">Sleep by 10:30 PM</div>
+            </div>
+          </div>
+          <div class="task-item" data-manifest="noon">
+            <div class="task-checkbox"></div>
+            <div class="task-details">
+              <span class="task-title">Noon Write 6x</span>
+              <div class="manifest-progress">
+                <span class="manifest-icon">✍️</span>
+                <span class="manifest-count">0/6</span>
+              </div>
+            </div>
+          </div>
+          <div class="task-item" data-manifest="evening">
+            <div class="task-checkbox"></div>
+            <div class="task-details">
+              <span class="task-title">Evening Write 9x</span>
+              <div class="manifest-progress">
+                <span class="manifest-icon">✍️</span>
+                <span class="manifest-count">0/9</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Qi Balance Group -->
         <div class="task-group">
-          <div class="task-group-header">
-            <span class="group-icon">☯️</span>
-            <span class="group-name">Qi Balance</span>
-          </div>
-          <div class="task-item" data-task-id="breathing" data-points="15" data-duration="5">
+          <h4>Qi Balance</h4>
+          <div class="task-item" data-qi="liver">
             <div class="task-checkbox"></div>
             <div class="task-details">
-              <div class="task-title-row">
-                <span class="task-title">Breathing Exercise</span>
-                <span class="task-points">+15 pts</span>
+              <span class="task-title">Liver Qi Exercise</span>
+              <div class="qi-progress">
+                <span class="qi-icon">🌿</span>
+                <span class="qi-time">0/5 min</span>
               </div>
-              <div class="task-progress-note">5 minutes of deep breathing</div>
             </div>
           </div>
-          <div class="task-item" data-task-id="stretching" data-points="15">
+          <div class="task-item" data-qi="lung">
             <div class="task-checkbox"></div>
             <div class="task-details">
-              <div class="task-title-row">
-                <span class="task-title">Gentle Stretching</span>
-                <span class="task-points">+15 pts</span>
+              <span class="task-title">Lung Qi Exercise</span>
+              <div class="qi-progress">
+                <span class="qi-icon">🫁</span>
+                <span class="qi-time">0/5 min</span>
               </div>
-              <div class="task-progress-note">Morning stretching routine</div>
             </div>
           </div>
         </div>
@@ -1919,378 +2106,148 @@ nav {
 </div>
 
 <div class="nav-links">
-  <a href="javascript:void(0)" class="nav-link" data-page="home-page">Home</a>
+  <a href="javascript:void(0)" class="nav-link active" data-page="home-page">Home</a>
   <a href="javascript:void(0)" class="nav-link" data-page="rewards-page">Rewards</a>
   <a href="javascript:void(0)" class="nav-link" data-page="journey-page">Journey</a>
   <a href="javascript:void(0)" class="nav-link" data-page="shop-page">Shop</a>
 </div>
 
 <script>
-document.addEventListener('touchmove', function(e) {
-  e.preventDefault();
-}, { passive: false });
-
-const room = new WebsimSocket();
-
-// Task manifest data structure
-const taskManifest = {
-  'Mental Health': {
-    icon: '🧠',
-    tasks: [
-      {id: 'meditation', title: 'Meditation Session', points: 15, duration: 10, type: 'timed'},
-      {id: 'gratitude', title: 'Gratitude Journal', points: 10, type: 'checklist', items: 3}
-    ]
-  },
-  'Self Care': {
-    icon: '💆',
-    tasks: [
-      {id: 'hydration', title: 'Hydration Goal', points: 20, target: 8, type: 'counter'},
-      {id: 'exercise', title: 'Exercise', points: 25, duration: 20, type: 'timed'}
-    ]
-  },
-  'Social Care': {
-    icon: '👥',
-    tasks: [
-      {id: 'connect', title: 'Connect with Friend', points: 15, type: 'single'}
-    ]
-  },
-  'Sleep Care': {
-    icon: '😴',
-    tasks: [
-      {id: 'bedtime', title: 'Bedtime Routine', points: 20, type: 'time', target: '22:30'}
-    ]
-  },
-  'Qi Balance': {
-    icon: '☯️',
-    tasks: [
-      {id: 'breathing', title: 'Breathing Exercise', points: 15, duration: 5, type: 'timed'},
-      {id: 'stretching', title: 'Gentle Stretching', points: 15, type: 'single'}
-    ]
-  }
+// Initialize panda state
+let pandaState = {
+  hunger: 100,
+  happiness: 100,
+  cleanliness: 100,
+  exp: 0,
+  level: 1
 };
 
-// Add task tracking functions
-function initTaskTracking() {
-  // Load saved task progress from store
-  room.store.get('dailyTasks').then(savedTasks => {
-    if (savedTasks) {
-      // Check if tasks are from today
-      const today = new Date().toDateString();
-      if (savedTasks.date === today) {
-        loadTaskProgress(savedTasks.progress);
-      } else {
-        // Reset for new day
-        resetDailyTasks();
-      }
-    } else {
-      resetDailyTasks();
-    }
-  });
-
-  // Add task completion tracking
-  document.querySelectorAll('.task-item').forEach(taskItem => {
-    const taskId = taskItem.dataset.taskId;
-    const taskType = findTaskType(taskId);
-    
-    if (taskType) {
-      initializeTaskHandler(taskItem, taskType);
-    }
-  });
-}
-
-function findTaskType(taskId) {
-  for (const category of Object.values(taskManifest)) {
-    const task = category.tasks.find(t => t.id === taskId);
-    if (task) return task.type;
-  }
-  return null;
-}
-
-function initializeTaskHandler(taskItem, taskType) {
-  switch(taskType) {
-    case 'timed':
-      initTimedTask(taskItem);
-      break;
-    case 'counter':
-      initCounterTask(taskItem);
-      break;
-    case 'checklist':
-      initChecklistTask(taskItem);
-      break;
-    case 'time':
-      initTimeBasedTask(taskItem);
-      break;
-    case 'single':
-      initSingleTask(taskItem);
-      break;
+// Initialize UI update functions
+function updatePandaStats() {
+  // Update health bar
+  const healthFill = document.querySelector('.health-fill');
+  const averageHealth = (pandaState.hunger + pandaState.happiness + pandaState.cleanliness) / 3;
+  healthFill.style.width = `${averageHealth}%`;
+  
+  // Update exp bar
+  const expFill = document.querySelector('.exp-fill');
+  expFill.style.width = `${(pandaState.exp % 100)}%`;
+  
+  // Update level badge
+  const levelBadge = document.querySelector('.level-badge');
+  levelBadge.textContent = `Level ${pandaState.level}`;
+  
+  // Update mood
+  const moodIndicator = document.querySelector('.mood-indicator');
+  if (averageHealth > 80) {
+    moodIndicator.textContent = '😊';
+  } else if (averageHealth > 50) {
+    moodIndicator.textContent = '😐';
+  } else {
+    moodIndicator.textContent = '😢';
   }
 }
 
-function initTimedTask(taskItem) {
-  let timer = null;
-  const progressNote = taskItem.querySelector('.task-progress-note');
-  const targetDuration = parseInt(taskItem.dataset.duration);
-  
-  taskItem.addEventListener('click', () => {
-    if (!timer) {
-      let timeLeft = targetDuration * 60;
-      progressNote.textContent = `${timeLeft} seconds remaining`;
-      
-      timer = setInterval(() => {
-        timeLeft--;
-        progressNote.textContent = `${timeLeft} seconds remaining`;
-        
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          completeTask(taskItem);
-        }
-      }, 1000);
-    }
-  });
-}
-
-function initCounterTask(taskItem) {
-  const counter = taskItem.querySelector('.water-cups');
-  let count = 0;
-  
-  taskItem.addEventListener('click', () => {
-    count++;
-    counter.textContent = `${count}/8`;
-    
-    if (count >= 8) {
-      completeTask(taskItem);
-    }
-  });
-}
-
-function initChecklistTask(taskItem) {
-  const items = taskItem.querySelectorAll('.checklist-item');
-  let completed = 0;
-  
-  items.forEach(item => {
-    item.addEventListener('click', () => {
-      if (!item.classList.contains('checked')) {
-        item.classList.add('checked');
-        completed++;
-        
-        if (completed >= items.length) {
-          completeTask(taskItem);
-        }
-      }
-    });
-  });
-}
-
-function initTimeBasedTask(taskItem) {
-  const targetTime = taskItem.dataset.targetTime;
-  
-  // Check time every minute
-  const timeCheck = setInterval(() => {
-    const now = new Date();
-    const currentTime = `${now.getHours()}:${now.getMinutes()}`;
-    
-    if (currentTime === targetTime) {
-      completeTask(taskItem);
-      clearInterval(timeCheck);
-    }
-  }, 60000);
-}
-
-function initSingleTask(taskItem) {
-  taskItem.addEventListener('click', () => {
-    completeTask(taskItem);
-  });
-}
-
-function completeTask(taskItem) {
-  const taskId = taskItem.dataset.taskId;
-  const points = parseInt(taskItem.dataset.points);
-  
-  taskItem.classList.add('completed');
-  gainPoints(points);
-  updateTaskProgress(taskId);
-  
-  // Broadcast completion
-  room.send({
-    type: 'taskCompleted',
-    taskId: taskId,
-    points: points,
-    username: room.party.client.username
-  });
-}
-
-function updateTaskProgress(taskId) {
-  room.store.update({
-    id: 'dailyTasks',
-    dependencies: { taskId },
-    updateFunction: (tasks) => {
-      if (!tasks) tasks = { date: new Date().toDateString(), progress: {} };
-      tasks.progress[taskId] = true;
-      return tasks;
-    }
-  });
-}
-
-function resetDailyTasks() {
-  room.store.update({
-    id: 'dailyTasks',
-    dependencies: {},
-    updateFunction: () => ({
-      date: new Date().toDateString(),
-      progress: {}
-    })
-  });
-}
-
-// Add this to your initialization code
+// Add interaction handlers
 document.addEventListener('DOMContentLoaded', () => {
-  initTaskTracking();
-});
-
-// Add page navigation
-document.querySelectorAll('.nav-link').forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    const pageId = this.dataset.page;
-    document.querySelectorAll('.page').forEach(page => {
-      page.classList.remove('active');
-    });
-    document.getElementById(pageId).classList.add('active');
-  });
-});
-
-// Shop functionality
-document.querySelectorAll('.buy-button').forEach(button => {
-  button.addEventListener('click', function() {
-    const item = this.closest('.shop-item');
-    const itemName = item.querySelector('.item-name').textContent;
-    const itemPrice = parseInt(item.querySelector('.item-price').textContent);
-    
-    if (points >= itemPrice) {
-      points -= itemPrice;
-      updateStats();
-      alert(`Successfully purchased ${itemName}!`);
-      
-      room.send({
-        type: 'itemPurchased',
-        item: itemName,
-        price: itemPrice
-      });
-      
-      room.store.update({
-        id: 'playerStats',
-        dependencies: { points },
-        updateFunction: (stats) => ({
-          ...stats,
-          points
-        })
-      });
-    } else {
-      alert('Not enough points!');
-    }
-  });
-});
-
-// Quick Actions
-function initQuickActions() {
-  const quickActions = document.querySelectorAll('.quick-action-btn');
-  quickActions.forEach(button => {
-    button.addEventListener('click', function() {
-      const action = this.textContent.trim();
-      let reward = 0;
-      let message = '';
-      
-      switch(action) {
-        case 'Feed':
-          reward = 5;
-          message = 'Panda is happy! +5 points';
-          break;
-        case 'Play':
-          reward = 8;
-          message = 'Fun time! +8 points';
-          break;
-        case 'Clean':
-          reward = 6;
-          message = 'Sparkly clean! +6 points';
-          break;
-      }
-      
-      points += reward;
-      updateStats();
-      showReward(message);
-      
-      // Make panda react
-      const panda = document.querySelector('.panda-container');
-      panda.classList.add('dancing');
-      setTimeout(() => {
-        panda.classList.remove('dancing');
-      }, 1000);
-      
-      // Send event to room
-      room.send({
-        type: 'quickAction',
-        action: action,
-        points: reward,
-        username: room.party.client.username
-      });
-    });
-  });
-}
-
-// Call this function when the page loads
-initQuickActions();
-
-// Update achievement progress
-function updateAchievements() {
-  const achievements = document.querySelectorAll('.achievement-card');
-  achievements.forEach(achievement => {
-    const progress = achievement.querySelector('.achievement-progress');
-    if (progress) { // Check if progress element exists
-      const progressText = progress.textContent;
-      if (progressText.includes('/')) { // Verify the text contains expected format
-        const [current, total] = progressText.split('/').map(n => parseInt(n));
-        if (current === total) {
-          achievement.style.background = '#e8f5e9';
-        }
-      }
-    }
-  });
-}
-
-// Call this when page loads and when achievements update
-updateAchievements();
-
-// Initialize daily rewards
-function initDailyRewards() {
-  const rewardItems = document.querySelectorAll('.reward-item:not(.claimed)');
+  const feedBtn = document.querySelector('.quick-action-btn:nth-child(1)');
+  const playBtn = document.querySelector('.quick-action-btn:nth-child(2)');
+  const cleanBtn = document.querySelector('.quick-action-btn:nth-child(3)');
   
-  rewardItems.forEach(item => {
-    item.addEventListener('click', function() {
-      if (this.classList.contains('unclaimed')) {
-        const pointsText = this.querySelector('.reward-points').textContent;
-        const pointsAmount = parseInt(pointsText);
-        points += pointsAmount;
-        updateStats();
-        
-        this.classList.remove('unclaimed');
-        this.classList.add('claimed');
-        
-        showReward(`Daily Reward Claimed! ${pointsText}`);
-        
-        // Broadcast the claim
-        room.send({
-          type: 'dailyRewardClaimed',
-          day: this.dataset.day,
-          points: pointsAmount,
-          username: room.party.client.username
-        });
-      }
+  feedBtn.addEventListener('click', () => {
+    pandaState.hunger = Math.min(100, pandaState.hunger + 20);
+    pandaState.exp += 10;
+    if (pandaState.exp >= 100) {
+      pandaState.level++;
+      pandaState.exp = 0;
+      showNotification('Level Up! 🎉');
+    }
+    updatePandaStats();
+    showNotification('Panda has been fed! 🍎');
+    
+    // Add animation to panda
+    const panda = document.querySelector('.panda-container svg');
+    panda.classList.add('eating');
+    setTimeout(() => panda.classList.remove('eating'), 1000);
+  });
+  
+  playBtn.addEventListener('click', () => {
+    pandaState.happiness = Math.min(100, pandaState.happiness + 20);
+    pandaState.exp += 10;
+    if (pandaState.exp >= 100) {
+      pandaState.level++;
+      pandaState.exp = 0;
+      showNotification('Level Up! 🎉');
+    }
+    updatePandaStats();
+    showNotification('Panda is having fun! 🎮');
+    
+    // Add animation to panda
+    const panda = document.querySelector('.panda-container svg');
+    panda.classList.add('dancing');
+    setTimeout(() => panda.classList.remove('dancing'), 1000);
+  });
+  
+  cleanBtn.addEventListener('click', () => {
+    pandaState.cleanliness = Math.min(100, pandaState.cleanliness + 20);
+    pandaState.exp += 10;
+    if (pandaState.exp >= 100) {
+      pandaState.level++;
+      pandaState.exp = 0;
+      showNotification('Level Up! 🎉');
+    }
+    updatePandaStats();
+    showNotification('Panda is clean! 🛁');
+    
+    // Add animation to panda
+    const panda = document.querySelector('.panda-container svg');
+    panda.classList.add('cleaning');
+    setTimeout(() => panda.classList.remove('cleaning'), 1000);
+  });
+  
+  // Navigation handling
+  const navLinks = document.querySelectorAll('.nav-link');
+  const pages = document.querySelectorAll('.page');
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      // Remove active class from all links and pages
+      navLinks.forEach(l => l.classList.remove('active'));
+      pages.forEach(p => p.classList.remove('active'));
+      
+      // Add active class to clicked link
+      link.classList.add('active');
+      
+      // Show corresponding page
+      const pageId = link.getAttribute('data-page');
+      document.getElementById(pageId).classList.add('active');
     });
   });
-}
 
-// Call this function after the page loads
-document.addEventListener('DOMContentLoaded', initDailyRewards);
+  // Start decrease loop
+  setInterval(() => {
+    pandaState.hunger = Math.max(0, pandaState.hunger - 1);
+    pandaState.happiness = Math.max(0, pandaState.happiness - 1);
+    pandaState.cleanliness = Math.max(0, pandaState.cleanliness - 1);
+    updatePandaStats();
+  }, 10000); // Decrease stats every 10 seconds
+});
+
+// Notification function
+function showNotification(message) {
+  const notification = document.createElement('div');
+  notification.className = 'notification';
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.classList.add('fade-out');
+    setTimeout(() => notification.remove(), 500);
+  }, 2000);
+}
 </script>
+
 </body>
 </html>
